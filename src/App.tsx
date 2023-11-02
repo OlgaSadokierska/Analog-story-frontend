@@ -1,12 +1,21 @@
 import './App.css';
 import Navbar from "./layout/Navbar";
+import SignIn from "./pages/SignIn";
+import {Routes, Route, BrowserRouter} from "react-router-dom";
+import Home from "./pages/Home";
+import LogIn from "./pages/LogIn";
 
-function App() {
+export default function App() {
   return (
     <div className="App">
-      <Navbar />
+        <BrowserRouter>
+            <Navbar />
+            <Routes>
+                <Route path="/login" element={<LogIn />} />
+                <Route path="/sighin" element={<SignIn />} />
+                <Route path="/" element={<Home />} />
+            </Routes>
+        </BrowserRouter>
     </div>
   );
 }
-
-export default App;
