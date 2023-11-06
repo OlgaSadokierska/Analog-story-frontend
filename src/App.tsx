@@ -12,7 +12,7 @@ export default function App() {
             <Navbar />
             <Routes>
                 <Route path="/login" element={<LogIn />} />
-                <Route path="/sighin" element={<SignIn />} />
+                <Route path="/signin" element={<SignIn />} />
                 <Route path="/" element={<Home />} />
             </Routes>
         </BrowserRouter>
