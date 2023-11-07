@@ -14,14 +14,10 @@ export default function AllUsers() {
     const [users, setUsers] = useState<User[]>([]);
 
     useEffect(() => {
-        GetRequests.getAllUsers().then(res =>{
-            setUsers(res);
-            console.log("1");
-            console.log(GetRequests.getAllUsers())}
-        ).catch(error =>{
-            console.log(error);
-            console.log("1");
-            console.log(GetRequests.getAllUsers())}
+        GetRequests.getAllUsers().then(res =>
+            setUsers(res)
+        ).catch(error =>
+            console.log(error)
         )
     }, [])
 
@@ -43,11 +39,11 @@ export default function AllUsers() {
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
                             <TableCell component="th" scope="row">
-                                {user.firstname}
+                                {user.id}
                             </TableCell>
+                            <TableCell align="right">{user.firstname}</TableCell>
                             <TableCell align="right">{user.lastname}</TableCell>
                             <TableCell align="right">{user.email}</TableCell>
-                            <TableCell align="right">{user.id}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
