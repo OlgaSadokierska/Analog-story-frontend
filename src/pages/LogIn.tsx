@@ -11,6 +11,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {useState} from "react";
+import {PostRequests} from "../communication/network/PostRequests";
+import {User} from "../communication/Types";
 
 function Copyright() {
     return (
@@ -29,13 +32,19 @@ const defaultTheme = createTheme();
 
 export default function LogIn() {
     const navigate = useNavigate();
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const [user, setUser] = useState<User>({
+        login: "",
+        password:"",
+        isAdmin: false
+    });
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+
+        try {
+            await PostRequests.logInUser(user.login, user.password).then(alert("Udało sie!"));
+        } catch (error) {
+            console.error("Wystąpił błąd podczas logowania:", error);
+        }
     };
 
     return (
@@ -58,16 +67,20 @@ export default function LogIn() {
                     </Typography>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                         <TextField
+                            onChange={(event) =>setUser((prevState) => ({...prevState, login: event.target.value}))}
                             margin="normal"
                             required
                             fullWidth
-                            id="email"
-                            label="Email"
-                            name="email"
-                            autoComplete="email"
+                            id="login"
+                            label="Login"
+                            name="login"
+                            autoComplete="login"
                             autoFocus
                         />
                         <TextField
+                            onChange={(event) => {
+                                setUser((prevState) => ({...prevState, password: event.target.value})
+                                )}}
                             margin="normal"
                             required
                             fullWidth

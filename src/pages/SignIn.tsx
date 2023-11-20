@@ -11,6 +11,9 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {useNavigate} from "react-router-dom";
+import {useState} from "react";
+import {User} from "../communication/Types";
+import {PostRequests} from "../communication/network/PostRequests";
 
 function Copyright() {
     return (
@@ -29,13 +32,23 @@ const defaultTheme = createTheme();
 
 export default function SignIn() {
     const navigate = useNavigate();
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const [user, setUser] = useState<User>({
+        firstname: "",
+        lastname: "",
+        email: "",
+        login: "",
+        password:"",
+        isAdmin: false
+    });
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+
+        try {
+            await PostRequests.registerUser(user.firstname, user.lastname, user.email, user.password, user.login, false);
+        } catch (error) {
+            console.error("Wystąpił błąd podczas rejestracji:", error);
+        }
     };
 
     return (
@@ -66,6 +79,7 @@ export default function SignIn() {
                             name="firstname"
                             autoComplete="firstname"
                             autoFocus
+                            onChange={(event) =>setUser((prevState) => ({...prevState, firstname: event.target.value}))}
                         />
                         <TextField
                             margin="normal"
@@ -76,6 +90,7 @@ export default function SignIn() {
                             name="lastname"
                             autoComplete="lastname"
                             autoFocus
+                            onChange={(event) =>setUser((prevState) => ({...prevState, lastname: event.target.value}))}
                         />
                         <TextField
                             margin="normal"
@@ -86,6 +101,18 @@ export default function SignIn() {
                             name="email"
                             autoComplete="email"
                             autoFocus
+                            onChange={(event) =>setUser((prevState) => ({...prevState, email: event.target.value}))}
+                        />
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="login"
+                            label="Login"
+                            name="login"
+                            autoComplete="login"
+                            autoFocus
+                            onChange={(event) =>setUser((prevState) => ({...prevState, login: event.target.value}))}
                         />
                         <TextField
                             margin="normal"
@@ -96,6 +123,7 @@ export default function SignIn() {
                             type="password"
                             id="password"
                             autoComplete="current-password"
+                            onChange={(event) =>setUser((prevState) => ({...prevState, password: event.target.value}))}
                         />
                         <Button
                             type="submit"
@@ -103,7 +131,7 @@ export default function SignIn() {
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
                         >
-                            Zaloguj się
+                            Zarejestruj się
                         </Button>
                         <Grid container>
                             <Grid item>
