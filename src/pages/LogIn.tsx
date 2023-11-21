@@ -98,9 +98,9 @@ export default function LogIn() {
                         >
                             Zaloguj się
                         </Button>
-                        <Grid container>
+                        <Grid container sx={{ display: "flex", flexDirection: "column"}}>
                             <Grid item>
-                                <Link onClick={() => navigate('../signin')} variant="body2">
+                                <Link onClick={() => navigate('../signin')} variant="body2" textAlign="center">
                                     {"Nie masz konta? Zarejestruj się!"}
                                 </Link>
                             </Grid>

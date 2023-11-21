@@ -133,7 +133,7 @@ export default function SignIn() {
                         >
                             Zarejestruj się
                         </Button>
-                        <Grid container>
+                        <Grid container sx={{ display: "flex", flexDirection: "column"}}>
                             <Grid item>
                                 <Link onClick={() => navigate(-1)} variant="body2">
                                     {"Masz już konto? Zaloguj się!"}
