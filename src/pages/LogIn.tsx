@@ -41,7 +41,7 @@ export default function LogIn() {
         event.preventDefault();
 
         try {
-            await PostRequests.logInUser(user.login, user.password).then(alert("Udało sie!"));
+            await PostRequests.logInUser(user.login, user.password);
         } catch (error) {
             console.error("Wystąpił błąd podczas logowania:", error);
         }

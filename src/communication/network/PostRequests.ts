@@ -18,8 +18,8 @@ export class PostRequests {
     static registerUser(firstname: string, lastname: string, email: string, password: string, login: string, isAdmin: boolean): Promise<User> {
         console.log(firstname, lastname, email, password, login, isAdmin)
         return api.post(Post.USERREG, {
-            firstname: firstname,
-            lastname: lastname,
+            firstName: firstname,
+            lastName: lastname,
             email: email,
             login: login,
             password: password,
