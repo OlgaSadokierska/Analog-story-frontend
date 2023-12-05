@@ -33,15 +33,14 @@ const defaultTheme = createTheme();
 export default function LogIn() {
     const navigate = useNavigate();
     const [user, setUser] = useState<User>({
-        login: "",
-        password:"",
-        isAdmin: false
+        email: "",
+        password:""
     });
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         try {
-            await PostRequests.logInUser(user.login, user.password);
+            await PostRequests.logInUser(user.email, user.password).then(res => localStorage.setItem("Token", res.token));
         } catch (error) {
             console.error("Wystąpił błąd podczas logowania:", error);
         }
@@ -67,14 +66,14 @@ export default function LogIn() {
                     </Typography>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                         <TextField
-                            onChange={(event) =>setUser((prevState) => ({...prevState, login: event.target.value}))}
+                            onChange={(event) =>setUser((prevState) => ({...prevState, email: event.target.value}))}
                             margin="normal"
                             required
                             fullWidth
-                            id="login"
-                            label="Login"
-                            name="login"
-                            autoComplete="login"
+                            id="email"
+                            label="Email"
+                            name="email"
+                            autoComplete="email"
                             autoFocus
                         />
                         <TextField

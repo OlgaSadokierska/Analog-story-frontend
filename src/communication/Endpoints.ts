@@ -7,8 +7,8 @@ export class Get {
 }
 
 export class Post {
-    static USER = [API_V1, USERS, "/login"].join("");
-    static USERREG = [API_V1, USERS, "/register"].join("");
+    static USER = [API_V1, "/auth/login"].join("");
+    static USERREG = [API_V1, "/auth/register"].join("");
 }
 
 export class Put {}

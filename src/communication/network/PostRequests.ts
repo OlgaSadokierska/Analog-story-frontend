@@ -6,24 +6,22 @@ import {api} from "../Config";
 import {Utils} from "./Utils";
 export class PostRequests {
     //USERS
-    static logInUser(login: string, password: string): Promise<User> {
-        console.log(login, password)
+    static logInUser(email: string, password: string): Promise<{ token : string }>{
+        console.log(email, password)
         return api.post(Post.USER, {
-            login: login,
+            email: email,
             password: password
-        }).then(Utils.mapResponse<User>)
+        }).then(Utils.mapResponse<{ token : string }>)
             .catch(Utils.handleError)
     }
 
-    static registerUser(firstname: string, lastname: string, email: string, password: string, login: string, isAdmin: boolean): Promise<User> {
-        console.log(firstname, lastname, email, password, login, isAdmin)
+    static registerUser(first_name: string, last_name: string, email: string, password: string): Promise<User> {
+        console.log(first_name, last_name, email, password)
         return api.post(Post.USERREG, {
-            firstName: firstname,
-            lastName: lastname,
+            firstname: first_name,
+            lastname: last_name,
             email: email,
-            login: login,
-            password: password,
-            isAdmin: isAdmin
+            password: password
         }).then(Utils.mapResponse<User>)
             .catch(Utils.handleError)
     }

@@ -36,16 +36,14 @@ export default function SignIn() {
         firstname: "",
         lastname: "",
         email: "",
-        login: "",
         password:"",
-        isAdmin: false
     });
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         try {
-            await PostRequests.registerUser(user.firstname, user.lastname, user.email, user.password, user.login, false);
+            await PostRequests.registerUser(user.firstname, user.lastname, user.email, user.password).then(res => console.log(res));
         } catch (error) {
             console.error("Wystąpił błąd podczas rejestracji:", error);
         }
@@ -102,17 +100,6 @@ export default function SignIn() {
                             autoComplete="email"
                             autoFocus
                             onChange={(event) =>setUser((prevState) => ({...prevState, email: event.target.value}))}
-                        />
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="login"
-                            label="Login"
-                            name="login"
-                            autoComplete="login"
-                            autoFocus
-                            onChange={(event) =>setUser((prevState) => ({...prevState, login: event.target.value}))}
                         />
                         <TextField
                             margin="normal"

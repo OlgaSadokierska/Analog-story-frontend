@@ -149,11 +149,9 @@ export default function Navbar() {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
+                                <MenuItem onClick={() => navigate("/userpanel")}>
+                                    <Typography textAlign="center">Profile</Typography>
                                 </MenuItem>
-                            ))}
                         </Menu>
                         <Button onClick={() => navigate('login')} sx={{backgroundColor: 'white'}}>Zaloguj</Button>
                     </Box>
