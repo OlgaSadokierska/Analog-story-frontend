@@ -30,12 +30,63 @@ function Copyright() {
 
 const defaultTheme = createTheme();
 
+const MIN_PASSWORD_LENGTH = 8;
+const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+])(?=.*[a-zA-Z]).{8,}$/;
+
+
 export default function SignIn() {
     const navigate = useNavigate();
     const [user, setUser] = useState<User>();
 
+    const [formSubmitted] = useState(false);
+
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const isPasswordValid = () => {
+        return user.password.length >= MIN_PASSWORD_LENGTH && PASSWORD_REGEX.test(user.password);
+    };
+
+    const isEmailValid = () => {
+        return validateEmail(user.email);
+    };
+
+    const isFormValid = () => {
+        return (
+            user.firstname &&
+            user.lastname &&
+            user.email &&
+            user.password &&
+            isEmailValid() &&
+            isPasswordValid()
+        );
+    };
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        if (!isFormValid()) {
+            console.error("Uzupełnij wszystkie wymagane pola poprawnie.");
+            return;
+        }
+
+        if (!user.firstname || !user.lastname || !user.email || !user.password) {
+            console.error("Uzupełnij wszystkie wymagane pola.");
+            return;
+        }
+
+        if (user.password.length < MIN_PASSWORD_LENGTH || !PASSWORD_REGEX.test(user.password)) {
+            console.error("Hasło nie spełnia wymagań.");
+            return;
+        }
+
+        if (!validateEmail(user.email)) {
+            console.error("Niepoprawny adres email.");
+            return;
+        }
+
 
         try {
             await PostRequests.registerUser(user.firstname, user.lastname, user.email, user.password).then(res => {
@@ -63,7 +114,7 @@ export default function SignIn() {
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Sign in
+                        Rejestracja
                     </Typography>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                         <TextField
@@ -97,7 +148,9 @@ export default function SignIn() {
                             name="email"
                             autoComplete="email"
                             autoFocus
-                            onChange={(event) =>setUser((prevState) => ({...prevState, email: event.target.value}))}
+                            error={user.email && !isEmailValid()}
+                            helperText={user.email && !isEmailValid() ? "Niepoprawny adres email." : null}
+                            onChange={(event) => setUser((prevState) => ({ ...prevState, email: event.target.value }))}
                         />
                         <TextField
                             margin="normal"
@@ -108,16 +161,41 @@ export default function SignIn() {
                             type="password"
                             id="password"
                             autoComplete="current-password"
-                            onChange={(event) =>setUser((prevState) => ({...prevState, password: event.target.value}))}
-                        />
+                            error={user.password && !isPasswordValid()}
+                            helperText={
+                                user.password &&
+                                (!isPasswordValid()
+                                    ? (
+                                        <div>
+                                            Hasło powinno mieć co najmniej 8 znaków i zawierać co najmniej:
+                                            <ul>
+                                                <li>jedną dużą literę</li>
+                                                <li>jedną małą literę</li>
+                                                <li>jedną cyfrę</li>
+                                                <li>jeden znak specjalny</li>
+                                            </ul>
+                                        </div>
+                                    ) : (
+                                        "Hasło spełnia wymagania."
+                                    ))
+                            }
+                            onChange={(event) => setUser((prevState) => ({ ...prevState, password: event.target.value }))}>
+                        </TextField>
                         <Button
                             type="submit"
                             fullWidth
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
+                            disabled={!isFormValid()}
                         >
+                            {formSubmitted && !isFormValid() && (
+                                <Typography variant="body2" color="error" align="center">
+                                    Uzupełnij wszystkie wymagane pola poprawnie.
+                                </Typography>
+                            )}
                             Zarejestruj się
                         </Button>
+
                         <Grid container sx={{ display: "flex", flexDirection: "column"}}>
                             <Grid item>
                                 <Link onClick={() => navigate(-1)} variant="body2">
