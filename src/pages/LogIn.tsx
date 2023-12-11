@@ -3,7 +3,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -11,9 +11,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {useState} from "react";
-import {PostRequests} from "../communication/network/PostRequests";
-import {User} from "../communication/Types";
+import { useState, useEffect } from 'react';
+import { PostRequests } from '../communication/network/PostRequests';
+import { User } from '../communication/Types';
 
 function Copyright() {
     return (
@@ -33,18 +33,30 @@ const defaultTheme = createTheme();
 export default function LogIn() {
     const navigate = useNavigate();
     const [user, setUser] = useState<User>({
-        email: "",
-        password:""
+        email: '',
+        password: '',
     });
+    const [isFormFilled, setIsFormFilled] = useState<boolean>(false);
+
+    const checkFormCompletion = () => {
+        setIsFormFilled(user.email !== '' && user.password !== '');
+    };
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         try {
-            await PostRequests.logInUser(user.email, user.password).then(res => localStorage.setItem("Token", res.token));
+            await PostRequests.logInUser(user.email, user.password).then((res) =>
+                localStorage.setItem('Token', res.token)
+            );
         } catch (error) {
-            console.error("Wystąpił błąd podczas logowania:", error);
+            console.error('Wystąpił błąd podczas logowania:', error);
         }
     };
+
+    useEffect(() => {
+        checkFormCompletion();
+    }, [user.email, user.password]);
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -62,11 +74,13 @@ export default function LogIn() {
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Log in
+                        Logowanie
                     </Typography>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                         <TextField
-                            onChange={(event) =>setUser((prevState) => ({...prevState, email: event.target.value}))}
+                            onChange={(event) =>
+                                setUser((prevState) => ({ ...prevState, email: event.target.value }))
+                            }
                             margin="normal"
                             required
                             fullWidth
@@ -77,9 +91,9 @@ export default function LogIn() {
                             autoFocus
                         />
                         <TextField
-                            onChange={(event) => {
-                                setUser((prevState) => ({...prevState, password: event.target.value})
-                                )}}
+                            onChange={(event) =>
+                                setUser((prevState) => ({ ...prevState, password: event.target.value }))
+                            }
                             margin="normal"
                             required
                             fullWidth
@@ -94,13 +108,14 @@ export default function LogIn() {
                             fullWidth
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
+                            disabled={!isFormFilled}
                         >
                             Zaloguj się
                         </Button>
-                        <Grid container sx={{ display: "flex", flexDirection: "column"}}>
+                        <Grid container sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Grid item>
                                 <Link onClick={() => navigate('../signin')} variant="body2" textAlign="center">
-                                    {"Nie masz konta? Zarejestruj się!"}
+                                    {'Nie masz konta? Zarejestruj się!'}
                                 </Link>
                             </Grid>
                         </Grid>
