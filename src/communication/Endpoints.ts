@@ -4,6 +4,7 @@ const USERS = "/users";
 export class Get {
 
     static USERS = [API_V1, USERS].join("");
+    static USER_BY_ID = [API_V1, USERS, "/"].join("");
 }
 
 export class Post {

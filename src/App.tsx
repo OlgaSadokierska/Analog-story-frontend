@@ -6,7 +6,6 @@ import Home from "./pages/Home";
 import LogIn from "./pages/LogIn";
 import UserPanel from "./pages/UserPanel";
 import React from 'react';
-import {idID} from "@mui/material/locale";
 
 export default function App() {
   return (

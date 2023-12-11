@@ -32,18 +32,16 @@ const defaultTheme = createTheme();
 
 export default function SignIn() {
     const navigate = useNavigate();
-    const [user, setUser] = useState<User>({
-        firstname: "",
-        lastname: "",
-        email: "",
-        password:"",
-    });
+    const [user, setUser] = useState<User>();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         try {
-            await PostRequests.registerUser(user.firstname, user.lastname, user.email, user.password).then(res => console.log(res));
+            await PostRequests.registerUser(user.firstname, user.lastname, user.email, user.password).then(res => {
+                alert("Użytkownik został utworzony");
+                console.log(res)
+            });
         } catch (error) {
             console.error("Wystąpił błąd podczas rejestracji:", error);
         }

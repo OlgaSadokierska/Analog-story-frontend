@@ -13,19 +13,22 @@ import MenuItem from '@mui/material/MenuItem';
 import MenuIcon from '@mui/icons-material/Menu';
 import AdbIcon from '@mui/icons-material/Adb';
 import CameraRollOutlinedIcon from '@mui/icons-material/CameraRollOutlined';
-import {useNavigate} from "react-router-dom";
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const pages = ['Repozytorium', 'Sklep'];
-const settings = ['Profile', 'Logout'];
+const settings = ['Profile'];
 
 export default function Navbar() {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
     const navigate = useNavigate();
+    const location = useLocation();
+    const isLoggedIn = !!localStorage.getItem('Token');
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
     };
+
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
     };
@@ -36,6 +39,17 @@ export default function Navbar() {
 
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
+    };
+
+    const handleLoginButtonClick = () => {
+        if (isLoggedIn) {
+            // Jeśli użytkownik jest zalogowany, wyloguj go i przekieruj na stronę główną
+            localStorage.removeItem('Token');
+            navigate('/');
+        } else {
+            // Jeśli użytkownik nie jest zalogowany, przekieruj na stronę logowania
+            navigate('/login');
+        }
     };
 
     return (
@@ -128,32 +142,38 @@ export default function Navbar() {
                     </Box>
 
                     <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, margin: 1}}>
-                                <Avatar src="../../../public/profile-user.png" />
-                            </IconButton>
-                        </Tooltip>
-                        <Menu
-                            sx={{ mt: '45px' }}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
-                        >
-                                <MenuItem onClick={() => navigate("/userpanel")}>
-                                    <Typography textAlign="center">Profile</Typography>
-                                </MenuItem>
-                        </Menu>
-                        <Button onClick={() => navigate('login')} sx={{backgroundColor: 'white'}}>Zaloguj</Button>
+                        {isLoggedIn && (
+                            <>
+                                <Tooltip title="Open settings">
+                                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, margin: 1 }}>
+                                        <Avatar src="../../../public/profile-user.png" />
+                                    </IconButton>
+                                </Tooltip>
+                                <Menu
+                                    sx={{ mt: '45px' }}
+                                    id="menu-appbar"
+                                    anchorEl={anchorElUser}
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    open={Boolean(anchorElUser)}
+                                    onClose={handleCloseUserMenu}
+                                >
+                                    <MenuItem onClick={() => navigate('/userpanel')}>
+                                        <Typography textAlign="center">Profile</Typography>
+                                    </MenuItem>
+                                </Menu>
+                            </>
+                        )}
+                        <Button onClick={handleLoginButtonClick} sx={{ backgroundColor: 'white' }}>
+                            {isLoggedIn ? 'Wyloguj' : 'Zaloguj'}
+                        </Button>
                     </Box>
                 </Toolbar>
             </Container>

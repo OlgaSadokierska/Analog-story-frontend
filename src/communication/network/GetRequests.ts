@@ -11,4 +11,10 @@ export class GetRequests {
             .then(Utils.mapResponse<User[]>)
             .catch(Utils.handleError)
     }
+
+    static getUserById(id: number):Promise<User>{
+        return api.get(Get.USER_BY_ID + id)
+            .then(Utils.mapResponse<User>)
+            .catch(Utils.handleError)
+    }
 }
