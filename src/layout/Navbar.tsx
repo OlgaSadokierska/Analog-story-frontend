@@ -1,27 +1,30 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
+import {
+    AppBar,
+    Box,
+    Toolbar,
+    IconButton,
+    Typography,
+    Menu,
+    Container,
+    Avatar,
+    Button,
+    Tooltip,
+    MenuItem,
+} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import AdbIcon from '@mui/icons-material/Adb';
 import CameraRollOutlinedIcon from '@mui/icons-material/CameraRollOutlined';
-import {useNavigate} from "react-router-dom";
+import AdbIcon from '@mui/icons-material/Adb';
+import { useNavigate, useLocation } from 'react-router-dom';
+
 
 const pages = ['Repozytorium', 'Sklep'];
-const settings = ['Profile', 'Logout'];
 
 export default function Navbar() {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
     const navigate = useNavigate();
+    const location = useLocation();
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
@@ -37,19 +40,27 @@ export default function Navbar() {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+    const handleLogin = () => {
+        navigate('/userpanel');
+    };
+    const handleLogout = () => {
+        navigate('/login');
+    };
 
     return (
         <AppBar position="static">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <CameraRollOutlinedIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+                    <CameraRollOutlinedIcon
+                        sx={{ display: { xs: 'none', md: 'flex' }, marginRight: 1 }}
+                    />
                     <Typography
                         variant="h6"
                         noWrap
                         component="a"
                         href="#app-bar-with-responsive-menu"
                         sx={{
-                            mr: 2,
+                            marginRight: 2,
                             display: { xs: 'none', md: 'flex' },
                             fontFamily: 'monospace',
                             fontWeight: 600,
@@ -60,7 +71,9 @@ export default function Navbar() {
                     >
                         ANALOG STORY
                     </Typography>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                    <Box
+                        sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
+                    >
                         <IconButton
                             size="large"
                             aria-label="account of current user"
@@ -96,14 +109,16 @@ export default function Navbar() {
                             ))}
                         </Menu>
                     </Box>
-                    <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+                    <AdbIcon
+                        sx={{ display: { xs: 'flex', md: 'none' }, marginRight: 1 }}
+                    />
                     <Typography
                         variant="h5"
                         noWrap
                         component="a"
                         href="#app-bar-with-responsive-menu"
                         sx={{
-                            mr: 2,
+                            marginRight: 2,
                             display: { xs: 'flex', md: 'none' },
                             flexGrow: 1,
                             fontFamily: 'monospace',
@@ -115,12 +130,14 @@ export default function Navbar() {
                     >
                         ANALOG STORY
                     </Typography>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                    <Box
+                        sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}
+                    >
                         {pages.map((page) => (
                             <Button
                                 key={page}
-                                onClick={handleCloseNavMenu}
-                                sx={{ my: 2, color: 'white', display: 'block' }}
+                                sx={{ marginY: 2, color: 'white', display: 'block' }}
+                                onClick={() => navigate(`/${page.toLowerCase()}`)}
                             >
                                 {page}
                             </Button>
@@ -128,14 +145,14 @@ export default function Navbar() {
                     </Box>
 
                     <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, margin: 1}}>
-                                <Avatar src="../../../public/profile-user.png" />
+                        <Tooltip title="Profil">
+                            <IconButton onClick={handleOpenUserMenu} sx={{ padding: 0, margin: 1 }}>
+                                <Avatar src="/profile-user.png" />
                             </IconButton>
                         </Tooltip>
                         <Menu
                             sx={{ mt: '45px' }}
-                            id="menu-appbar"
+                            id="menu-appbar-user"
                             anchorEl={anchorElUser}
                             anchorOrigin={{
                                 vertical: 'top',
@@ -149,11 +166,29 @@ export default function Navbar() {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                                <MenuItem onClick={() => navigate("/userpanel")}>
-                                    <Typography textAlign="center">Profile</Typography>
+                            {location.pathname !== '/signin' && (
+                                <MenuItem onClick={() => navigate('/userpanel')}>
+                                    <Typography textAlign="center">Profil</Typography>
                                 </MenuItem>
+                            )}
+                            {location.pathname === '/login' ? (
+                                <MenuItem>
+                                    <Typography textAlign="center">Logowanie</Typography>
+                                </MenuItem>
+                            ) : (
+                                <>
+                                    {location.pathname === '/userpanel' ? (
+                                        <MenuItem onClick={handleLogout}>
+                                            <Typography textAlign="center">Wyloguj</Typography>
+                                        </MenuItem>
+                                    ) : (
+                                        <MenuItem onClick={() => navigate('/login')}>
+                                            <Typography textAlign="center">Logowanie</Typography>
+                                        </MenuItem>
+                                    )}
+                                </>
+                            )}
                         </Menu>
-                        <Button onClick={() => navigate('login')} sx={{backgroundColor: 'white'}}>Zaloguj</Button>
                     </Box>
                 </Toolbar>
             </Container>
