@@ -36,7 +36,12 @@ const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+])(?=.*
 
 export default function SignIn() {
     const navigate = useNavigate();
-    const [user, setUser] = useState<User>();
+    const [user, setUser] = useState<User>({
+        firstname: '',
+        lastname: '',
+        email: '',
+        password: '',
+    });
 
     const [formSubmitted] = useState(false);
 
