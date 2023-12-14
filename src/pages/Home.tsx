@@ -1,9 +1,8 @@
 import * as React from 'react';
-import AllUsers from "./users/AllUsers";
+import Background from "../layout/Background";
 export default function Home(){
 return (<>
-    <div className='container'>DZIEŃ DOBRY</div>
-
+    <Background />
     </>
 )
 }

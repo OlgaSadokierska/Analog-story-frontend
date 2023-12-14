@@ -1,18 +1,13 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useState, useEffect } from 'react';
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { GetRequests } from "../communication/network/GetRequests";
 import { User } from '../communication/Types';
+import {jwtDecode} from "jwt-decode";
 
-const defaultTheme = createTheme();
-
-type UserKey = Exclude<keyof User, "id" | "accountTypeId">;
-
-export default function UserProfile() {
+const UserProfile = () => {
     const [user, setUser] = useState<User>({
         id: 0,
         firstname: "",
@@ -28,12 +23,27 @@ export default function UserProfile() {
     const [newPassword, setNewPassword] = useState("");
 
     useEffect(() => {
-        GetRequests.getUserById(Number(24)).then(res =>
-            setUser(res)
-        ).catch(error =>
-            console.log(error)
-        );
-    }, [24]);
+        const token = localStorage.getItem('Token');
+
+        if (token) {
+            console.log(token+ "dupa");
+            const decodedToken = jwtDecode(token);
+
+            const userId = decodedToken.sub?.toString();
+
+            if (userId) {
+                localStorage.setItem("User", userId);
+            } else {
+                console.error("User ID is undefined or null");
+            }
+
+            GetRequests.getUserById(Number(24)).then(res =>
+                setUser(res)
+            ).catch(error =>
+                console.log(error)
+            );
+        }
+    }, []);
 
     const handleEditProfile = () => {
         setEditing(true);
@@ -45,46 +55,45 @@ export default function UserProfile() {
     };
 
     return (
-        <ThemeProvider theme={defaultTheme}>
-            <Container component="main" maxWidth="xs">
-                <div>
-                    <p></p>
-                    <Typography component="h1" variant="h5">
-                        User Profile
-                    </Typography>
-                    {Object.keys(user).map((key) => {
-                        if (key !== "id" && key !== "accountTypeId") {
-                            return (
-                                <p key={key}>
-                                    {isEditing ? (
-                                        <TextField
-                                            value={key === "password" ? newPassword : user[key as UserKey]}
-                                            onChange={(e) => key === "password" ? setNewPassword(e.target.value) : setUser({ ...user, [key as UserKey]: e.target.value })}
-                                            label={key.charAt(0).toUpperCase() + key.slice(1)}
-                                            type={key === "password" ? "password" : "text"}
-                                        />
-                                    ) : (
-                                        <>
-                                            <strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong> {key === "password" ? "********" : user[key as UserKey]}
-                                        </>
-                                    )}
-                                </p>
-                            );
-                        }
-                        return null;
-                    })}
-                    {isEditing && (
-                        <Button onClick={handleSaveProfile} fullWidth variant="contained">
-                            Zapisz
-                        </Button>
-                    )}
-                    {!isEditing && (
-                        <Button onClick={handleEditProfile} fullWidth variant="contained">
-                            Edytuj
-                        </Button>
-                    )}
-                </div>
-            </Container>
-        </ThemeProvider>
+        <Container component="main" maxWidth="xs">
+            <div>
+                <Typography component="h1" variant="h5">
+                    User Profile
+                </Typography>
+                {Object.keys(user).map((key) => {
+                    if (key !== "id" && key !== "accountTypeId") {
+                        return (
+                            <p key={key}>
+                                {isEditing ? (
+                                    <TextField
+                                        value={key === "password" ? newPassword : user[key]}
+                                        onChange={(e) => key === "password" ? setNewPassword(e.target.value) : setUser({ ...user, [key]: e.target.value })}
+                                        label={key.charAt(0).toUpperCase() + key.slice(1)}
+                                        type={key === "password" ? "password" : "text"}
+                                    />
+                                ) : (
+                                    <>
+                                        <strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong> {key === "password" ? "********" : user[key]}
+                                    </>
+                                )}
+                            </p>
+                        );
+                    }
+                    return null;
+                })}
+                {isEditing && (
+                    <Button onClick={handleSaveProfile} fullWidth variant="contained">
+                        Save
+                    </Button>
+                )}
+                {!isEditing && (
+                    <Button onClick={handleEditProfile} fullWidth variant="contained">
+                        Edit
+                    </Button>
+                )}
+            </div>
+        </Container>
     );
-}
+};
+
+export default UserProfile;

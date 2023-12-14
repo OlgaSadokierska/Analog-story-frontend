@@ -48,7 +48,6 @@ export default function LogIn() {
         try {
             const res = await PostRequests.logInUser(user.email, user.password);
             localStorage.setItem('Token', res.token);
-            // Po zalogowaniu przekieruj na stronę główną
             navigate('/');
         } catch (error) {
             console.error('Wystąpił błąd podczas logowania:', error);

@@ -22,7 +22,6 @@ export default function Navbar() {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
     const navigate = useNavigate();
-    const location = useLocation();
     const isLoggedIn = !!localStorage.getItem('Token');
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -43,13 +42,15 @@ export default function Navbar() {
 
     const handleLoginButtonClick = () => {
         if (isLoggedIn) {
-            // Jeśli użytkownik jest zalogowany, wyloguj go i przekieruj na stronę główną
-            localStorage.removeItem('Token');
+            localStorage.clear();
             navigate('/');
         } else {
-            // Jeśli użytkownik nie jest zalogowany, przekieruj na stronę logowania
             navigate('/login');
         }
+    };
+
+    const handleTypographyClick = () => {
+        navigate('/');
     };
 
     return (
@@ -71,6 +72,7 @@ export default function Navbar() {
                             color: 'inherit',
                             textDecoration: 'none',
                         }}
+                        onClick={handleTypographyClick}
                     >
                         ANALOG STORY
                     </Typography>
