@@ -14,6 +14,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, useEffect } from 'react';
 import { PostRequests } from '../communication/network/PostRequests';
 import { User } from '../communication/Types';
+import {jwtDecode} from "jwt-decode";
+import {GetRequests} from "../communication/network/GetRequests";
 
 function Copyright() {
     return (
@@ -48,6 +50,26 @@ export default function LogIn() {
         try {
             const res = await PostRequests.logInUser(user.email, user.password);
             localStorage.setItem('Token', res.token);
+
+            // Dekoduj JWT token, aby uzyskać informacje o użytkowniku
+            const decodedToken = jwtDecode(res.token);
+
+            // Pobierz dane użytkownika z zdekodowanego tokenu
+            const userEmail = decodedToken?.sub?.toString();
+
+            // Zapisz dane użytkownika do localStorage
+            if (userEmail) {
+                localStorage.setItem('User', userEmail);
+
+                // Pobierz dodatkowe informacje o użytkowniku i zapisz do localStorage
+                const userDetails = await GetRequests.getUserIDByEmail();
+                if (userDetails) {
+                    localStorage.setItem('UserId', userDetails.toString());
+                }
+            } else {
+                console.error('User ID is undefined or null');
+            }
+
             navigate('/');
         } catch (error) {
             console.error('Wystąpił błąd podczas logowania:', error);

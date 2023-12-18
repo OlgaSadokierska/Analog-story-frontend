@@ -24,25 +24,16 @@ const UserProfile = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('Token');
+        const userId = localStorage.getItem('UserId');
 
-        if (token) {
-            console.log(token+ "dupa");
-            const decodedToken = jwtDecode(token);
-
-            const userId = decodedToken.sub?.toString();
-
-            if (userId) {
-                localStorage.setItem("User", userId);
-            } else {
-                console.error("User ID is undefined or null");
-            }
-
-            GetRequests.getUserById(Number(24)).then(res =>
+        if (token && userId) {
+            GetRequests.getUserById(Number(userId)).then(res =>
                 setUser(res)
             ).catch(error =>
                 console.log(error)
             );
         }
+
     }, []);
 
     const handleEditProfile = () => {
