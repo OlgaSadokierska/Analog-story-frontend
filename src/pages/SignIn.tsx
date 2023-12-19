@@ -32,6 +32,7 @@ const defaultTheme = createTheme();
 
 const MIN_PASSWORD_LENGTH = 8;
 const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+])(?=.*[a-zA-Z]).{8,}$/;
+const PHONE_REGEX = /^[0-9]{9}$/;
 
 
 export default function SignIn() {
@@ -40,7 +41,9 @@ export default function SignIn() {
         firstname: '',
         lastname: '',
         email: '',
+        login: '',
         password: '',
+        phone: ''
     });
 
     const [formSubmitted] = useState(false);
@@ -52,6 +55,9 @@ export default function SignIn() {
 
     const isPasswordValid = () => {
         return user.password.length >= MIN_PASSWORD_LENGTH && PASSWORD_REGEX.test(user.password);
+    };
+    const isPhoneValid = () => {
+        return PHONE_REGEX.test(user.phone);
     };
 
     const isEmailValid = () => {
@@ -65,7 +71,8 @@ export default function SignIn() {
             user.email &&
             user.password &&
             isEmailValid() &&
-            isPasswordValid()
+            isPasswordValid()&&
+                isPhoneValid()
         );
     };
 
@@ -94,7 +101,7 @@ export default function SignIn() {
 
 
         try {
-            await PostRequests.registerUser(user.firstname, user.lastname, user.email, user.password).then(res => {
+            await PostRequests.registerUser(user.firstname, user.lastname, user.login, user.email, user.password, user.phone).then(res => {
                 alert("Użytkownik został utworzony");
                 console.log(res)
             });
@@ -148,6 +155,17 @@ export default function SignIn() {
                             margin="normal"
                             required
                             fullWidth
+                            id="login"
+                            label="Login"
+                            name="login"
+                            autoComplete="login"
+                            autoFocus
+                            onChange={(event) =>setUser((prevState) => ({...prevState, login: event.target.value}))}
+                        />
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
                             id="email"
                             label="Email"
                             name="email"
@@ -186,6 +204,19 @@ export default function SignIn() {
                             }
                             onChange={(event) => setUser((prevState) => ({ ...prevState, password: event.target.value }))}>
                         </TextField>
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="phone"
+                            label="Phone"
+                            name="phone"
+                            autoComplete="phone"
+                            autoFocus
+                            error={user.phone && !isPhoneValid()}
+                            helperText={user.phone && !isPhoneValid() ? "Niepoprawny numer telefonu." : null}
+                            onChange={(event) => setUser((prevState) => ({ ...prevState, phone: event.target.value }))}
+                        />
                         <Button
                             type="submit"
                             fullWidth

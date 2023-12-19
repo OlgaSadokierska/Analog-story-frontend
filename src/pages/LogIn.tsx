@@ -51,17 +51,13 @@ export default function LogIn() {
             const res = await PostRequests.logInUser(user.email, user.password);
             localStorage.setItem('Token', res.token);
 
-            // Dekoduj JWT token, aby uzyskać informacje o użytkowniku
             const decodedToken = jwtDecode(res.token);
 
-            // Pobierz dane użytkownika z zdekodowanego tokenu
             const userEmail = decodedToken?.sub?.toString();
 
-            // Zapisz dane użytkownika do localStorage
             if (userEmail) {
                 localStorage.setItem('User', userEmail);
 
-                // Pobierz dodatkowe informacje o użytkowniku i zapisz do localStorage
                 const userDetails = await GetRequests.getUserIDByEmail();
                 if (userDetails) {
                     localStorage.setItem('UserId', userDetails.toString());
@@ -72,7 +68,7 @@ export default function LogIn() {
 
             navigate('/');
         } catch (error) {
-            console.error('Wystąpił błąd podczas logowania:', error);
+            alert('Wystąpił błąd podczas logowania:');
         }
     };
 

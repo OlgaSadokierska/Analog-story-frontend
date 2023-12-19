@@ -16,7 +16,6 @@ import CameraRollOutlinedIcon from '@mui/icons-material/CameraRollOutlined';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const pages = ['Repozytorium', 'Sklep'];
-const settings = ['Profile'];
 
 export default function Navbar() {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -51,6 +50,11 @@ export default function Navbar() {
 
     const handleTypographyClick = () => {
         navigate('/');
+    };
+
+    const handleUserProfileClick = () => {
+        navigate('/userpanel');
+        handleCloseNavMenu(); // Zamknij menu nawigacyjne po przejściu do panelu użytkownika
     };
 
     return (
@@ -146,31 +150,11 @@ export default function Navbar() {
                     <Box sx={{ flexGrow: 0 }}>
                         {isLoggedIn && (
                             <>
-                                <Tooltip title="Open settings">
-                                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, margin: 1 }}>
+                                <Tooltip title="Open user profile">
+                                    <IconButton onClick={handleUserProfileClick} sx={{ p: 0, margin: 1 }}>
                                         <Avatar src="../../../public/profile-user.png" />
                                     </IconButton>
                                 </Tooltip>
-                                <Menu
-                                    sx={{ mt: '45px' }}
-                                    id="menu-appbar"
-                                    anchorEl={anchorElUser}
-                                    anchorOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    keepMounted
-                                    transformOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    open={Boolean(anchorElUser)}
-                                    onClose={handleCloseUserMenu}
-                                >
-                                    <MenuItem onClick={() => navigate('/userpanel')}>
-                                        <Typography textAlign="center">Profile</Typography>
-                                    </MenuItem>
-                                </Menu>
                             </>
                         )}
                         <Button onClick={handleLoginButtonClick} sx={{ backgroundColor: 'white' }}>
