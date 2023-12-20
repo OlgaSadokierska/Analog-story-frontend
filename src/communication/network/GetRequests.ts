@@ -1,5 +1,6 @@
 import {Get} from "../Endpoints";
 import {
+    Product,
     User
 } from "../Types";
 import {api} from "../Config";
@@ -30,5 +31,11 @@ export class GetRequests {
             console.error("User email is undefined or null");
             return null;
         }
+
+    }
+    static getAllProducts():Promise<Product[]>{
+        return api.get(Get.PRODUCTS)
+            .then(Utils.mapResponse<Product[]>)
+            .catch(Utils.handleError)
     }
 }

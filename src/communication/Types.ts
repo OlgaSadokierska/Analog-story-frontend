@@ -8,3 +8,34 @@ export interface User {
     phone: string;
     accountTypeId: number
 }
+export interface Product {
+    id: number;
+    product_type_id: number;
+    description: string;
+    price: number;
+}
+export interface ProductType {
+    id: number;
+    name_type_product: string;
+}
+
+
+export interface Camera {
+    id: number;
+    user_id: number;
+    model: string;
+    brand: string;
+    film_loaded: boolean;
+    is_for_sale: boolean;
+    product_id: number;
+}
+
+export interface Film {
+    id: number;
+    id_camera: number | null;
+    loaded_frames: number;
+    is_full: boolean;
+    id_product: number | null;
+    is_for_sale: boolean;
+    user_id: number | null;
+}
