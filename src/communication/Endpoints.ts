@@ -15,6 +15,8 @@ export class Post {
 
 }
 
-export class Put {}
+export class Put {
+    static USER_UPDATE = [API_V1, USERS,"/id"].join("");
+}
 
 export class Delete {}

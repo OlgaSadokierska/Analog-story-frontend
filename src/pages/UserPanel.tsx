@@ -4,9 +4,8 @@ import Container from '@mui/material/Container';
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { GetRequests } from "../communication/network/GetRequests";
+import { PutRequests } from "../communication/network/PutRequests";
 import { User } from '../communication/Types';
-import {jwtDecode} from "jwt-decode";
-
 const UserProfile = () => {
     const [user, setUser] = useState<User>({
         id: 0,
@@ -33,7 +32,6 @@ const UserProfile = () => {
                 console.log(error)
             );
         }
-
     }, []);
 
     const handleEditProfile = () => {
@@ -42,7 +40,12 @@ const UserProfile = () => {
 
     const handleSaveProfile = () => {
         console.log("Saving user profile...", { ...user, password: newPassword });
-        setEditing(false);
+
+        PutRequests.updateUser({ ...user, password: newPassword }).then(() => {
+            setEditing(false);
+        }).catch(error => {
+            console.error("Error updating user profile:", error);
+        });
     };
 
     return (
