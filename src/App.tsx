@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import LogIn from "./pages/LogIn";
 import UserPanel from "./pages/UserPanel";
 import React from 'react';
+import Shop from "./pages/Shop";
 
 export default function App() {
   return (
@@ -15,7 +16,8 @@ export default function App() {
             <Routes>
                 <Route path="/login" element={<LogIn />} />
                 <Route path="/signin" element={<SignIn />} />
-                <Route path="/userpanel" element={<UserPanel/>} />
+                <Route path="/userpanel" element={<UserPanel />} />
+                <Route path="/products" element={<Shop />} />
                 <Route path="/" element={<Home />} />
             </Routes>
         </BrowserRouter>

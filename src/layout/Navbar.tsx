@@ -10,12 +10,15 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import MenuIcon from '@mui/icons-material/Menu';
-import AdbIcon from '@mui/icons-material/Adb';
-import CameraRollOutlinedIcon from '@mui/icons-material/CameraRollOutlined';
-import { useLocation, useNavigate } from 'react-router-dom';
 
-const pages = ['Repozytorium', 'Sklep'];
+import CameraRollOutlinedIcon from '@mui/icons-material/CameraRollOutlined';
+import { useNavigate } from 'react-router-dom';
+
+const pages = [
+    { label: 'Repozytorium', link: '/repozytorium' },
+    { label: 'Sklep', link: '/products' },
+];
+const settings = ['Profile'];
 
 export default function Navbar() {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -48,8 +51,8 @@ export default function Navbar() {
         }
     };
 
-    const handleTypographyClick = () => {
-        navigate('/');
+    const handlePageButtonClick = (link: string) => {
+        navigate(link);
     };
 
     const handleUserProfileClick = () => {
@@ -76,77 +79,30 @@ export default function Navbar() {
                             color: 'inherit',
                             textDecoration: 'none',
                         }}
-                        onClick={handleTypographyClick}
+                        onClick={() => navigate('/')}
                     >
                         ANALOG STORY
                     </Typography>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                        <IconButton
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            onClick={handleOpenNavMenu}
-                            color="inherit"
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorElNav}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'left',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'left',
-                            }}
-                            open={Boolean(anchorElNav)}
-                            onClose={handleCloseNavMenu}
+                    {pages.map((page) => (
+                        <Button
+                            key={page.label}
+                            variant="text"
+                            onClick={() => handlePageButtonClick(page.link)}
                             sx={{
-                                display: { xs: 'block', md: 'none' },
+                                mr: 2,
+                                display: { xs: 'none', md: 'flex' },
+                                fontFamily: 'monospace',
+                                fontWeight: 50,
+                                letterSpacing: '.1rem',
+                                color: 'inherit',
+                                textDecoration: 'none',
+                                cursor: 'pointer',
                             }}
                         >
-                            {pages.map((page) => (
-                                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center">{page}</Typography>
-                                </MenuItem>
-                            ))}
-                        </Menu>
-                    </Box>
-                    <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-                    <Typography
-                        variant="h5"
-                        noWrap
-                        component="a"
-                        href="#app-bar-with-responsive-menu"
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'flex', md: 'none' },
-                            flexGrow: 1,
-                            fontFamily: 'monospace',
-                            fontWeight: 600,
-                            letterSpacing: '.1rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
-                    >
-                        ANALOG STORY
-                    </Typography>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {pages.map((page) => (
-                            <Button
-                                key={page}
-                                onClick={handleCloseNavMenu}
-                                sx={{ my: 2, color: 'white', display: 'block' }}
-                            >
-                                {page}
-                            </Button>
-                        ))}
-                    </Box>
-
+                            {page.label}
+                        </Button>
+                    ))}
+                    <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ flexGrow: 0 }}>
                         {isLoggedIn && (
                             <>
@@ -155,6 +111,30 @@ export default function Navbar() {
                                         <Avatar src="../../../public/profile-user.png" />
                                     </IconButton>
                                 </Tooltip>
+                                <Menu
+                                    sx={{ mt: '45px' }}
+                                    id="menu-appbar"
+                                    anchorEl={anchorElUser}
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    open={Boolean(anchorElUser)}
+                                    onClose={handleCloseUserMenu}
+                                >
+                                    <MenuItem onClick={() => navigate('/userpanel')}>
+                                        <Typography textAlign="center">Profil</Typography>
+                                    </MenuItem>
+                                    <MenuItem onClick={() => navigate('/user_products')}>
+                                        <Typography textAlign="center">Moje produkty</Typography>
+                                    </MenuItem>
+
+                                </Menu>
                             </>
                         )}
                         <Button onClick={handleLoginButtonClick} sx={{ backgroundColor: 'white' }}>
