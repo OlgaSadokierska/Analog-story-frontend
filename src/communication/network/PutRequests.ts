@@ -8,8 +8,8 @@ export class PutRequests {
         const { id, firstname, lastname, email, login, password, phone, accountTypeId } = user;
 
         const requestBody = {
-            firstName: firstname,
-            lastName: lastname,
+            firstname: firstname,
+            lastname: lastname,
             email: email,
             login: login,
             password: password,
@@ -17,7 +17,7 @@ export class PutRequests {
             accountTypeId: 2
         };
 
-        return api.put(`${Put.USER}/${id}`, requestBody)
+        return api.put(`${Put.USER_UPDATE}/${id}`, requestBody)
             .then(Utils.mapResponse<void>)
             .catch(Utils.handleError);
     }

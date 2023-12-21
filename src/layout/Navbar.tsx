@@ -18,7 +18,6 @@ const pages = [
     { label: 'Repozytorium', link: '/repozytorium' },
     { label: 'Sklep', link: '/products' },
 ];
-const settings = ['Profile'];
 
 export default function Navbar() {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -83,25 +82,26 @@ export default function Navbar() {
                     >
                         ANALOG STORY
                     </Typography>
-                    {pages.map((page) => (
-                        <Button
-                            key={page.label}
-                            variant="text"
-                            onClick={() => handlePageButtonClick(page.link)}
-                            sx={{
-                                mr: 2,
-                                display: { xs: 'none', md: 'flex' },
-                                fontFamily: 'monospace',
-                                fontWeight: 50,
-                                letterSpacing: '.1rem',
-                                color: 'inherit',
-                                textDecoration: 'none',
-                                cursor: 'pointer',
-                            }}
-                        >
-                            {page.label}
-                        </Button>
-                    ))}
+                    {isLoggedIn &&
+                        pages.map((page) => (
+                            <Button
+                                key={page.label}
+                                variant="text"
+                                onClick={() => handlePageButtonClick(page.link)}
+                                sx={{
+                                    mr: 2,
+                                    display: { xs: 'none', md: 'flex' },
+                                    fontFamily: 'monospace',
+                                    fontWeight: 50,
+                                    letterSpacing: '.1rem',
+                                    color: 'inherit',
+                                    textDecoration: 'none',
+                                    cursor: 'pointer',
+                                }}
+                            >
+                                {page.label}
+                            </Button>
+                        ))}
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ flexGrow: 0 }}>
                         {isLoggedIn && (
