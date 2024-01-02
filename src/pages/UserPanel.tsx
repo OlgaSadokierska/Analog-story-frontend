@@ -77,12 +77,12 @@ const UserProfile = () => {
                 })}
                 {isEditing && (
                     <Button onClick={handleSaveProfile} fullWidth variant="contained">
-                        Save
+                        Zapisz
                     </Button>
                 )}
                 {!isEditing && (
                     <Button onClick={handleEditProfile} fullWidth variant="contained">
-                        Edit
+                        Edytuj
                     </Button>
                 )}
             </div>

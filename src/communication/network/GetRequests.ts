@@ -19,13 +19,13 @@ export class GetRequests {
             .catch(Utils.handleError)
     }
 
-    static getUserIDByEmail(): Promise<Number> | null {
+    static getUserDataByEmail(): Promise<Number[]> | null {
         const email = localStorage.getItem("User");
 
         if (email) {
             const endpoint = Get.USER_BY_EMAIL(email);
             return api.get(endpoint)
-                .then(Utils.mapResponse<Number>)
+                .then(Utils.mapResponse<Number[]>)
                 .catch(Utils.handleError);
         } else {
             console.error("User email is undefined or null");

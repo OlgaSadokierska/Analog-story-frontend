@@ -14,9 +14,20 @@ import MenuItem from '@mui/material/MenuItem';
 import CameraRollOutlinedIcon from '@mui/icons-material/CameraRollOutlined';
 import { useNavigate } from 'react-router-dom';
 
-const pages = [
+const pagesUser = [
     { label: 'Repozytorium', link: '/repozytorium' },
     { label: 'Sklep', link: '/products' },
+];
+
+const pagesAdmin = [
+    { label: 'Użytkownicy', link: '/products' },
+    { label: 'Pracownicy', link: '/products' },
+    { label: 'Produkty ', link: '/products' },
+];
+
+const pagesEmplyee = [
+    { label: 'Użytkownicy', link: '/products' },
+    { label: 'Produkty ', link: '/products' },
 ];
 
 export default function Navbar() {
@@ -24,14 +35,7 @@ export default function Navbar() {
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
     const navigate = useNavigate();
     const isLoggedIn = !!localStorage.getItem('Token');
-
-    const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElNav(event.currentTarget);
-    };
-
-    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElUser(event.currentTarget);
-    };
+    const userAccountType = localStorage.getItem('UserAccountType');
 
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
@@ -54,9 +58,25 @@ export default function Navbar() {
         navigate(link);
     };
 
-    const handleUserProfileClick = () => {
-        navigate('/userpanel');
-        handleCloseNavMenu(); // Zamknij menu nawigacyjne po przejściu do panelu użytkownika
+    const handleUserProfileClick = (event: React.MouseEvent<HTMLElement>) => {
+        if (isLoggedIn) {
+            setAnchorElUser(event.currentTarget);
+        }
+    };
+
+    const handleUserMenuItemClick = (action: string) => {
+        handleCloseUserMenu();
+
+        switch (action) {
+            case 'profile':
+                navigate('/userpanel');
+                break;
+            case 'products':
+                navigate('/user_products');
+                break;
+            default:
+                break;
+        }
     };
 
     return (
@@ -82,8 +102,49 @@ export default function Navbar() {
                     >
                         ANALOG STORY
                     </Typography>
-                    {isLoggedIn &&
-                        pages.map((page) => (
+                    {isLoggedIn && userAccountType == "2" &&
+                        pagesUser.map((page) => (
+                            <Button
+                                key={page.label}
+                                variant="text"
+                                onClick={() => handlePageButtonClick(page.link)}
+                                sx={{
+                                    mr: 2,
+                                    display: { xs: 'none', md: 'flex' },
+                                    fontFamily: 'monospace',
+                                    fontWeight: 50,
+                                    letterSpacing: '.1rem',
+                                    color: 'inherit',
+                                    textDecoration: 'none',
+                                    cursor: 'pointer',
+                                }}
+                            >
+                                {page.label}
+                            </Button>
+                        ))}
+                    {isLoggedIn && userAccountType == "1" &&
+                        pagesAdmin.map((page) => (
+                            <Button
+                                key={page.label}
+                                variant="text"
+                                onClick={() => handlePageButtonClick(page.link)}
+                                sx={{
+                                    mr: 2,
+                                    display: { xs: 'none', md: 'flex' },
+                                    fontFamily: 'monospace',
+                                    fontWeight: 50,
+                                    letterSpacing: '.1rem',
+                                    color: 'inherit',
+                                    textDecoration: 'none',
+                                    cursor: 'pointer',
+                                }}
+                            >
+                                {page.label}
+                            </Button>
+                        ))}
+
+                    {isLoggedIn && userAccountType == "3" &&
+                        pagesEmplyee.map((page) => (
                             <Button
                                 key={page.label}
                                 variant="text"
@@ -106,9 +167,9 @@ export default function Navbar() {
                     <Box sx={{ flexGrow: 0 }}>
                         {isLoggedIn && (
                             <>
-                                <Tooltip title="Open user profile">
-                                    <IconButton onClick={handleUserProfileClick} sx={{ p: 0, margin: 1 }}>
-                                        <Avatar src="../../../public/profile-user.png" />
+                                <Tooltip title="Open user profile" arrow>
+                                    <IconButton onClick={handleUserProfileClick} sx={{ p: 0, margin: 1 }} aria-label="Open user profile">
+                                        <Avatar src="/profile-user.png" />
                                     </IconButton>
                                 </Tooltip>
                                 <Menu
@@ -127,13 +188,23 @@ export default function Navbar() {
                                     open={Boolean(anchorElUser)}
                                     onClose={handleCloseUserMenu}
                                 >
-                                    <MenuItem onClick={() => navigate('/userpanel')}>
+                                    <MenuItem onClick={() => handleUserMenuItemClick('profile')}>
                                         <Typography textAlign="center">Profil</Typography>
                                     </MenuItem>
-                                    <MenuItem onClick={() => navigate('/user_products')}>
-                                        <Typography textAlign="center">Moje produkty</Typography>
-                                    </MenuItem>
 
+                                    {(userAccountType === "1" || userAccountType === "3") && (
+                                        <MenuItem onClick={() => handleUserMenuItemClick('products')}>
+                                            <Typography textAlign="center">
+                                                {userAccountType === "3" ? 'Zamówienia do zaakceptowania' : 'Aukcje'}
+                                            </Typography>
+                                        </MenuItem>
+                                    )}
+
+                                    {userAccountType === "2" && (
+                                        <MenuItem onClick={() => handleUserMenuItemClick('products')}>
+                                            <Typography textAlign="center">Moje aukcje</Typography>
+                                        </MenuItem>
+                                    )}
                                 </Menu>
                             </>
                         )}
