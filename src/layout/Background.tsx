@@ -11,7 +11,7 @@ export default function Background() {
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 height: '100vh',
-                overflow: 'hidden', // Ukryj paski przewijania
+                overflow: 'hidden',
                 margin: 0,
                 padding: 0,
                 display: 'flex',
@@ -24,7 +24,7 @@ export default function Background() {
                 color: 'white',
             }}
         >
-            <h1 style={{ fontSize: '2.5em', margin: 0 }}>Now, it is yours</h1>
+            <h1 style={{ fontSize: '2.5em', margin: 0, color: "#EFC049"}}>Now, it is yours</h1>
             <p style={{ fontSize: '1.2em', margin: 0 }}>ANALOG STORY</p>
         </div>
     );

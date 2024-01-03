@@ -6,28 +6,67 @@ import TextField from "@mui/material/TextField";
 import { GetRequests } from "../communication/network/GetRequests";
 import { PutRequests } from "../communication/network/PutRequests";
 import { User } from '../communication/Types';
+import Box from "@mui/material/Box";
+
 const UserProfile = () => {
-    const [user, setUser] = useState<User>({
-        id: 0,
-        firstname: "",
-        lastname: "",
+    const PHONE_REGEX = /^[0-9]{9}$/;
+    const MIN_PASSWORD_LENGTH = 8;
+    const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+])(?=.*[a-zA-Z]).{8,}$/;
+
+    const [actualUser, setUser] = useState<User>({
+        id: localStorage.getItem('UserId'),
+        firstName: "",
+        lastName: "",
         email: "",
         login: "",
         password: "",
         phone: "",
-        accountTypeId: 0
+        accountTypeId: localStorage.getItem('UserAccountType')
     });
 
     const [isEditing, setEditing] = useState(false);
     const [newPassword, setNewPassword] = useState("");
+
+    const [formSubmitted] = useState(false);
+
+    const isEmailValid = () => {
+        return validateEmail(actualUser.email);
+    };
+
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const isPasswordValid = () => {
+        return actualUser.password.length >= MIN_PASSWORD_LENGTH && PASSWORD_REGEX.test(actualUser.password);
+    };
+
+    const isFormValid = () => {
+        return (
+            actualUser.firstName &&
+            actualUser.lastName &&
+            actualUser.email &&
+            actualUser.password &&
+            isEmailValid() &&
+            isPasswordValid()&&
+            isPhoneValid()
+        );
+    };
+
+    const isPhoneValid = () => {
+        return PHONE_REGEX.test(actualUser.phone);
+    };
 
     useEffect(() => {
         const token = localStorage.getItem('Token');
         const userId = localStorage.getItem('UserId');
 
         if (token && userId) {
-            GetRequests.getUserById(Number(userId)).then(res =>
-                setUser(res)
+            GetRequests.getUserById(Number(userId)).then(res => {
+                setUser(res);
+                    console.log(res)
+                }
             ).catch(error =>
                 console.log(error)
             );
@@ -39,9 +78,7 @@ const UserProfile = () => {
     };
 
     const handleSaveProfile = () => {
-        console.log("Saving user profile...", { ...user, password: newPassword });
-
-        PutRequests.updateUser({ ...user, password: newPassword }).then(() => {
+        PutRequests.updateUser(actualUser.id, actualUser.firstName, actualUser.lastName, actualUser.email, actualUser.login, actualUser.password, actualUser.phone, actualUser.accountTypeId).then(() => {
             setEditing(false);
         }).catch(error => {
             console.error("Error updating user profile:", error);
@@ -49,43 +86,122 @@ const UserProfile = () => {
     };
 
     return (
-        <Container component="main" maxWidth="xs">
-            <div>
-                <Typography component="h1" variant="h5">
-                    User Profile
+        <Container component="main" maxWidth="s" sx={{ display: "flex", justifyContent: "center", backgroundImage: 'url(/img015.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', height: '100vh', overflow: 'hidden' }}>
+            <Box sx={{ display: "flex", flexDirection: "column", width: "100%", alignItems: "center" }}>
+                <Typography component="h1" variant="h5" sx={{ color: "white", mt: 3 }}>
+                    Dane użytkownika
                 </Typography>
-                {Object.keys(user).map((key) => {
-                    if (key !== "id" && key !== "accountTypeId") {
-                        return (
-                            <p key={key}>
-                                {isEditing ? (
-                                    <TextField
-                                        value={key === "password" ? newPassword : user[key]}
-                                        onChange={(e) => key === "password" ? setNewPassword(e.target.value) : setUser({ ...user, [key]: e.target.value })}
-                                        label={key.charAt(0).toUpperCase() + key.slice(1)}
-                                        type={key === "password" ? "password" : "text"}
-                                    />
+                <Box component="form" noValidate sx={{ mt: 3, pl: 2, pr: 2, width: "50%", height: "60%", pLeft: 2, bgcolor: "white", borderRadius: "1%", justifyContent: "center", }}>
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="firstName"
+                        label="Imię"
+                        name="firstName"
+                        autoFocus
+                        value={actualUser.firstName}
+                        onChange={(event) => setUser((prevState) => ({ ...prevState, firstName: event.target.value }))}
+                        readOnly={!isEditing}
+                    />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="lastName"
+                        label="Nazwisko"
+                        name="lastName"
+                        autoFocus
+                        value={actualUser.lastName}
+                        onChange={(event) => setUser((prevState) => ({ ...prevState, lastName: event.target.value }))}
+                        readOnly={!isEditing}
+                    />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="login"
+                        label="Login"
+                        name="login"
+                        autoComplete="login"
+                        autoFocus
+                        value={actualUser.login}
+                        onChange={(event) => setUser((prevState) => ({ ...prevState, login: event.target.value }))}
+                        readOnly={!isEditing}
+                    />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label="Email"
+                        name="email"
+                        autoComplete="email"
+                        autoFocus
+                        error={actualUser.email && !isEmailValid()}
+                        helperText={actualUser.email && !isEmailValid() ? "Niepoprawny adres email." : null}
+                        value={actualUser.email}
+                        onChange={(event) => setUser((prevState) => ({ ...prevState, email: event.target.value }))}
+                        readOnly={!isEditing}
+                    />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Hasło"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                        error={actualUser.password && !isPasswordValid()}
+                        helperText={
+                            actualUser.password &&
+                            (!isPasswordValid()
+                                ? (
+                                    <div>
+                                        Hasło powinno mieć co najmniej 8 znaków i zawierać co najmniej:
+                                        <ul>
+                                            <li>jedną dużą literę</li>
+                                            <li>jedną małą literę</li>
+                                            <li>jedną cyfrę</li>
+                                            <li>jeden znak specjalny</li>
+                                        </ul>
+                                    </div>
                                 ) : (
-                                    <>
-                                        <strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong> {key === "password" ? "********" : user[key]}
-                                    </>
-                                )}
-                            </p>
-                        );
-                    }
-                    return null;
-                })}
-                {isEditing && (
-                    <Button onClick={handleSaveProfile} fullWidth variant="contained">
-                        Zapisz
-                    </Button>
-                )}
-                {!isEditing && (
-                    <Button onClick={handleEditProfile} fullWidth variant="contained">
-                        Edytuj
-                    </Button>
-                )}
-            </div>
+                                    "Hasło spełnia wymagania."
+                                ))
+                        }
+                        value={actualUser.password}
+                        onChange={(event) => setUser((prevState) => ({ ...prevState, password: event.target.value }))}
+                        readOnly={!isEditing}
+                    />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="phone"
+                        label="Phone"
+                        name="phone"
+                        autoComplete="phone"
+                        autoFocus
+                        error={actualUser.phone && !isPhoneValid()}
+                        helperText={actualUser.phone && !isPhoneValid() ? "Niepoprawny numer telefonu." : null}
+                        value={actualUser.phone}
+                        onChange={(event) => setUser((prevState) => ({ ...prevState, phone: event.target.value }))}
+                        readOnly={!isEditing}
+                    />
+
+                    {isEditing ? (
+                        <Button onClick={handleSaveProfile} fullWidth variant="contained">
+                            Zapisz
+                        </Button>
+                    ) : (
+                        <Button onClick={handleEditProfile} fullWidth variant="contained">
+                            Edytuj
+                        </Button>
+                    )}
+                </Box>
+            </Box>
         </Container>
     );
 };

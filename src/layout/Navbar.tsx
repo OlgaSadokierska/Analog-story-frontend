@@ -80,7 +80,7 @@ export default function Navbar() {
     };
 
     return (
-        <AppBar position="static">
+        <AppBar position="static" sx={{ backgroundColor: "#EFC049"}}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <CameraRollOutlinedIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
