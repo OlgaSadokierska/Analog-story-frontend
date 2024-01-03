@@ -15,7 +15,7 @@ export class PutRequests {
             accountTypeId: accountTypeId
         };
 
-        return api.patch(`${Put.USER_UPDATE}/${id}`, requestBody)
+        return api.put(`${Put.USER_UPDATE}/${id}`, requestBody)
             .then(Utils.mapResponse<void>)
             .catch(Utils.handleError);
     }
