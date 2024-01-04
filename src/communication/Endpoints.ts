@@ -12,6 +12,7 @@ export class Get {
 export class Post {
     static USER = [API_V1, "/auth/login"].join("");
     static USERREG = [API_V1, "/auth/register"].join("");
+    static USER_LOGOUT = "/logout";
 
 }
 
