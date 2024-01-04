@@ -4,17 +4,15 @@ import { api } from "../Config";
 import {Utils} from "./Utils";
 
 export class PutRequests {
-    static updateUser(user: User): Promise<void> {
-        const { id, firstname, lastname, email, login, password, phone, accountTypeId } = user;
-
+    static updateUser(id: number, first_name: string, last_name: string, login: string, email: string, password: string, phone: string, accountTypeId: number): Promise<void> {
         const requestBody = {
-            firstname: firstname,
-            lastname: lastname,
+            firstName: first_name,
+            lastName: last_name,
             email: email,
             login: login,
             password: password,
             phone: phone,
-            accountTypeId: 2
+            accountTypeId: accountTypeId
         };
 
         return api.put(`${Put.USER_UPDATE}/${id}`, requestBody)

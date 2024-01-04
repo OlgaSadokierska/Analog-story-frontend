@@ -58,9 +58,10 @@ export default function LogIn() {
             if (userEmail) {
                 localStorage.setItem('User', userEmail);
 
-                const userDetails = await GetRequests.getUserIDByEmail();
+                const userDetails = await GetRequests.getUserDataByEmail();
                 if (userDetails) {
-                    localStorage.setItem('UserId', userDetails.toString());
+                    localStorage.setItem('UserId', userDetails[0].toString());
+                    localStorage.setItem('UserAccountType', userDetails[1].toString());
                 }
             } else {
                 console.error('User ID is undefined or null');
@@ -88,7 +89,7 @@ export default function LogIn() {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                    <Avatar sx={{ m: 1, bgcolor: '#EFC049' }}>
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
