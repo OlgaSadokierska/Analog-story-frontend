@@ -1,7 +1,8 @@
 import {Get} from "../Endpoints";
 import {
     Product,
-    User
+    User,
+    UserMediaDTO
 } from "../Types";
 import {api} from "../Config";
 import {Utils} from "./Utils";
@@ -38,4 +39,17 @@ export class GetRequests {
             .then(Utils.mapResponse<Product[]>)
             .catch(Utils.handleError)
     }
+
+    static getUserMedia(userId: number): Promise<UserMediaDTO> {
+        const userMediaEndpoint = Get.USER_MEDIA.replace(":userId", userId.toString());
+
+        return api.get(userMediaEndpoint)
+            .then(Utils.mapResponse<UserMediaDTO>)
+            .catch(Utils.handleError);
+    }
+
+
+
+
 }
+

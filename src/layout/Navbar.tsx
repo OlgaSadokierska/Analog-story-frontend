@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import {PostRequests} from "../communication/network/PostRequests";
 
 const pagesUser = [
-    { label: 'Repozytorium', link: '/repozytorium' },
+    { label: 'Repozytorium',  link: '/:userId/media'  },
     { label: 'Sklep', link: '/products' },
 ];
 
@@ -37,6 +37,8 @@ export default function Navbar() {
     const navigate = useNavigate();
     const isLoggedIn = !!localStorage.getItem('Token');
     const userAccountType = localStorage.getItem('UserAccountType');
+    const userId = localStorage.getItem('UserId');
+
 
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
@@ -62,7 +64,16 @@ export default function Navbar() {
     };
 
     const handlePageButtonClick = (link: string) => {
-        navigate(link);
+        if (link.includes('/:userId')) {
+            if (userId) {
+                const formattedLink = link.replace('/:userId', `/${userId}`);
+                navigate(formattedLink);
+            } else {
+                console.error('Nie znaleziono ID użytkownika w localStorage');
+            }
+        } else {
+            navigate(link);
+        }
     };
 
     const handleUserProfileClick = (event: React.MouseEvent<HTMLElement>) => {

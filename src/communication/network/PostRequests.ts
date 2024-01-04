@@ -31,4 +31,6 @@ export class PostRequests {
         return apiAuth.post(Post.USER_LOGOUT).then(Utils.mapResponse<User>)
             .catch(Utils.handleError)
     }
+
+
 }

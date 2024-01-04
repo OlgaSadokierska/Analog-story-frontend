@@ -14,12 +14,6 @@ export interface Product {
     description: string;
     price: number;
 }
-export interface ProductType {
-    id: number;
-    name_type_product: string;
-}
-
-
 export interface Camera {
     id: number;
     user_id: number;
@@ -35,7 +29,12 @@ export interface Film {
     id_camera: number | null;
     loaded_frames: number;
     is_full: boolean;
-    id_product: number | null;
+    id_produktu: number | null;
     is_for_sale: boolean;
-    user_id: number | null;
+    user_id: number;
+}
+
+export interface UserMediaDTO {
+    kamery: Camera[];
+    filmy: Film[];
 }
