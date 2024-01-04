@@ -13,6 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 
 import CameraRollOutlinedIcon from '@mui/icons-material/CameraRollOutlined';
 import { useNavigate } from 'react-router-dom';
+import {PostRequests} from "../communication/network/PostRequests";
 
 const pagesUser = [
     { label: 'Repozytorium', link: '/repozytorium' },
@@ -45,9 +46,15 @@ export default function Navbar() {
         setAnchorElUser(null);
     };
 
-    const handleLoginButtonClick = () => {
+    const handleLoginButtonClick = async () => {
         if (isLoggedIn) {
             localStorage.clear();
+            try {
+                await PostRequests.logout();
+
+            } catch (error) {
+                console.error("Wystąpił błąd", error);
+            }
             navigate('/');
         } else {
             navigate('/login');

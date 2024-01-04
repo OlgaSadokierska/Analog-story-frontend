@@ -26,4 +26,9 @@ export class PostRequests {
         }).then(Utils.mapResponse<User>)
             .catch(Utils.handleError)
     }
+
+    static logout(): Promise<any>{
+        return apiAuth.post(Post.USER_LOGOUT).then(Utils.mapResponse<User>)
+            .catch(Utils.handleError)
+    }
 }
