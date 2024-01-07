@@ -19,12 +19,14 @@ import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import { orderBy } from 'lodash';
+import Button from "@mui/material/Button";
 
 export default function ProductTable() {
     const [products, setProducts] = useState<Product[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortedProducts, setSortedProducts] = useState<Product[]>([]);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+    const userAccountType = localStorage.getItem('UserAccountType');
 
     useEffect(() => {
         async function fetchProducts() {
@@ -76,7 +78,7 @@ export default function ProductTable() {
     return (
 
         <Container maxWidth="lg" sx={{ marginTop: '20px' }}>
-            <h1 style={{ margin: '0 20px' }}>Sklep</h1>
+            <h1 style={{ margin: '0 20px' }}>Produkty</h1>
             <Box sx={{ marginBottom: '20px', display: 'flex', alignItems: 'center' }}>
                 <TextField
                     label="Szukaj po opisie"
@@ -91,9 +93,11 @@ export default function ProductTable() {
                         ),
                     }}
                 />
-
+                <Button sx={{ backgroundColor: '#EFC049', marginLeft: 'auto' }}>
+                    {'Dodaj produkt'}
+                </Button>
             </Box>
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} sx={{ marginTop: '20px', marginBottom: '20px' }}>
                 <Table aria-label="Tabela produktów" sx={{ marginTop: '20px' }}>
                     <TableHead>
                         <TableRow>
@@ -117,15 +121,21 @@ export default function ProductTable() {
                                 <TableCell>{product.description}</TableCell>
                                 <TableCell>{product.price} zł</TableCell>
                                 <TableCell>
-                                    <IconButton onClick={() => handleEdit(product.id)}>
-                                        <EditIcon />
-                                    </IconButton>
-                                    <IconButton onClick={() => handleDelete(product.id)}>
-                                        <DeleteOutlineIcon />
-                                    </IconButton>
-                                    <IconButton onClick={() => handleBuy(product.id)}>
-                                        <ShoppingCartIcon />
-                                    </IconButton>
+                                    {userAccountType === "1" || userAccountType === "3" ? (
+                                        <>
+                                            <IconButton onClick={() => handleEdit(product.id)}>
+                                                <EditIcon />
+                                            </IconButton>
+                                            <IconButton onClick={() => handleDelete(product.id)}>
+                                                <DeleteOutlineIcon />
+                                            </IconButton>
+                                        </>
+                                    ) : null}
+                                    {userAccountType === "2" ? (
+                                        <IconButton onClick={() => handleBuy(product.id)}>
+                                            <ShoppingCartIcon />
+                                        </IconButton>
+                                    ) : null}
                                 </TableCell>
                             </TableRow>
                         ))}

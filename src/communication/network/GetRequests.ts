@@ -38,4 +38,16 @@ export class GetRequests {
             .then(Utils.mapResponse<Product[]>)
             .catch(Utils.handleError)
     }
+
+    static getAllEmployees():Promise<User[]>{
+        return api.get(Get.EMPLOYEES)
+            .then(Utils.mapResponse<User[]>)
+            .catch(Utils.handleError)
+    }
+
+    static getOnlyUsers():Promise<User[]>{
+        return api.get(Get.ONLY_USERS)
+            .then(Utils.mapResponse<User[]>)
+            .catch(Utils.handleError)
+    }
 }

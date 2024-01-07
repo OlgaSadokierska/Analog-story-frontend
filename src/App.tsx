@@ -7,6 +7,8 @@ import LogIn from "./pages/LogIn";
 import UserPanel from "./pages/UserPanel";
 import React from 'react';
 import Shop from "./pages/Shop";
+import AllEmployees from "./pages/admin/AllEmployees";
+import OnlyUsers from "./pages/admin/OnlyUsers";
 
 export default function App() {
   return (
@@ -17,6 +19,8 @@ export default function App() {
                 <Route path="/login" element={<LogIn />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/userpanel" element={<UserPanel />} />
+                <Route path="/employees" element={<AllEmployees />} />
+                <Route path="/users" element={<OnlyUsers />} />
                 <Route path="/products" element={<Shop />} />
                 <Route path="/" element={<Home />} />
             </Routes>

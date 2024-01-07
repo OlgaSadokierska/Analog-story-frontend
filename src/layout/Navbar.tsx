@@ -21,13 +21,13 @@ const pagesUser = [
 ];
 
 const pagesAdmin = [
-    { label: 'Użytkownicy', link: '/products' },
-    { label: 'Pracownicy', link: '/products' },
+    { label: 'Użytkownicy', link: '/users' },
+    { label: 'Pracownicy', link: '/employees' },
     { label: 'Produkty ', link: '/products' },
 ];
 
 const pagesEmplyee = [
-    { label: 'Użytkownicy', link: '/products' },
+    { label: 'Użytkownicy', link: '/users' },
     { label: 'Produkty ', link: '/products' },
 ];
 

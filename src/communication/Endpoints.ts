@@ -5,6 +5,8 @@ const PRODUCTS = "/products";
 export class Get {
     static USERS = [API_V1, USERS].join("");
     static USER_BY_ID = [API_V1, USERS, "/id/"].join("");
+    static EMPLOYEES = [API_V1, USERS, "/employees"].join("");
+    static ONLY_USERS = [API_V1, USERS, "/users"].join("");
     static USER_BY_EMAIL = (email: string) => [API_V1, USERS, "/by-email"].join("") + `?email=${email}`;
     static PRODUCTS = [API_V1, PRODUCTS].join("");
 }
