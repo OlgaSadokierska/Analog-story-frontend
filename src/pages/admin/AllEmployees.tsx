@@ -19,6 +19,9 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import { orderBy } from 'lodash';
 import Button from "@mui/material/Button";
+import { confirmAlert } from "react-confirm-alert";
+import { DeleteRequest } from "../../communication/network/DeleteRequest";
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 export default function AllEmployees() {
     const [users, setUsers] = useState<User[]>([]);
@@ -39,8 +42,28 @@ export default function AllEmployees() {
         console.log(`Edytuj pracownika o ID: ${userId}`);
     };
 
-    const handleDelete = (userId: number) => {
-        console.log(`Usuń pracownika o ID: ${userId}`);
+    const handleDelete = async (userId: number) => {
+        confirmAlert({
+            title: 'Potwierdzenie',
+            message: 'Jesteś pewień, że chcesz usunąć tego użytkownika?',
+            buttons: [
+                {
+                    label: 'Tak',
+                    onClick: async () =>
+                    {   try {
+                        await DeleteRequest.deleteUser(userId);
+                        window.location.reload();
+                    } catch (error) {
+                        alert("Uźytkownik posiada produkty w swojej kolekcji.  " +
+                            "Operaacja niemożliwa!")
+                        console.error(`Błąd podczas usuwania użytkownika o ID: ${userId}`, error);
+                    }}
+                },
+                {
+                    label: 'Anuluj'
+                }
+            ]
+        });
     };
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
