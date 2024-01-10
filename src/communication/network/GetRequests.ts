@@ -2,7 +2,7 @@ import {Get} from "../Endpoints";
 import {
     Product,
     User,
-    UserMediaDTO
+    UserMedia
 } from "../Types";
 import {api} from "../Config";
 import {Utils} from "./Utils";
@@ -40,16 +40,23 @@ export class GetRequests {
             .catch(Utils.handleError)
     }
 
-    static getUserMedia(userId: number): Promise<UserMediaDTO> {
+    static getUserMedia(userId: number): Promise<UserMedia> {
         const userMediaEndpoint = Get.USER_MEDIA.replace(":userId", userId.toString());
 
         return api.get(userMediaEndpoint)
-            .then(Utils.mapResponse<UserMediaDTO>)
+            .then(Utils.mapResponse<UserMedia>)
             .catch(Utils.handleError);
     }
 
+    static getAllEmployees():Promise<User[]>{
+        return api.get(Get.EMPLOYEES)
+            .then(Utils.mapResponse<User[]>)
+            .catch(Utils.handleError)
+    }
 
-
-
+    static getOnlyUsers():Promise<User[]>{
+        return api.get(Get.ONLY_USERS)
+            .then(Utils.mapResponse<User[]>)
+            .catch(Utils.handleError)
+    }
 }
-

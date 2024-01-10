@@ -88,7 +88,7 @@ const UserProfile = () => {
     return (
         <Container component="main" maxWidth="s" sx={{ display: "flex", justifyContent: "center", backgroundImage: 'url(/img015.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', height: '100vh', overflow: 'hidden' }}>
             <Box sx={{ display: "flex", flexDirection: "column", width: "100%", alignItems: "center" }}>
-                <Typography component="h1" variant="h5" sx={{ color: "white", mt: 3 }}>
+                <Typography component="h1" variant="h5" sx={{ color: "black", mt: 3 }}>
                     Dane użytkownika
                 </Typography>
                 <Box component="form" noValidate sx={{ mt: 3, pl: 2, pr: 2, width: "50%", height: "60%", pLeft: 2, bgcolor: "white", borderRadius: "1%", justifyContent: "center", }}>
