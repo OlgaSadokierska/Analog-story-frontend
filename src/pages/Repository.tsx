@@ -126,12 +126,12 @@ const Repository = () => {
     };
     const handleEditCamera = (cameraId: number) => {
         // Obsługa edycji aparatury
-        console.log(`Edytuj aparaturę o ID: ${cameraId}`);
+        console.log(`Edytuj aparat o ID: ${cameraId}`);
     };
 
     const handleDeleteCamera = (cameraId: number) => {
-        // Obsługa usunięcia aparatury
-        console.log(`Usuń aparaturę o ID: ${cameraId}`);
+        // Obsługa usunięcia aparatu
+        console.log(`Usuń apart o ID: ${cameraId}`);
     };
 
     const handleEditFilm = (filmId: number) => {
