@@ -8,13 +8,89 @@ import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { GetRequests } from "../communication/network/GetRequests";
-import { UserMediaDTO, Camera, Film } from '../communication/Types';
+import { UserMedia, Film, Camera } from '../communication/Types';
+
+
+const Row = ({ camera, films, handleEditCamera, handleDeleteCamera, handleEditFilm, handleDeleteFilm }: {
+    camera: Camera;
+    films: Film[];
+    handleEditCamera: (cameraId: number) => void;
+    handleDeleteCamera: (cameraId: number) => void;
+    handleEditFilm: (filmId: number) => void;
+    handleDeleteFilm: (filmId: number) => void;
+}) => {
+    const [open, setOpen] = useState(false);
+
+    return (
+        <React.Fragment>
+            <TableRow key={camera.id}>
+                <TableCell>
+                    <IconButton size="small" onClick={() => setOpen(!open)}>
+                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                    </IconButton>
+                </TableCell>
+                <TableCell>{camera.model}</TableCell>
+                <TableCell>{camera.brand}</TableCell>
+                <TableCell>{camera.isForSale ? 'Tak' : 'Nie'}</TableCell>
+                <TableCell>
+                    <IconButton aria-label="edit-camera" onClick={() => handleEditCamera(camera.id)}>
+                        <EditIcon />
+                    </IconButton>
+                    <IconButton aria-label="delete-camera" onClick={() => handleDeleteCamera(camera.id)}>
+                        <DeleteIcon />
+                    </IconButton>
+                </TableCell>
+            </TableRow>
+            <TableRow>
+                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                    <Collapse in={open} timeout="auto" unmountOnExit>
+                        <Table aria-label="Szczegóły filmów">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Liczba załadowanych klatek</TableCell>
+                                    <TableCell>Czy w pełni wykorzystany?</TableCell>
+                                    <TableCell>Czy na sprzedaż?</TableCell>
+                                    <TableCell>Edytuj</TableCell>
+                                    <TableCell>Usuń</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {films.map((film) => (
+                                    <TableRow key={film.id}>
+                                        <TableCell>{film.loadedFrames}</TableCell>
+                                        <TableCell>{film.isFull ? 'Tak' : 'Nie'}</TableCell>
+                                        <TableCell>{film.isForSale ? 'Tak' : 'Nie'}</TableCell>
+                                        <TableCell>
+                                            <IconButton aria-label="edit-film" onClick={() => handleEditFilm(film.id)}>
+                                                <EditIcon />
+                                            </IconButton>
+                                        </TableCell>
+                                        <TableCell>
+                                            <IconButton aria-label="delete-film" onClick={() => handleDeleteFilm(film.id)}>
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </Collapse>
+                </TableCell>
+            </TableRow>
+        </React.Fragment>
+    );
+};
 
 const Repository = () => {
     const [userId, setUserId] = useState<number | null>(null);
-    const [cameras, setCameras] = useState<Camera[]>([]);
-    const [films, setFilms] = useState<Film[]>([]);
+    const [media, setMedia] = useState<UserMedia | null>(null);
 
     useEffect(() => {
         const storedUserId = localStorage.getItem('UserId');
@@ -27,9 +103,11 @@ const Repository = () => {
     useEffect(() => {
         const fetchUserMedia = async (userId: number) => {
             try {
-                const mediaData: UserMediaDTO = await GetRequests.getUserMedia(userId);
-                setCameras(mediaData.kamery || []);
-                setFilms(mediaData.filmy || []);
+                const mediaData: UserMedia = await GetRequests.getUserMedia(userId);
+                if (mediaData) {
+                    setMedia(mediaData);
+                }
+                console.log(mediaData);
             } catch (error) {
                 console.error("Error fetching user media:", error);
             }
@@ -40,67 +118,154 @@ const Repository = () => {
         }
     }, [userId]);
 
+    const handleEditCamera = (cameraId: number) => {
+        // Obsługa edycji aparatury
+        console.log(`Edytuj aparaturę o ID: ${cameraId}`);
+    };
+
+    const handleDeleteCamera = (cameraId: number) => {
+        // Obsługa usunięcia aparatury
+        console.log(`Usuń aparaturę o ID: ${cameraId}`);
+    };
+
+    const handleEditFilm = (filmId: number) => {
+        // Obsługa edycji filmu
+        console.log(`Edytuj film o ID: ${filmId}`);
+    };
+
+    const handleDeleteFilm = (filmId: number) => {
+        // Obsługa usunięcia filmu
+        console.log(`Usuń film o ID: ${filmId}`);
+    };
+
+    if (userId === null || !media) {
+        return (
+            <Container component="main" maxWidth="lg">
+                <Typography component="h1" variant="h5">
+                    Brak danych
+                </Typography>
+            </Container>
+        );
+    }
+
+    const camerasWithFilms = media.cameras.filter(
+        (camera) => media.films.some((film) => film.idCamera === camera.id)
+    );
+
+    const camerasWithoutFilms = media.cameras.filter(
+        (camera) => !media.films.some((film) => film.idCamera === camera.id)
+    );
+
+    const filmsWithoutCameras = media.films.filter(
+        (film) => !media.cameras.some((camera) => camera.id === film.idCamera)
+    );
+
     return (
         <Container component="main" maxWidth="lg">
-            {userId !== null && (
-                <div>
-                    <p></p>
-                    <Typography component="h1" variant="h5">
-                        <h2>Repozytorium</h2>
-                    </Typography>
-                    <p></p>
-                    <TableContainer component={Paper}>
-                        <Typography component="h2" variant="h6">
-                            Kamery
-                        </Typography>
-                        <Table aria-label="Kamery">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>ID</TableCell>
-                                    <TableCell>Model</TableCell>
-                                    <TableCell>Brand</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {cameras.map(camera => (
-                                    <TableRow key={camera.id}>
-                                        <TableCell>{camera.id}</TableCell>
-                                        <TableCell>{camera.model}</TableCell>
-                                        <TableCell>{camera.brand}</TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+            <Typography variant="h5">
+                Repozytorium klisz i aparatów
+            </Typography>
 
-                    <TableContainer component={Paper}>
-                        <Typography component="h2" variant="h6">
-                            Filmy
-                        </Typography>
-                        <Table aria-label="Filmy">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>ID</TableCell>
-                                    <TableCell>Loaded Frames</TableCell>
-                                    <TableCell>Is Full</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {films.map(film => (
-                                    <TableRow key={film.id}>
-                                        <TableCell>{film.id}</TableCell>
-                                        <TableCell>{film.loaded_frames}</TableCell>
-                                        <TableCell>{film.is_full ? 'Full' : 'Not Full'}</TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+            {camerasWithFilms.length > 0 && (
+                <TableContainer component={Paper}>
+                    <Typography variant="h6">Aparaty z kliszami</Typography>
+                    <Table aria-label="Kamery z filmami">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell />
+                                <TableCell>Model</TableCell>
+                                <TableCell>Marka</TableCell>
+                                <TableCell>Czy na sprzedaż?</TableCell>
+                                <TableCell>Akcje</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {camerasWithFilms.map((camera) => (
+                                <Row
+                                    key={camera.id}
+                                    camera={camera}
+                                    films={media.films.filter((film) => film.idCamera === camera.id)}
+                                    handleEditCamera={handleEditCamera}
+                                    handleDeleteCamera={handleDeleteCamera}
+                                    handleEditFilm={handleEditFilm}
+                                    handleDeleteFilm={handleDeleteFilm}
+                                />
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            )}
 
-            </div>
-)}
-</Container>
-);
+            {camerasWithoutFilms.length > 0 && (
+                <TableContainer component={Paper}>
+                    <Typography variant="h6">Aparaty</Typography>
+                    <Table aria-label="Kamery bez filmów">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Model</TableCell>
+                                <TableCell>Marka</TableCell>
+                                <TableCell>Czy na sprzedaż?</TableCell>
+                                <TableCell>Akcje</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {camerasWithoutFilms.map((camera) => (
+                                <TableRow key={camera.id}>
+                                    <TableCell>{camera.model}</TableCell>
+                                    <TableCell>{camera.brand}</TableCell>
+                                    <TableCell>{camera.isForSale ? 'Tak' : 'Nie'}</TableCell>
+                                    <TableCell>
+                                        <IconButton aria-label="edit-camera" onClick={() => handleEditCamera(camera.id)}>
+                                            <EditIcon />
+                                        </IconButton>
+                                        <IconButton aria-label="delete-camera" onClick={() => handleDeleteCamera(camera.id)}>
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            )}
+
+            {filmsWithoutCameras.length > 0 && (
+                <TableContainer component={Paper}>
+                    <Typography variant="h6">Filmy bez powiązanych kamer</Typography>
+                    <Table aria-label="Filmy bez kamer">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Liczba załadowanych klatek</TableCell>
+                                <TableCell>Czy w pełni wykorzystany?</TableCell>
+                                <TableCell>Czy na sprzedaż?</TableCell>
+                                <TableCell>Edytuj</TableCell>
+                                <TableCell>Usuń</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {filmsWithoutCameras.map((film) => (
+                                <TableRow key={film.id}>
+                                    <TableCell>{film.loadedFrames}</TableCell>
+                                    <TableCell>{film.isFull ? 'Tak' : 'Nie'}</TableCell>
+                                    <TableCell>{film.isForSale ? 'Tak' : 'Nie'}</TableCell>
+                                    <TableCell>
+                                        <IconButton aria-label="edit-film" onClick={() => handleEditFilm(film.id)}>
+                                            <EditIcon />
+                                        </IconButton>
+                                    </TableCell>
+                                    <TableCell>
+                                        <IconButton aria-label="delete-film" onClick={() => handleDeleteFilm(film.id)}>
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            )}
+        </Container>
+    );
 };
 
 export default Repository;

@@ -34,7 +34,7 @@ export interface Film {
     user_id: number;
 }
 
-export interface UserMediaDTO {
+export interface UserMedia {
     kamery: Camera[];
     filmy: Film[];
 }
