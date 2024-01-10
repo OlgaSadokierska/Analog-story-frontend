@@ -19,22 +19,22 @@ export interface Camera {
     user_id: number;
     model: string;
     brand: string;
-    film_loaded: boolean;
-    is_for_sale: boolean;
+    filmLoaded: boolean;
+    isForSale: boolean;
     product_id: number;
 }
 
 export interface Film {
     id: number;
-    id_camera: number | null;
-    loaded_frames: number;
-    is_full: boolean;
+    idCamera: number | null;
+    loadedFrames: number;
+    isFull: boolean;
     id_produktu: number | null;
-    is_for_sale: boolean;
+    isForSale: boolean;
     user_id: number;
 }
 
 export interface UserMedia {
-    kamery: Camera[];
-    filmy: Film[];
+    cameras: Camera[];
+    films: Film[];
 }

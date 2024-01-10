@@ -16,17 +16,25 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { GetRequests } from "../communication/network/GetRequests";
 import { UserMedia, Film, Camera } from '../communication/Types';
+import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
 
-
-const Row = ({ camera, films, handleEditCamera, handleDeleteCamera, handleEditFilm, handleDeleteFilm }: {
+const Row = ({
+                 camera,
+                 films,
+                 handleEditCamera,
+                 handleDeleteCamera,
+                 handleAddMedia,
+             }: {
     camera: Camera;
     films: Film[];
     handleEditCamera: (cameraId: number) => void;
     handleDeleteCamera: (cameraId: number) => void;
-    handleEditFilm: (filmId: number) => void;
     handleDeleteFilm: (filmId: number) => void;
+    handleAddMedia: () => void;
 }) => {
     const [open, setOpen] = useState(false);
+
 
     return (
         <React.Fragment>
@@ -57,8 +65,6 @@ const Row = ({ camera, films, handleEditCamera, handleDeleteCamera, handleEditFi
                                     <TableCell>Liczba załadowanych klatek</TableCell>
                                     <TableCell>Czy w pełni wykorzystany?</TableCell>
                                     <TableCell>Czy na sprzedaż?</TableCell>
-                                    <TableCell>Edytuj</TableCell>
-                                    <TableCell>Usuń</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -67,16 +73,6 @@ const Row = ({ camera, films, handleEditCamera, handleDeleteCamera, handleEditFi
                                         <TableCell>{film.loadedFrames}</TableCell>
                                         <TableCell>{film.isFull ? 'Tak' : 'Nie'}</TableCell>
                                         <TableCell>{film.isForSale ? 'Tak' : 'Nie'}</TableCell>
-                                        <TableCell>
-                                            <IconButton aria-label="edit-film" onClick={() => handleEditFilm(film.id)}>
-                                                <EditIcon />
-                                            </IconButton>
-                                        </TableCell>
-                                        <TableCell>
-                                            <IconButton aria-label="delete-film" onClick={() => handleDeleteFilm(film.id)}>
-                                                <DeleteIcon />
-                                            </IconButton>
-                                        </TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
@@ -87,6 +83,12 @@ const Row = ({ camera, films, handleEditCamera, handleDeleteCamera, handleEditFi
         </React.Fragment>
     );
 };
+
+const tableContainerStyle = {
+    marginTop: '20px',
+    marginBottom: '20px',
+};
+
 
 const Repository = () => {
     const [userId, setUserId] = useState<number | null>(null);
@@ -118,6 +120,10 @@ const Repository = () => {
         }
     }, [userId]);
 
+    const handleAddMedia = () => {
+        // Obsługa dodawania nowych mediów
+        console.log("Dodaj media");
+    };
     const handleEditCamera = (cameraId: number) => {
         // Obsługa edycji aparatury
         console.log(`Edytuj aparaturę o ID: ${cameraId}`);
@@ -137,6 +143,7 @@ const Repository = () => {
         // Obsługa usunięcia filmu
         console.log(`Usuń film o ID: ${filmId}`);
     };
+
 
     if (userId === null || !media) {
         return (
@@ -162,12 +169,21 @@ const Repository = () => {
 
     return (
         <Container component="main" maxWidth="lg">
-            <Typography variant="h5">
-                Repozytorium klisz i aparatów
-            </Typography>
+            <Grid container alignItems="center" justifyContent="space-between" style={{ marginTop: '20px', marginBottom: '20px' }}>
+                <Grid item>
+                    <Typography variant="h5">
+                        Repozytorium klisz i aparatów
+                    </Typography>
+                </Grid>
+                <Grid item>
+                    <Button sx={{ backgroundColor: '#EFC049' }} onClick={handleAddMedia}>
+                        {'Dodaj media'}
+                    </Button>
+                </Grid>
+            </Grid>
 
             {camerasWithFilms.length > 0 && (
-                <TableContainer component={Paper}>
+                <TableContainer component={Paper} style={tableContainerStyle}>
                     <Typography variant="h6">Aparaty z kliszami</Typography>
                     <Table aria-label="Kamery z filmami">
                         <TableHead>
@@ -187,8 +203,8 @@ const Repository = () => {
                                     films={media.films.filter((film) => film.idCamera === camera.id)}
                                     handleEditCamera={handleEditCamera}
                                     handleDeleteCamera={handleDeleteCamera}
-                                    handleEditFilm={handleEditFilm}
                                     handleDeleteFilm={handleDeleteFilm}
+                                    handleAddMedia={handleAddMedia}
                                 />
                             ))}
                         </TableBody>
@@ -197,7 +213,7 @@ const Repository = () => {
             )}
 
             {camerasWithoutFilms.length > 0 && (
-                <TableContainer component={Paper}>
+                <TableContainer component={Paper} style={tableContainerStyle}>
                     <Typography variant="h6">Aparaty</Typography>
                     <Table aria-label="Kamery bez filmów">
                         <TableHead>
@@ -230,7 +246,7 @@ const Repository = () => {
             )}
 
             {filmsWithoutCameras.length > 0 && (
-                <TableContainer component={Paper}>
+                <TableContainer component={Paper} style={tableContainerStyle}>
                     <Typography variant="h6">Filmy bez powiązanych kamer</Typography>
                     <Table aria-label="Filmy bez kamer">
                         <TableHead>
