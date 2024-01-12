@@ -14,6 +14,12 @@ export interface Product {
     description: string;
     price: number;
 }
+
+export interface ProductType {
+    id: number;
+    typeName: string;
+}
+
 export interface Camera {
     id: number;
     user_id: number;

@@ -2,7 +2,8 @@ import {Get} from "../Endpoints";
 import {
     Product,
     User,
-    UserMedia
+    UserMedia,
+    ProductType
 } from "../Types";
 import {api} from "../Config";
 import {Utils} from "./Utils";
@@ -59,4 +60,11 @@ export class GetRequests {
             .then(Utils.mapResponse<User[]>)
             .catch(Utils.handleError)
     }
+
+    static getAllProductTypes():Promise<ProductType[]>{
+        return api.get(Get.PRODUCT_TYPES)
+            .then(Utils.mapResponse<ProductType[]>)
+            .catch(Utils.handleError)
+    }
+
 }

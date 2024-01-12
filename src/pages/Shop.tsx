@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -20,13 +21,13 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import { orderBy } from 'lodash';
 import Button from "@mui/material/Button";
-
 export default function ProductTable() {
     const [products, setProducts] = useState<Product[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortedProducts, setSortedProducts] = useState<Product[]>([]);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
     const userAccountType = localStorage.getItem('UserAccountType');
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchProducts() {
@@ -75,6 +76,10 @@ export default function ProductTable() {
         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     };
 
+    const handleAddProduct = () => {
+        navigate('/addproduct');
+    };
+
     return (
 
         <Container maxWidth="lg" sx={{ marginTop: '20px' }}>
@@ -93,8 +98,8 @@ export default function ProductTable() {
                         ),
                     }}
                 />
-                <Button sx={{ backgroundColor: '#EFC049', marginLeft: 'auto' }}>
-                    {'Dodaj produkt'}
+                <Button sx={{ backgroundColor: '#EFC049', marginLeft: 'auto' }} onClick={handleAddProduct}>
+                    {'Dodaj ogłoszenie'}
                 </Button>
             </Box>
             <TableContainer component={Paper} sx={{ marginTop: '20px', marginBottom: '20px' }}>

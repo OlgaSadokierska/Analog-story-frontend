@@ -1,6 +1,7 @@
 import {Post} from "../Endpoints";
 import {
-    User
+    User,
+    Product
 } from "../Types";
 import {api} from "../Config";
 import {Utils} from "./Utils";
@@ -29,6 +30,14 @@ export class PostRequests {
 
     static logout(): Promise<any>{
         return apiAuth.post(Post.USER_LOGOUT).then(Utils.mapResponse<User>)
+            .catch(Utils.handleError)
+    }
+
+    static addProduct(name: string, price: number): Promise<any>{
+        return apiAuth.post(Post.PRODUCT, {
+            name: name,
+            price: price
+        }).then(Utils.mapResponse<any>)
             .catch(Utils.handleError)
     }
 

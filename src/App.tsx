@@ -10,6 +10,7 @@ import Shop from "./pages/Shop";
 import AllEmployees from "./pages/admin/AllEmployees";
 import OnlyUsers from "./pages/admin/OnlyUsers";
 import Repository from "./pages/Repository";
+import AddProduct from "./pages/AddProduct";
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
                 <Route path="/:userId/media" element={<Repository />} />
                 <Route path="/products" element={<Shop />} />
                 <Route path="/" element={<Home />} />
+                <Route path="/addproduct" element={<AddProduct />} />
             </Routes>
         </BrowserRouter>
     </div>
