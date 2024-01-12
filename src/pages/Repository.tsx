@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import TableContainer from '@mui/material/TableContainer';
@@ -18,6 +19,7 @@ import { GetRequests } from "../communication/network/GetRequests";
 import { UserMedia, Film, Camera } from '../communication/Types';
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
+
 
 const Row = ({
                  camera,
@@ -93,6 +95,7 @@ const tableContainerStyle = {
 const Repository = () => {
     const [userId, setUserId] = useState<number | null>(null);
     const [media, setMedia] = useState<UserMedia | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const storedUserId = localStorage.getItem('UserId');
@@ -121,8 +124,7 @@ const Repository = () => {
     }, [userId]);
 
     const handleAddMedia = () => {
-        // Obsługa dodawania nowych mediów
-        console.log("Dodaj media");
+        navigate('/addmedia');
     };
     const handleEditCamera = (cameraId: number) => {
         // Obsługa edycji aparatury

@@ -11,6 +11,7 @@ import AllEmployees from "./pages/admin/AllEmployees";
 import OnlyUsers from "./pages/admin/OnlyUsers";
 import Repository from "./pages/Repository";
 import AddProduct from "./pages/AddProduct";
+import AddMedia from "./pages/AddMedia";
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
                 <Route path="/products" element={<Shop />} />
                 <Route path="/" element={<Home />} />
                 <Route path="/addproduct" element={<AddProduct />} />
+                <Route path="/addmedia" element={<AddMedia />} />
             </Routes>
         </BrowserRouter>
     </div>
