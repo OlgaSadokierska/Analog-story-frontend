@@ -36,6 +36,7 @@ const Row = ({
     handleAddMedia: () => void;
 }) => {
     const [open, setOpen] = useState(false);
+    const navigate = useNavigate();
 
 
     return (
@@ -129,6 +130,7 @@ const Repository = () => {
     const handleEditCamera = (cameraId: number) => {
         // Obsługa edycji aparatury
         console.log(`Edytuj aparat o ID: ${cameraId}`);
+        navigate(`/editcamera/${cameraId}`);
     };
 
     const handleDeleteCamera = (cameraId: number) => {
@@ -139,6 +141,7 @@ const Repository = () => {
     const handleEditFilm = (filmId: number) => {
         // Obsługa edycji filmu
         console.log(`Edytuj film o ID: ${filmId}`);
+        navigate(`/editfilm/${filmId}`);
     };
 
     const handleDeleteFilm = (filmId: number) => {

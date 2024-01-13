@@ -55,7 +55,7 @@ const AddProduct = () => {
     return (
         <Container component="main" maxWidth="s" sx={{ display: "flex", justifyContent: "center", backgroundImage: 'url(/img015.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', height: '100vh', overflow: 'hidden' }}>
             <Box sx={{ display: "flex", flexDirection: "column", width: "50%", alignItems: "center", mt: 4 }}>
-                <h1>Dodaj nowy produkt</h1>
+                <h1 style={{ margin: '0 20px' }}>Dodaj nowy produkt</h1>
                 <Box component="form" noValidate sx={{ mt: 3, p: 3, bgcolor: "white", borderRadius: "1%", boxShadow: 1, }}>
                     <div style={{ marginBottom: '20px' }}>
                         <span style={{ marginRight: '10px' }}>Typ produktu:</span>
