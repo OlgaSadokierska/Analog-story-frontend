@@ -14,20 +14,22 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { User } from "../../communication/Types";
 import { GetRequests } from "../../communication/network/GetRequests";
+import { orderBy } from "lodash" ;
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import { orderBy } from 'lodash';
 import Button from "@mui/material/Button";
 import { confirmAlert } from "react-confirm-alert";
-import { DeleteRequest } from "../../communication/network/DeleteRequest";
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import { useNavigate, Link } from "react-router-dom";
+import {DeleteRequest} from "../../communication/network/DeleteRequest";
 
 export default function AllEmployees() {
     const [users, setUsers] = useState<User[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortedUsers, setSortedUsers] = useState<User[]>([]);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+    const navigate = useNavigate();
 
     useEffect(() => {
         GetRequests.getAllEmployees().then(res => {
@@ -39,7 +41,7 @@ export default function AllEmployees() {
     }, [sortOrder])
 
     const handleEdit = (userId: number) => {
-        console.log(`Edytuj pracownika o ID: ${userId}`);
+        navigate(`/userprofile/${userId}`);
     };
 
     const handleDelete = async (userId: number) => {
@@ -50,14 +52,16 @@ export default function AllEmployees() {
                 {
                     label: 'Tak',
                     onClick: async () =>
-                    {   try {
-                        await DeleteRequest.deleteUser(userId);
-                        window.location.reload();
-                    } catch (error) {
-                        alert("Uźytkownik posiada produkty w swojej kolekcji.  " +
-                            "Operaacja niemożliwa!")
-                        console.error(`Błąd podczas usuwania użytkownika o ID: ${userId}`, error);
-                    }}
+                    {
+                        try {
+                            await DeleteRequest.deleteUser(userId);
+                            window.location.reload();
+                        } catch (error) {
+                            alert("Uźytkownik posiada produkty w swojej kolekcji.  " +
+                                "Operaacja niemożliwa!")
+                            console.error(`Błąd podczas usuwania użytkownika o ID: ${userId}`, error);
+                        }
+                    }
                 },
                 {
                     label: 'Anuluj'
@@ -84,6 +88,10 @@ export default function AllEmployees() {
         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     };
 
+    const handleAddEmployee = () => {
+        navigate('/addemployee');
+    };
+
     return (
         <Container maxWidth="lg" sx={{ marginTop: '20px' }}>
             <h1 style={{ margin: '0 20px' }}>Wszyscy pracownicy</h1>
@@ -101,7 +109,7 @@ export default function AllEmployees() {
                         ),
                     }}
                 />
-                <Button sx={{ backgroundColor: '#EFC049', marginLeft: 'auto' }}>
+                <Button sx={{ backgroundColor: '#EFC049', marginLeft: 'auto' }} onClick={handleAddEmployee}>
                     {'Dodaj pracownika'}
                 </Button>
             </Box>
@@ -109,13 +117,8 @@ export default function AllEmployees() {
                 <Table aria-label="Tabela pracowników" sx={{ marginTop: '20px' }}>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Użytkownik</TableCell>
-                            <TableCell>
-                                Imię
-                            </TableCell>
-                            <TableCell>
-                                Nazwisko
-                            </TableCell>
+                            <TableCell>Imię</TableCell>
+                            <TableCell>Nazwisko</TableCell>
                             <TableCell>
                                 E-mail
                                 <IconButton onClick={handleSortByEmail}>
@@ -132,12 +135,11 @@ export default function AllEmployees() {
                     <TableBody>
                         {sortedUsers.map((user) => (
                             <TableRow key={user.id}>
-                                <TableCell>{user.id}</TableCell>
                                 <TableCell>{user.firstName}</TableCell>
                                 <TableCell>{user.lastName}</TableCell>
                                 <TableCell>{user.email}</TableCell>
                                 <TableCell>
-                                    <IconButton onClick={() => handleEdit(user.id)}>
+                                    <IconButton component={Link} to={`/userprofile/${user.id}`}>
                                         <EditIcon />
                                     </IconButton>
                                     <IconButton onClick={() => handleDelete(user.id)}>

@@ -32,5 +32,22 @@ export class PostRequests {
             .catch(Utils.handleError)
     }
 
-
+    static addEmployee(
+        first_name: string,
+        last_name: string,
+        login: string,
+        email: string,
+        password: string,
+        phone: string
+    ): Promise<User> {
+        return apiAuth.post(Post.USER_ADD_EMPLOYEE, {
+            firstName: first_name,
+            lastName: last_name,
+            login: login,
+            email: email,
+            password: password,
+            phone: phone
+        }).then(Utils.mapResponse<User>)
+            .catch(Utils.handleError);
+    }
 }

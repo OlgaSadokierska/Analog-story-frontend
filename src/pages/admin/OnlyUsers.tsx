@@ -105,7 +105,6 @@ export default function OnlyUsers() {
                 <Table aria-label="Tabela użytkowników" >
                     <TableHead>
                         <TableRow>
-                            <TableCell>Użytkownik</TableCell>
                             <TableCell>
                                 Imię
                             </TableCell>
@@ -128,7 +127,6 @@ export default function OnlyUsers() {
                     <TableBody>
                         {sortedUsers.map((user) => (
                             <TableRow key={user.id}>
-                                <TableCell>{user.id}</TableCell>
                                 <TableCell>{user.firstName}</TableCell>
                                 <TableCell>{user.lastName}</TableCell>
                                 <TableCell>{user.email}</TableCell>
