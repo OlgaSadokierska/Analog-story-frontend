@@ -1,6 +1,7 @@
 import {Post} from "../Endpoints";
 import {
-    User
+    User,
+    Product
 } from "../Types";
 import {api} from "../Config";
 import {Utils} from "./Utils";
@@ -48,6 +49,17 @@ export class PostRequests {
             password: password,
             phone: phone
         }).then(Utils.mapResponse<User>)
+            .catch(Utils.handleError);
+    }
+    static createProduct(product_type_id: number, description: string, price: number): Promise<any> {
+        const postData = {
+            product_type_id: product_type_id,
+            description: description,
+            price: price
+        };
+
+        return apiAuth.post(Post.PRODUCT, postData)
+            .then(Utils.mapResponse<any>)
             .catch(Utils.handleError);
     }
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import TableContainer from '@mui/material/TableContainer';
@@ -15,25 +16,39 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { GetRequests } from "../communication/network/GetRequests";
-import { UserMedia, Film, Camera } from '../communication/Types';
+import { UserMedia, Film, Camera, Product, ProductType } from '../communication/Types';
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
+
 
 const Row = ({
                  camera,
                  films,
+                 products,
+                 types,
                  handleEditCamera,
                  handleDeleteCamera,
                  handleAddMedia,
              }: {
     camera: Camera;
     films: Film[];
+    products: Product[];
+    types: ProductType[];
     handleEditCamera: (cameraId: number) => void;
     handleDeleteCamera: (cameraId: number) => void;
     handleDeleteFilm: (filmId: number) => void;
     handleAddMedia: () => void;
 }) => {
     const [open, setOpen] = useState(false);
+    const navigate = useNavigate();
+
+    const findProductById = (productId: number): Product | undefined => {
+        const foundProduct = products ? products.find((product) => product.id === productId) : undefined;
+        console.log("Found product:", foundProduct);
+        return foundProduct;
+    };
+
+    const cameraProduct = findProductById(camera.product_id);
 
 
     return (
@@ -41,23 +56,25 @@ const Row = ({
             <TableRow key={camera.id}>
                 <TableCell>
                     <IconButton size="small" onClick={() => setOpen(!open)}>
-                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                        {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
                     </IconButton>
                 </TableCell>
                 <TableCell>{camera.model}</TableCell>
                 <TableCell>{camera.brand}</TableCell>
                 <TableCell>{camera.isForSale ? 'Tak' : 'Nie'}</TableCell>
+                <TableCell>{camera.product.description}</TableCell>
+                <TableCell>{camera.product.price}</TableCell>
                 <TableCell>
                     <IconButton aria-label="edit-camera" onClick={() => handleEditCamera(camera.id)}>
-                        <EditIcon />
+                        <EditIcon/>
                     </IconButton>
                     <IconButton aria-label="delete-camera" onClick={() => handleDeleteCamera(camera.id)}>
-                        <DeleteIcon />
+                        <DeleteIcon/>
                     </IconButton>
                 </TableCell>
             </TableRow>
             <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={7}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Table aria-label="Szczegóły filmów">
                             <TableHead>
@@ -84,7 +101,9 @@ const Row = ({
     );
 };
 
-const tableContainerStyle = {
+
+
+    const tableContainerStyle = {
     marginTop: '20px',
     marginBottom: '20px',
 };
@@ -93,6 +112,7 @@ const tableContainerStyle = {
 const Repository = () => {
     const [userId, setUserId] = useState<number | null>(null);
     const [media, setMedia] = useState<UserMedia | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const storedUserId = localStorage.getItem('UserId');
@@ -121,12 +141,12 @@ const Repository = () => {
     }, [userId]);
 
     const handleAddMedia = () => {
-        // Obsługa dodawania nowych mediów
-        console.log("Dodaj media");
+        navigate('/addmedia');
     };
     const handleEditCamera = (cameraId: number) => {
         // Obsługa edycji aparatury
         console.log(`Edytuj aparat o ID: ${cameraId}`);
+        navigate(`/editcamera/${cameraId}`);
     };
 
     const handleDeleteCamera = (cameraId: number) => {
@@ -137,6 +157,7 @@ const Repository = () => {
     const handleEditFilm = (filmId: number) => {
         // Obsługa edycji filmu
         console.log(`Edytuj film o ID: ${filmId}`);
+        navigate(`/editfilm/${filmId}`);
     };
 
     const handleDeleteFilm = (filmId: number) => {
@@ -192,6 +213,8 @@ const Repository = () => {
                                 <TableCell>Model</TableCell>
                                 <TableCell>Marka</TableCell>
                                 <TableCell>Czy na sprzedaż?</TableCell>
+                                <TableCell>Opis</TableCell>
+                                <TableCell>Cena</TableCell>
                                 <TableCell>Akcje</TableCell>
                             </TableRow>
                         </TableHead>
@@ -221,6 +244,8 @@ const Repository = () => {
                                 <TableCell>Model</TableCell>
                                 <TableCell>Marka</TableCell>
                                 <TableCell>Czy na sprzedaż?</TableCell>
+                                <TableCell>Opis</TableCell>
+                                <TableCell>Cena</TableCell>
                                 <TableCell>Akcje</TableCell>
                             </TableRow>
                         </TableHead>
@@ -230,6 +255,8 @@ const Repository = () => {
                                     <TableCell>{camera.model}</TableCell>
                                     <TableCell>{camera.brand}</TableCell>
                                     <TableCell>{camera.isForSale ? 'Tak' : 'Nie'}</TableCell>
+                                    <TableCell>{camera.product.description}</TableCell>
+                                    <TableCell>{camera.product.price}</TableCell>
                                     <TableCell>
                                         <IconButton aria-label="edit-camera" onClick={() => handleEditCamera(camera.id)}>
                                             <EditIcon />
