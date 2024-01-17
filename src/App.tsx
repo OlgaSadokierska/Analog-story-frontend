@@ -10,6 +10,8 @@ import Shop from "./pages/Shop";
 import AllEmployees from "./pages/admin/AllEmployees";
 import OnlyUsers from "./pages/admin/OnlyUsers";
 import Repository from "./pages/Repository";
+import AddEmployee from "./pages/admin/AddEmployee";
+import EditUser from "./pages/admin/EditUser";
 import AddProduct from "./pages/AddProduct";
 import AddMedia from "./pages/AddMedia";
 import EditCamera from "./pages/EditCamera";
@@ -25,6 +27,8 @@ export default function App() {
                 <Route path="/userpanel" element={<UserPanel />} />
                 <Route path="/employees" element={<AllEmployees />} />
                 <Route path="/users" element={<OnlyUsers />} />
+                <Route path="/addemployee" element={<AddEmployee />} />
+                <Route path="/userprofile/:userId" element={<EditUser />} />
                 <Route path="/:userId/media" element={<Repository />} />
                 <Route path="/products" element={<Shop />} />
                 <Route path="/" element={<Home />} />
