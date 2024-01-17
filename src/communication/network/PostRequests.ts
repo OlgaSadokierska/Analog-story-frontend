@@ -33,13 +33,18 @@ export class PostRequests {
             .catch(Utils.handleError)
     }
 
-    static addProduct(name: string, price: number): Promise<any>{
-        return apiAuth.post(Post.PRODUCT, {
-            name: name,
+    static createProduct(product_type_id: number, description: string, price: number): Promise<any> {
+        const postData = {
+            product_type_id: product_type_id,
+            description: description,
             price: price
-        }).then(Utils.mapResponse<any>)
-            .catch(Utils.handleError)
+        };
+
+        return apiAuth.post(Post.PRODUCT, postData)
+            .then(Utils.mapResponse<any>)
+            .catch(Utils.handleError);
     }
+
 
 
 }

@@ -36,6 +36,8 @@ const AddMediaPage = () => {
         }
     }, []);
 
+
+
     useEffect(() => {
         const fetchUserCameras = async () => {
             try {

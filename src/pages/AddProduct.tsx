@@ -10,8 +10,7 @@ import { GetRequests } from '../communication/network/GetRequests';
 import { ProductType, Product } from '../communication/Types';
 
 const AddProduct = () => {
-    const initialProductState: Product = {
-        id: 0,
+    const initialProductState: { price: number; description: string; product_type_id: number } = {
         product_type_id: 0,
         description: '',
         price: 0
@@ -40,17 +39,20 @@ const AddProduct = () => {
 
     const handleAddProduct = async () => {
         try {
-            await PostRequests.addProduct(newProduct);
+            console.log('Product data to be sent:', newProduct);
+            await PostRequests.createProduct(newProduct.product_type_id, newProduct.description, newProduct.price);
             console.log('Dodano nowy produkt:', newProduct);
-
             setNewProduct(initialProductState);
             setError('');
         } catch (error) {
             console.error('Wystąpił błąd podczas dodawania produktu:', error);
-
+            if (error.response) {
+                console.error('Error Response Data:', error.response.data);
+            }
             setError('Wystąpił błąd podczas dodawania produktu');
         }
     };
+
 
     return (
         <Container component="main" maxWidth="s" sx={{ display: "flex", justifyContent: "center", backgroundImage: 'url(/img015.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', height: '100vh', overflow: 'hidden' }}>
@@ -67,9 +69,9 @@ const AddProduct = () => {
                             value={newProduct.product_type_id}
                             onChange={(event) => setNewProduct((prevState) => ({ ...prevState, product_type_id: event.target.value }))}
                         >
-                            {productTypes.map((productType) => (
-                                <MenuItem key={productType.id} value={productType.id} label={productType.typeName}>
-                                    {productType.typeName}
+                            {productTypes.map(({id, typeName}) => (
+                                <MenuItem key={id} value={id}>
+                                    {typeName}
                                 </MenuItem>
                             ))}
                         </Select>

@@ -21,6 +21,8 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import { orderBy } from 'lodash';
 import Button from "@mui/material/Button";
+
+
 export default function ProductTable() {
     const [products, setProducts] = useState<Product[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -81,7 +83,6 @@ export default function ProductTable() {
     };
 
     return (
-
         <Container maxWidth="lg" sx={{ marginTop: '20px' }}>
             <h1 style={{ margin: '0 20px' }}>Produkty</h1>
             <Box sx={{ marginBottom: '20px', display: 'flex', alignItems: 'center' }}>
@@ -107,6 +108,8 @@ export default function ProductTable() {
                     <TableHead>
                         <TableRow>
                             <TableCell>Opis ogłoszenia</TableCell>
+                            <TableCell>Marka</TableCell>
+                            <TableCell>Model</TableCell>
                             <TableCell>
                                 Cena
                                 <IconButton onClick={handleSortByPrice}>
@@ -124,6 +127,8 @@ export default function ProductTable() {
                         {sortedProducts.map((product) => (
                             <TableRow key={product.id}>
                                 <TableCell>{product.description}</TableCell>
+                                <TableCell>{product.brand}</TableCell>
+                                <TableCell>{product.model}</TableCell>
                                 <TableCell>{product.price} zł</TableCell>
                                 <TableCell>
                                     {userAccountType === "1" || userAccountType === "3" ? (
