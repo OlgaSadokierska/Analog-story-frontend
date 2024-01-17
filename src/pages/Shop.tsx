@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -21,12 +22,14 @@ import Box from '@mui/material/Box';
 import { orderBy } from 'lodash';
 import Button from "@mui/material/Button";
 
+
 export default function ProductTable() {
     const [products, setProducts] = useState<Product[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortedProducts, setSortedProducts] = useState<Product[]>([]);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
     const userAccountType = localStorage.getItem('UserAccountType');
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchProducts() {
@@ -75,8 +78,11 @@ export default function ProductTable() {
         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     };
 
-    return (
+    const handleAddProduct = () => {
+        navigate('/addproduct');
+    };
 
+    return (
         <Container maxWidth="lg" sx={{ marginTop: '20px' }}>
             <h1 style={{ margin: '0 20px' }}>Produkty</h1>
             <Box sx={{ marginBottom: '20px', display: 'flex', alignItems: 'center' }}>
@@ -93,8 +99,8 @@ export default function ProductTable() {
                         ),
                     }}
                 />
-                <Button sx={{ backgroundColor: '#EFC049', marginLeft: 'auto' }}>
-                    {'Dodaj produkt'}
+                <Button sx={{ backgroundColor: '#EFC049', marginLeft: 'auto' }} onClick={handleAddProduct}>
+                    {'Dodaj ogłoszenie'}
                 </Button>
             </Box>
             <TableContainer component={Paper} sx={{ marginTop: '20px', marginBottom: '20px' }}>
@@ -102,6 +108,8 @@ export default function ProductTable() {
                     <TableHead>
                         <TableRow>
                             <TableCell>Opis ogłoszenia</TableCell>
+                            <TableCell>Marka</TableCell>
+                            <TableCell>Model</TableCell>
                             <TableCell>
                                 Cena
                                 <IconButton onClick={handleSortByPrice}>
@@ -119,6 +127,8 @@ export default function ProductTable() {
                         {sortedProducts.map((product) => (
                             <TableRow key={product.id}>
                                 <TableCell>{product.description}</TableCell>
+                                <TableCell>{product.brand}</TableCell>
+                                <TableCell>{product.model}</TableCell>
                                 <TableCell>{product.price} zł</TableCell>
                                 <TableCell>
                                     {userAccountType === "1" || userAccountType === "3" ? (
