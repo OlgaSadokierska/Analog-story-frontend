@@ -13,6 +13,8 @@ export interface Product {
     product_type_id: number;
     description: string;
     price: number;
+    model?: string | null;
+    brand?: string | null;
 }
 
 export interface ProductType {
@@ -46,4 +48,13 @@ export interface UserMedia {
     films: Film[];
     products: Product[];
     types: ProductType[];
+}
+
+export interface Cart {
+    id: number;
+    userId: number;
+    productId: number;
+    isPurchased: boolean;
+    productDto: Product;
+    userDto: User;
 }

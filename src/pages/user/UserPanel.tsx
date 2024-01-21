@@ -3,9 +3,9 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { GetRequests } from "../communication/network/GetRequests";
-import { PutRequests } from "../communication/network/PutRequests";
-import { User } from '../communication/Types';
+import { GetRequests } from "../../communication/network/GetRequests";
+import { PutRequests } from "../../communication/network/PutRequests";
+import { User } from '../../communication/Types';
 import Box from "@mui/material/Box";
 
 const UserProfile = () => {
