@@ -84,13 +84,12 @@ export default function Navbar() {
 
     const handleUserMenuItemClick = (action: string) => {
         handleCloseUserMenu();
-
         switch (action) {
             case 'profile':
                 navigate('/userpanel');
                 break;
             case 'products':
-                navigate('/user_products');
+                navigate('/carts');
                 break;
             default:
                 break;
@@ -213,14 +212,14 @@ export default function Navbar() {
                                     {(userAccountType === "1" || userAccountType === "3") && (
                                         <MenuItem onClick={() => handleUserMenuItemClick('products')}>
                                             <Typography textAlign="center">
-                                                {userAccountType === "3" ? 'Zamówienia do zaakceptowania' : 'Aukcje'}
+                                                {userAccountType === "3" ? 'Zamówienia do zaakceptowania' : 'Koszyki'}
                                             </Typography>
                                         </MenuItem>
                                     )}
 
                                     {userAccountType === "2" && (
                                         <MenuItem onClick={() => handleUserMenuItemClick('products')}>
-                                            <Typography textAlign="center">Moje aukcje</Typography>
+                                            <Typography textAlign="center">Mój koszyk</Typography>
                                         </MenuItem>
                                     )}
                                 </Menu>

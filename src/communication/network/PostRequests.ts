@@ -1,4 +1,4 @@
-import {Post} from "../Endpoints";
+import {Get, Post} from "../Endpoints";
 import {
     User,
     Product
@@ -59,6 +59,22 @@ export class PostRequests {
         };
 
         return apiAuth.post(Post.PRODUCT, postData)
+            .then(Utils.mapResponse<any>)
+            .catch(Utils.handleError);
+    }
+
+    static addProductToCart(user_id: string, product_id: number): Promise<any> {
+        const postData = Post.ADD_TO_CART.replace(":userId", user_id.toString()).replace(":productId", product_id.toString());
+
+        return api.post(postData)
+            .then(Utils.mapResponse<any>)
+            .catch(Utils.handleError);
+    }
+
+    static markAsPurchased(cart_Id: number): Promise<any> {
+        const postData = Post.ACCEPT_CART.replace(":cartId", cart_Id.toString());
+
+        return api.post(postData)
             .then(Utils.mapResponse<any>)
             .catch(Utils.handleError);
     }

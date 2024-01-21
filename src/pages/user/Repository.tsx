@@ -15,8 +15,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { GetRequests } from "../communication/network/GetRequests";
-import { UserMedia, Film, Camera, Product, ProductType } from '../communication/Types';
+import { GetRequests } from "../../communication/network/GetRequests";
+import { UserMedia, Film, Camera, Product, ProductType } from '../../communication/Types';
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 
@@ -49,7 +49,6 @@ const Row = ({
     };
 
     const cameraProduct = findProductById(camera.product_id);
-
 
     return (
         <React.Fragment>
@@ -100,8 +99,6 @@ const Row = ({
         </React.Fragment>
     );
 };
-
-
 
     const tableContainerStyle = {
     marginTop: '20px',

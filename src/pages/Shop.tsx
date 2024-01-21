@@ -21,6 +21,7 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import { orderBy } from 'lodash';
 import Button from "@mui/material/Button";
+import {PostRequests} from "../communication/network/PostRequests";
 
 
 export default function ProductTable() {
@@ -46,18 +47,22 @@ export default function ProductTable() {
     }, []);
 
     const handleEdit = (productId: number) => {
-        // Logika obsługi edycji produktu
         console.log(`Edytuj produkt o ID: ${productId}`);
     };
 
     const handleDelete = (productId: number) => {
-        // Logika obsługi usuwania produktu
         console.log(`Usuń produkt o ID: ${productId}`);
     };
 
-    const handleBuy = (productId: number) => {
-        // Logika obsługi zakupu produktu
-        console.log(`Kup produkt o ID: ${productId}`);
+    const handleBuy = async (productId: number) => {
+        const storedUserId = localStorage.getItem('UserId');
+        try {
+            await PostRequests.addProductToCart(storedUserId!, productId);
+            alert('Produkt został dodany do koszyka!');
+            window.location.reload();
+        } catch (error) {
+            console.error('Wystąpił błąd podczas dodawania do koszyka: ', error);
+        }
     };
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {

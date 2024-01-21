@@ -12,10 +12,10 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, useEffect } from 'react';
-import { PostRequests } from '../communication/network/PostRequests';
-import { User } from '../communication/Types';
+import { PostRequests } from '../../communication/network/PostRequests';
+import { User } from '../../communication/Types';
 import {jwtDecode} from "jwt-decode";
-import {GetRequests} from "../communication/network/GetRequests";
+import {GetRequests} from "../../communication/network/GetRequests";
 
 function Copyright() {
     return (

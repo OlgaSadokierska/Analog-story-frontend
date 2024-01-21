@@ -12,8 +12,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
-import {User} from "../communication/Types";
-import {PostRequests} from "../communication/network/PostRequests";
+import {User} from "../../communication/Types";
+import {PostRequests} from "../../communication/network/PostRequests";
 
 function Copyright() {
     return (

@@ -3,7 +3,7 @@ import {
     Product,
     User,
     UserMedia,
-    ProductType
+    ProductType, Cart
 } from "../Types";
 import {api} from "../Config";
 import {Utils} from "./Utils";
@@ -64,6 +64,17 @@ export class GetRequests {
     static getAllProductTypes():Promise<ProductType[]>{
         return api.get(Get.PRODUCT_TYPES)
             .then(Utils.mapResponse<ProductType[]>)
+            .catch(Utils.handleError)
+    }
+
+    static getAllUnacceptedCarts():Promise<Cart[]>{
+        return api.get(Get.CARTS_UNACCEPTED)
+            .then(Utils.mapResponse<Cart[]>)
+            .catch(Utils.handleError)
+    }
+    static getAllAcceptedCarts():Promise<Cart[]>{
+        return api.get(Get.CARTS_ACCEPTED)
+            .then(Utils.mapResponse<Cart[]>)
             .catch(Utils.handleError)
     }
 
