@@ -10,16 +10,26 @@ import { GetRequests } from '../communication/network/GetRequests';
 import { ProductType, Product } from '../communication/Types';
 
 const AddProduct = () => {
-    const initialProductState: { price: number; description: string; product_type_id: number } = {
-        product_type_id: 0,
+    const initialProductState: {
+        // id: number;
+        productTypeId: number;
+        description: string;
+        price: number;
+        // brand: string | undefined ;
+        // model: string | undefined
+    } = {
+        // id: 0,
+        productTypeId: 0,
         description: '',
-        price: 0
+        price: 0,
+        // model: undefined,
+        // brand: undefined
+    }, [newProduct, setNewProduct] = useState<Product>(initialProductState), [productTypes, setProductTypes] = useState<ProductType[]>([]), [error, setError] = useState<string>('');
+
+    const isFormValid = () => {
+        // Add your validation logic here
+        return newProduct.description.trim() !== '' && newProduct.price > 0;
     };
-
-    const [newProduct, setNewProduct] = useState<Product>(initialProductState);
-    const [productTypes, setProductTypes] = useState<ProductType[]>([]);
-    const [error, setError] = useState<string>('');
-
     useEffect(() => {
         const fetchProductTypes = async () => {
             try {
@@ -27,7 +37,7 @@ const AddProduct = () => {
                 setProductTypes(productTypesData);
 
                 if (productTypesData.length > 0) {
-                    setNewProduct((prevState) => ({ ...prevState, product_type_id: productTypesData[0].id }));
+                    setNewProduct((prevState) => ({ ...prevState, productTypeId: productTypesData[0].id }));
                 }
             } catch (error) {
                 console.error('Wystąpił błąd podczas pobierania typów produktów:', error);
@@ -40,16 +50,25 @@ const AddProduct = () => {
     const handleAddProduct = async () => {
         try {
             console.log('Product data to be sent:', newProduct);
-            await PostRequests.createProduct(newProduct.product_type_id, newProduct.description, newProduct.price);
+            await PostRequests.createProduct(
+                // newProduct.id,
+                newProduct.productTypeId,
+                newProduct.description,
+                newProduct.price
+                // newProduct.brand,
+                // newProduct.model
+                );
+            alert("Produkt został dodany");
             console.log('Dodano nowy produkt:', newProduct);
             setNewProduct(initialProductState);
             setError('');
         } catch (error) {
+            alert("Produkt nie został dodany");
             console.error('Wystąpił błąd podczas dodawania produktu:', error);
             if (error.response) {
                 console.error('Error Response Data:', error.response.data);
             }
-            setError('Wystąpił błąd podczas dodawania produktu');
+
         }
     };
 
@@ -65,9 +84,8 @@ const AddProduct = () => {
                             id="product-type"
                             label="Product Type"
                             variant="outlined"
-                            margin="normal"
-                            value={newProduct.product_type_id}
-                            onChange={(event) => setNewProduct((prevState) => ({ ...prevState, product_type_id: event.target.value }))}
+                            value={newProduct.productTypeId}
+                            onChange={(event) => setNewProduct((prevState) => ({ ...prevState, productTypeId: event.target.value }))}
                         >
                             {productTypes.map(({id, typeName}) => (
                                 <MenuItem key={id} value={id}>
@@ -76,6 +94,26 @@ const AddProduct = () => {
                             ))}
                         </Select>
                     </div>
+                    {/*{newProduct.productTypeId === productTypes.find(type => type.typeName === 'Camera')?.id && (*/}
+                    {/*    <>*/}
+                    {/*        <TextField*/}
+                    {/*            label="Marka"*/}
+                    {/*            variant="outlined"*/}
+                    {/*            margin="normal"*/}
+                    {/*            fullWidth*/}
+                    {/*            value={newProduct.brand}*/}
+                    {/*            onChange={(event) => setNewProduct((prevState) => ({ ...prevState, brand: event.target.value }))}*/}
+                    {/*        />*/}
+                    {/*        <TextField*/}
+                    {/*            label="Model"*/}
+                    {/*            variant="outlined"*/}
+                    {/*            margin="normal"*/}
+                    {/*            fullWidth*/}
+                    {/*            value={newProduct.model}*/}
+                    {/*            onChange={(event) => setNewProduct((prevState) => ({ ...prevState, model: event.target.value }))}*/}
+                    {/*        />*/}
+                    {/*    </>*/}
+                    {/*)}*/}
                     <TextField
                         label="Opis"
                         variant="outlined"
@@ -93,17 +131,24 @@ const AddProduct = () => {
                         type="number"
                         fullWidth
                         value={newProduct.price}
-                        onChange={(event) => setNewProduct((prevState) => ({ ...prevState, price: event.target.value }))}
+                        onChange={(event) => {
+                            const parsedValue = parseFloat(event.target.value);
+                            if (!isNaN(parsedValue) && parsedValue >= 0) {
+                                setNewProduct((prevState) => ({ ...prevState, price: parsedValue }));
+                            }
+                        }}
                         inputProps={{
                             min: 0,
-                            step: 10.00,
+                            step: 10.0,
                         }}
                     />
+
                     {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
                     <Button
                         onClick={handleAddProduct}
                         variant="contained"
                         sx={{ backgroundColor: '#EFC049', marginTop: '20px' }}
+                        disabled={!isFormValid()}
                     >
                         Dodaj Produkt
                     </Button>

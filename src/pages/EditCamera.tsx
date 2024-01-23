@@ -18,6 +18,7 @@ const EditCamera = () => {
     const [editedFilm, setEditedFilm] = useState<Film | null>(null);
     const [editedLoadedFrames, setEditedLoadedFrames] = useState<number>(0);
     const [editedFilmIsForSale, setEditedFilmIsForSale] = useState<boolean>(false);
+    const [editedFilmIsFull, setEditedFilmIsFull] = useState<boolean>(false);
 
     const navigate = useNavigate();
     const { cameraId } = useParams();
@@ -39,6 +40,7 @@ const EditCamera = () => {
                         setEditedBrand(foundCamera.brand);
                         setEditedIsForSale(foundCamera.isForSale);
 
+
                         const associatedFilm = userMediaData.films.find(
                             (film) => film.idCamera === foundCamera.id
                         );
@@ -47,6 +49,7 @@ const EditCamera = () => {
                             setEditedFilm(associatedFilm);
                             setEditedLoadedFrames(associatedFilm.loadedFrames);
                             setEditedFilmIsForSale(associatedFilm.isForSale);
+                            setEditedFilmIsFull(associatedFilm.isFull);
                         }
                     } else {
                         console.error('Camera not found in user media data.');
@@ -95,17 +98,17 @@ const EditCamera = () => {
 
     return (
         <Container component="main" maxWidth="s" sx={{ display: 'flex', justifyContent: 'center', backgroundImage: 'url(/img015.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', height: '100vh', overflow: 'hidden' }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', width: '50%', alignItems: 'center', mt: 4 }}>
-                <h1 style={{ margin: '0 20px' }}>Edytuj aparat</h1>
-                <Box component="form" noValidate sx={{ mt: 3, p: 3, bgcolor: "white", borderRadius: "1%", boxShadow: 1 }}>
-                    <div style={{ marginBottom: '20px' }}>
+            <Box sx={{display: 'flex', flexDirection: 'column', width: '50%', alignItems: 'center', mt: 4}}>
+                <h1 style={{margin: '0 20px'}}>Edytuj aparat</h1>
+                <Box component="form" noValidate sx={{mt: 3, p: 3, bgcolor: "white", borderRadius: "1%", boxShadow: 1}}>
+                    <div style={{marginBottom: '20px'}}>
                         <TextField
                             label="Model"
                             variant="outlined"
                             fullWidth
                             value={editedModel}
                             onChange={(e) => setEditedModel(e.target.value)}
-                            sx={{ mb: 2 }}
+                            sx={{mb: 2}}
                         />
                         <TextField
                             label="Brand"
@@ -113,27 +116,29 @@ const EditCamera = () => {
                             fullWidth
                             value={editedBrand}
                             onChange={(e) => setEditedBrand(e.target.value)}
-                            sx={{ mb: 2 }}
+                            sx={{mb: 2}}
                         />
-                        <Box sx={{ mb: 2 }}>
+                        <Box sx={{mb: 2}}>
                             <label>
                                 Czy na sprzedaż:
                                 <input
                                     type="checkbox"
                                     checked={editedIsForSale}
                                     onChange={(e) => setEditedIsForSale(e.target.checked)}
-                                    sx={{ ml: 1 }}
+                                    sx={{ml: 1}}
                                 />
                             </label>
+
                         </Box>
                     </div>
                 </Box>
 
                 {editedFilm && (
-                    <Box sx={{ display: 'flex', flexDirection: 'column', width: '50%', alignItems: 'center', mt: 4 }}>
-                        <h1 style={{ margin: '0 20px' }}>Edytuj powiązaną kliszę</h1>
-                        <Box component="form" noValidate sx={{ mt: 3, p: 3, bgcolor: "white", borderRadius: "1%", boxShadow: 1 }}>
-                            <div style={{ marginBottom: '20px' }}>
+                    <Box sx={{display: 'flex', flexDirection: 'column', width: '50%', alignItems: 'center', mt: 4}}>
+                        <h1 style={{margin: '0 20px'}}>Edytuj powiązaną kliszę</h1>
+                        <Box component="form" noValidate
+                             sx={{mt: 3, p: 3, bgcolor: "white", borderRadius: "1%", boxShadow: 1}}>
+                            <div style={{marginBottom: '20px'}}>
                                 <TextField
                                     label="Liczba załadowanych klatek"
                                     variant="outlined"
@@ -142,36 +147,48 @@ const EditCamera = () => {
                                     fullWidth
                                     value={editedLoadedFrames}
                                     onChange={(e) => setEditedLoadedFrames(Math.min(Math.max(parseInt(e.target.value, 10), 0), 32))}
-                                    inputProps={{ min: 0, max: 32 }}
-                                    sx={{ width: '250px' }}
+                                    inputProps={{min: 0, max: 32}}
+                                    sx={{width: '250px'}}
                                 />
                             </div>
-                            <div style={{ marginBottom: '20px' }}>
+                            <div style={{marginBottom: '20px'}}>
                                 <label>
-                                    Czy na sprzedaż:
+                                    Czy w pełni wykorzystany:
                                     <input
                                         type="checkbox"
                                         checked={editedFilmIsForSale}
                                         onChange={(e) => setEditedFilmIsForSale(e.target.checked)}
-                                        sx={{ ml: 1 }}
+                                        sx={{ml: 1}}
+                                    />
+                                </label>
+                            </div>
+                            <div style={{marginBottom: '20px'}}>
+                                <label>
+                                    Czy na sprzedaż:
+                                    <input
+                                        type="checkbox"
+                                        checked={editedFilmIsFull}
+                                        onChange={(e) => setEditedFilmIsFull(e.target.checked)}
+                                        sx={{ml: 1}}
                                     />
                                 </label>
                             </div>
                         </Box>
                     </Box>
                 )}
-
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSaveChanges}
-                    sx={{ backgroundColor: '#EFC049', mb: 5 }}
-                >
-                    Zapisz zmiany
-                </Button>
+                <div style={{margin: '20px'}}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleSaveChanges}
+                        sx={{backgroundColor: '#EFC049', mb: 5}}
+                    >
+                        Zapisz zmiany
+                    </Button>
+                </div>
             </Box>
         </Container>
-    );
+);
 };
 
 export default EditCamera;
