@@ -39,7 +39,6 @@ export default function Navbar() {
     const userAccountType = localStorage.getItem('UserAccountType');
     const userId = localStorage.getItem('UserId');
 
-
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
@@ -89,7 +88,11 @@ export default function Navbar() {
                 navigate('/userpanel');
                 break;
             case 'products':
-                navigate('/carts');
+                if (userAccountType === "1" || userAccountType === "3") {
+                    navigate('/cartsEmployee');
+                } else if (userAccountType === "2") {
+                    navigate('/cartsUser');
+                }
                 break;
             default:
                 break;

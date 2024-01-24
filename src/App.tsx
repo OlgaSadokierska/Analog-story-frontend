@@ -16,7 +16,8 @@ import AddProduct from "./pages/AddProduct";
 import AddMedia from "./pages/AddMedia";
 import EditCamera from "./pages/EditCamera";
 import UnacceptedCartsEmployee from "./pages/UnacceptedCartsEmployee";
-import CartsManagement from "./pages/CartsManagement";
+import CartsManagementEmployee from "./pages/CartsManagementEmployee";
+import CartsManagementUser from "./pages/user/CartsManagementUser";
 
 export default function App() {
   return (
@@ -31,7 +32,8 @@ export default function App() {
                 <Route path="/users" element={<OnlyUsers />} />
                 <Route path="/addemployee" element={<AddEmployee />} />
                 <Route path="/userprofile/:userId" element={<EditUser />} />
-                <Route path="/carts" element={<CartsManagement />} />
+                <Route path="/cartsEmployee" element={<CartsManagementEmployee />} />
+                <Route path="/cartsUser" element={<CartsManagementUser />} />
                 <Route path="/:userId/media" element={<Repository />} />
                 <Route path="/products" element={<Shop />} />
                 <Route path="/" element={<Home />} />

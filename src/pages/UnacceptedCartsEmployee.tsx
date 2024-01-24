@@ -24,7 +24,7 @@ export default function UnacceptedCartsEmployee() {
     useEffect(() => {
         async function fetchCarts() {
             try {
-                const cartsData = await GetRequests.getAllUnacceptedCarts();
+                const cartsData = await GetRequests.getAllUnacceptedCartsEmployee();
                 setCarts(cartsData);
                 setSortedCarts(cartsData);
             } catch (error) {
