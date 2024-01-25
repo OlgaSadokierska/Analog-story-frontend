@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Cart } from "../communication/Types";
-import { GetRequests } from "../communication/network/GetRequests";
+import { Cart } from "../../communication/Types";
+import { GetRequests } from "../../communication/network/GetRequests";
 import Container from "@mui/material/Container";
 import IconButton from "@mui/material/IconButton";
 import TableContainer from "@mui/material/TableContainer";
@@ -12,19 +12,19 @@ import TableCell from "@mui/material/TableCell";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import TableBody from "@mui/material/TableBody";
-import Button from "@mui/material/Button";
 import { orderBy } from 'lodash';
-import {PostRequests} from "../communication/network/PostRequests";
 
-export default function UnacceptedCartsEmployee() {
+export default function UnacceptedCartsUser() {
     const [carts, setCarts] = useState<Cart[]>([]);
     const [sortedCarts, setSortedCarts] = useState<Cart[]>([]);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
+    const userId = localStorage.getItem('UserId');
+
     useEffect(() => {
         async function fetchCarts() {
             try {
-                const cartsData = await GetRequests.getAllUnacceptedCartsEmployee();
+                const cartsData = await GetRequests.getAllUnacceptedCartsUser(userId);
                 setCarts(cartsData);
                 setSortedCarts(cartsData);
             } catch (error) {
@@ -35,16 +35,6 @@ export default function UnacceptedCartsEmployee() {
         fetchCarts();
     }, []);
 
-    const handleAccept = async (cartId: number) => {
-        try {
-            await PostRequests.markAsPurchased(cartId);
-            alert('Koszyk został zaakceptowany!');
-            window.location.reload();
-        } catch (error) {
-            console.error('Wystąpił błąd podczas akceptowania koszyka: ', error);
-        }
-    };
-
     const handleSortByPrice = () => {
         const sorted = orderBy(sortedCarts, 'price', sortOrder);
         setSortedCarts(sorted);
@@ -53,12 +43,11 @@ export default function UnacceptedCartsEmployee() {
 
     return (
         <Container maxWidth="lg" sx={{ marginTop: '20px' }}>
-            <h1 style={{ margin: '0 20px' }}>Koszyki do zaakceptowania</h1>
+            <h1 style={{ margin: '0 20px' }}>Niezaakceptowane przedmioty</h1>
             <TableContainer component={Paper} sx={{ marginTop: '20px', marginBottom: '20px' }}>
                 <Table aria-label="Tabela koszyków" sx={{ marginTop: '20px' }}>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Email użytkownika</TableCell>
                             <TableCell>Opis koszyka</TableCell>
                             <TableCell>Marka</TableCell>
                             <TableCell>Model</TableCell>
@@ -71,22 +60,15 @@ export default function UnacceptedCartsEmployee() {
                                     )}
                                 </IconButton>
                             </TableCell>
-                            <TableCell></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {sortedCarts.map((cart) => (
                             <TableRow key={cart.id}>
-                                <TableCell>{cart.userDto.email}</TableCell>
                                 <TableCell>{cart.productDto.description}</TableCell>
                                 <TableCell>{cart.productDto.brand}</TableCell>
                                 <TableCell>{cart.productDto.model}</TableCell>
                                 <TableCell>{cart.productDto.price} zł</TableCell>
-                                <TableCell>
-                                    <Button variant="contained" color="success" onClick={() => handleAccept(cart.id)}>
-                                        {'Akceptuj'}
-                                    </Button>
-                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

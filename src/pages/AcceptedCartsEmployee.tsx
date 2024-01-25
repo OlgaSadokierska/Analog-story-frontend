@@ -22,14 +22,13 @@ export default function AcceptedCartsEmployee() {
     useEffect(() => {
         async function fetchCarts() {
             try {
-                const cartsData = await GetRequests.getAllAcceptedCarts();
+                const cartsData = await GetRequests.getAllAcceptedCartsEmployee();
                 setCarts(cartsData);
                 setSortedCarts(cartsData);
             } catch (error) {
                 console.error('Wystąpił błąd podczas pobierania koszyków:', error);
             }
         }
-
         fetchCarts();
     }, []);
     const handleSortByPrice = () => {

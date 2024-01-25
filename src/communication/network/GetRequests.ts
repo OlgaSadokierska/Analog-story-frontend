@@ -67,13 +67,25 @@ export class GetRequests {
             .catch(Utils.handleError)
     }
 
-    static getAllUnacceptedCarts():Promise<Cart[]>{
-        return api.get(Get.CARTS_UNACCEPTED)
+    static getAllUnacceptedCartsEmployee():Promise<Cart[]>{
+        return api.get(Get.CARTS_UNACCEPTED_EMPLOYEE)
             .then(Utils.mapResponse<Cart[]>)
             .catch(Utils.handleError)
     }
-    static getAllAcceptedCarts():Promise<Cart[]>{
-        return api.get(Get.CARTS_ACCEPTED)
+    static getAllAcceptedCartsEmployee():Promise<Cart[]>{
+        return api.get(Get.CARTS_ACCEPTED_EMPLOYEE)
+            .then(Utils.mapResponse<Cart[]>)
+            .catch(Utils.handleError)
+    }
+
+    static getAllAcceptedCartsUser(Id: number):Promise<Cart[]>{
+        return api.get(Get.CARTS_ACCEPTED_USER + "/" + Id)
+            .then(Utils.mapResponse<Cart[]>)
+            .catch(Utils.handleError)
+    }
+
+    static getAllUnacceptedCartsUser(Id: number):Promise<Cart[]>{
+        return api.get(Get.CARTS_UNACCEPTED_USER + "/" + Id)
             .then(Utils.mapResponse<Cart[]>)
             .catch(Utils.handleError)
     }
