@@ -53,12 +53,12 @@ export class PostRequests {
     }
     static createProduct(product_type_id: number, description: string, price: number): Promise<any> {
         const postData = {
-            product_type_id: product_type_id,
+            productTypeId: product_type_id,
             description: description,
             price: price
         };
 
-        return apiAuth.post(Post.PRODUCT, postData)
+        return api.post(Post.PRODUCT, postData)
             .then(Utils.mapResponse<any>)
             .catch(Utils.handleError);
     }

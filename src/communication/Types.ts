@@ -10,11 +10,11 @@ export interface User {
 }
 export interface Product {
     id: number;
-    product_type_id: number;
+    productTypeId: number;
     description: string;
     price: number;
-    model?: string | null;
-    brand?: string | null;
+    // model?: string | null;
+    // brand?: string | null;
 }
 
 export interface ProductType {

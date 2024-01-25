@@ -99,12 +99,12 @@ export default function SignIn() {
             return;
         }
 
-
         try {
             await PostRequests.registerUser(user.firstname, user.lastname, user.login, user.email, user.password, user.phone).then(res => {
                 alert("Użytkownik został utworzony");
                 console.log(res)
             });
+            navigate('../login')
         } catch (error) {
             console.error("Wystąpił błąd podczas rejestracji:", error);
         }
@@ -120,8 +120,7 @@ export default function SignIn() {
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
-                    }}
-                >
+                    }}>
                     <Avatar sx={{ m: 1, bgcolor: '#EFC049' }}>
                         <LockOutlinedIcon />
                     </Avatar>

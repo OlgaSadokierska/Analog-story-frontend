@@ -89,5 +89,4 @@ export class GetRequests {
             .then(Utils.mapResponse<Cart[]>)
             .catch(Utils.handleError)
     }
-
 }
