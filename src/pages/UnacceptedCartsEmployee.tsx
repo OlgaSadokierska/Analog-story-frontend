@@ -14,12 +14,16 @@ import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import TableBody from "@mui/material/TableBody";
 import Button from "@mui/material/Button";
 import { orderBy } from 'lodash';
-import {PostRequests} from "../communication/network/PostRequests";
+import { PostRequests } from "../communication/network/PostRequests";
+import TextField from "@mui/material/TextField";
+import SearchIcon from "@mui/icons-material/Search";
+import Box from "@mui/material/Box";
 
 export default function UnacceptedCartsEmployee() {
     const [carts, setCarts] = useState<Cart[]>([]);
     const [sortedCarts, setSortedCarts] = useState<Cart[]>([]);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         async function fetchCarts() {
@@ -46,19 +50,57 @@ export default function UnacceptedCartsEmployee() {
     };
 
     const handleSortByPrice = () => {
-        const sorted = orderBy(sortedCarts, 'price', sortOrder);
+        const sorted = orderBy(sortedCarts, 'productDto.price', sortOrder);
         setSortedCarts(sorted);
         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    };
+
+    const handleSortByEmail = () => {
+        const sorted = orderBy(sortedCarts, 'userDto.email', sortOrder);
+        setSortedCarts(sorted);
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    };
+
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+        const filteredCarts = carts.filter(cart =>
+            cart.userDto.email.toLowerCase().includes(event.target.value.toLowerCase())
+        );
+        setSortedCarts(filteredCarts);
     };
 
     return (
         <Container maxWidth="lg" sx={{ marginTop: '20px' }}>
             <h1 style={{ margin: '0 20px' }}>Koszyki do zaakceptowania</h1>
+            <Box sx={{ marginBottom: '20px', display: 'flex', alignItems: 'center' }}>
+            <TextField
+                label="Szukaj po emailu"
+                variant="outlined"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                InputProps={{
+                    endAdornment: (
+                        <IconButton>
+                            <SearchIcon />
+                        </IconButton>
+                    ),
+                }}
+                sx={{ margin: '0 20px 20px' }}
+            />
+            </Box>
             <TableContainer component={Paper} sx={{ marginTop: '20px', marginBottom: '20px' }}>
                 <Table aria-label="Tabela koszyków" sx={{ marginTop: '20px' }}>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Email użytkownika</TableCell>
+                            <TableCell>Email użytkownika
+                                <IconButton onClick={handleSortByEmail}>
+                                    {sortOrder === 'asc' ? (
+                                        <ArrowUpwardIcon fontSize="small" />
+                                    ) : (
+                                        <ArrowDownwardIcon fontSize="small" />
+                                    )}
+                                </IconButton>
+                            </TableCell>
                             <TableCell>Opis koszyka</TableCell>
                             <TableCell>Marka</TableCell>
                             <TableCell>Model</TableCell>
