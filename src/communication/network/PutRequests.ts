@@ -1,5 +1,4 @@
 import { Put } from "../Endpoints";
-import { User } from "../Types";
 import { api } from "../Config";
 import {Utils} from "./Utils";
 
@@ -16,6 +15,15 @@ export class PutRequests {
         };
 
         return api.put(`${Put.USER_UPDATE}/${id}`, requestBody)
+            .then(Utils.mapResponse<void>)
+            .catch(Utils.handleError);
+    }
+
+    static setCameraForSale(id: number, isForSale: boolean): Promise<void> {
+        const requestBody = {
+            isForSale: isForSale
+        };
+        return api.put(`${Put.CAMERA_FOR_SALE}/${id}`, requestBody)
             .then(Utils.mapResponse<void>)
             .catch(Utils.handleError);
     }

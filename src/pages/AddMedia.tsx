@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Typography from '@mui/material/Typography';
+
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -16,27 +16,30 @@ const AddMediaPage = () => {
         model: '',
         brand: '',
         isForSale: false,
+        description: '',
+        price: 0,
     });
 
     const [newFilm, setNewFilm] = useState({
         loadedFrames: 0,
         isFull: false,
         isForSale: false,
-        selectedCameraId: '', // Dodajemy nowy stan, aby przechować ID wybranego aparatu
+        selectedCameraId: '',
+        description: '',
+        price: 0,
     });
 
     const [userCameras, setUserCameras] = useState([]);
-    const [loggedInUserId, setLoggedInUserId] = useState(null); // Dodajemy stan do przechowywania ID zalogowanego użytkownika
+    const [loggedInUserId, setLoggedInUserId] = useState(null);
 
     useEffect(() => {
         const storedUserId = localStorage.getItem('UserId');
         if (storedUserId !== null) {
             const parsedUserId = parseInt(storedUserId, 10);
-            setLoggedInUserId(parsedUserId);
+            // @ts-ignore
+            setLoggedInUserId(parsedUserId.toString());
         }
     }, []);
-
-
 
     useEffect(() => {
         const fetchUserCameras = async () => {
@@ -55,8 +58,13 @@ const AddMediaPage = () => {
 
     const handleAddCamera = async () => {
         try {
-            // Dodaj logikę wysyłania nowej kamery na serwer
-            await PostRequests.addCamera(newCamera);
+            if (newCamera.isForSale) {
+                if (!newCamera.description || newCamera.price <= 0) {
+                    throw new Error('Opis i cena są wymagane, gdy kamera jest ustawiona na sprzedaż.');
+                }
+            }
+
+            await PostRequests.addCamera(loggedInUserId, newCamera.model, newCamera.brand, newCamera.isForSale, newCamera.description, newCamera.price);
             console.log('Dodano nową kamerę:', newCamera);
         } catch (error) {
             console.error('Wystąpił błąd podczas dodawania kamery:', error);
@@ -65,8 +73,7 @@ const AddMediaPage = () => {
 
     const handleAddFilm = async () => {
         try {
-            // Dodaj logikę wysyłania nowego filmu na serwer
-            await PostRequests.addFilm({ ...newFilm, userId: loggedInUserId }); // Dodajemy userId do danych filmu
+            await PostRequests.addFilm({ ...newFilm, userId: loggedInUserId });
             console.log('Dodano nowy film:', newFilm);
         } catch (error) {
             console.error('Wystąpił błąd podczas dodawania filmu:', error);
@@ -99,6 +106,27 @@ const AddMediaPage = () => {
                             control={<Checkbox checked={newCamera.isForSale} onChange={(event) => setNewCamera((prevState) => ({ ...prevState, isForSale: event.target.checked }))} />}
                             label="Czy na sprzedaż?"
                         />
+                        {newCamera.isForSale && (
+                            <>
+                                <TextField
+                                    label="Opis"
+                                    variant="outlined"
+                                    margin="normal"
+                                    fullWidth
+                                    value={newCamera.description}
+                                    onChange={(event) => setNewCamera((prevState) => ({ ...prevState, description: event.target.value }))}
+                                />
+                                <TextField
+                                    label="Cena"
+                                    variant="outlined"
+                                    margin="normal"
+                                    type="number"
+                                    fullWidth
+                                    value={newCamera.price}
+                                    onChange={(event) => setNewCamera((prevState) => ({ ...prevState, price: Number(event.target.value) }))}
+                                />
+                            </>
+                        )}
 
                         <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px', justifyContent: 'center' }}>
                             <Button onClick={handleAddCamera} variant="contained" sx={{ backgroundColor: '#EFC049' }}>
@@ -119,7 +147,6 @@ const AddMediaPage = () => {
                             fullWidth
                             value={newFilm.loadedFrames}
                             onChange={(event) => {
-                                // Dodajemy walidację, aby liczba załadowanych klatek nie przekraczała 32
                                 const loadedFrames = Number(event.target.value);
                                 if (loadedFrames >= 0 && loadedFrames <= 32) {
                                     setNewFilm((prevState) => ({ ...prevState, loadedFrames }));
@@ -130,12 +157,31 @@ const AddMediaPage = () => {
                             control={<Checkbox checked={newFilm.isFull} onChange={(event) => setNewFilm((prevState) => ({ ...prevState, isFull: event.target.checked }))} />}
                             label="Czy w pełni wykorzystany?"
                         />
-                        <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px', justifyContent: 'center' }}>
                         <FormControlLabel
                             control={<Checkbox checked={newFilm.isForSale} onChange={(event) => setNewFilm((prevState) => ({ ...prevState, isForSale: event.target.checked }))} />}
                             label="Czy na sprzedaż?"
                         />
-                        </div>
+                        {newFilm.isForSale && (
+                            <>
+                                <TextField
+                                    label="Opis"
+                                    variant="outlined"
+                                    margin="normal"
+                                    fullWidth
+                                    value={newFilm.description}
+                                    onChange={(event) => setNewFilm((prevState) => ({ ...prevState, description: event.target.value }))}
+                                />
+                                <TextField
+                                    label="Cena"
+                                    variant="outlined"
+                                    margin="normal"
+                                    type="number"
+                                    fullWidth
+                                    value={newFilm.price}
+                                    onChange={(event) => setNewFilm((prevState) => ({ ...prevState, price: Number(event.target.value) }))}
+                                />
+                            </>
+                        )}
 
                         <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px', justifyContent: 'center' }}>
                             <span style={{ marginRight: '10px' }}>Powiązana kamera:</span>
@@ -148,7 +194,7 @@ const AddMediaPage = () => {
                             >
                                 <MenuItem value="">Brak</MenuItem>
                                 {userCameras.map(({ brand, id, model }) => (
-                                    <MenuItem key={id} value={id} label={`${brand} ${model}`}>
+                                    <MenuItem>
                                         {`${brand} ${model}`}
                                     </MenuItem>
                                 ))}
