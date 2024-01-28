@@ -1,4 +1,4 @@
-import { Put } from "../Endpoints";
+import {Post, Put} from "../Endpoints";
 import { api } from "../Config";
 import {Utils} from "./Utils";
 
@@ -18,13 +18,15 @@ export class PutRequests {
             .then(Utils.mapResponse<void>)
             .catch(Utils.handleError);
     }
-
-    static setCameraForSale(id: number, isForSale: boolean): Promise<void> {
+    static setCameraForSale(id: number, description: string, price: number): Promise<any> {
+        const putData = Put.CAMERA_FOR_SALE.replace(":cameraId", id.toString());
         const requestBody = {
-            isForSale: isForSale
+            description: description,
+            price: price,
         };
-        return api.put(`${Put.CAMERA_FOR_SALE}/${id}`, requestBody)
-            .then(Utils.mapResponse<void>)
+        return api.put(putData, requestBody)
+            .then(Utils.mapResponse<any>)
             .catch(Utils.handleError);
     }
+
 }
