@@ -1,4 +1,4 @@
-import {Get, Post} from "../Endpoints";
+import {Post} from "../Endpoints";
 import {
     User,
     Product
@@ -78,4 +78,35 @@ export class PostRequests {
             .then(Utils.mapResponse<any>)
             .catch(Utils.handleError);
     }
+
+    static addCamera(user_id: string, model: string, brand: string): Promise<any> {
+        const postData = Post.ADD_CAMERA.replace(":userId", user_id.toString());
+        const requestBody = {
+            model: model,
+            brand: brand,
+        };
+        return api.post(postData, requestBody)
+            .then(Utils.mapResponse<any>)
+            .catch(Utils.handleError);
+    }
+
+    static addFilm(user_id: string, loaded_frames: number, is_full: boolean, id_camera: number| null, max_loaded: number, is_for_sale:boolean): Promise<any> {
+        const postData = Post.ADD_FILM.replace(":userId", user_id.toString());
+        const requestBody = {
+            loadedFrames: loaded_frames,
+            isFull: is_full,
+            idCamera: id_camera,
+            maxLoaded: max_loaded,
+            isForSale: is_for_sale
+
+        };
+        return api.post(postData, requestBody)
+            .then(Utils.mapResponse<any>)
+            .catch(Utils.handleError);
+    }
+
+
+
+
+
 }

@@ -12,12 +12,16 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import TableBody from "@mui/material/TableBody";
 import { orderBy } from 'lodash';
-import {Cart} from "../../communication/Types";
+import { Cart } from "../../communication/Types";
+import TextField from "@mui/material/TextField";
+import SearchIcon from "@mui/icons-material/Search";
+import Box from "@mui/material/Box";
 
 export default function AcceptedCartsUser() {
-    const [carts, setCarts] = useState<Cart[]>([]); // Change to Cart[]
+    const [carts, setCarts] = useState<Cart[]>([]);
     const [sortedCarts, setSortedCarts] = useState<Cart[]>([]);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+    const [searchTerm, setSearchTerm] = useState('');
 
     const userId = localStorage.getItem('UserId');
 
@@ -33,20 +37,59 @@ export default function AcceptedCartsUser() {
         }
         fetchCarts();
     }, []);
+
     const handleSortByPrice = () => {
-        const sorted = orderBy(sortedCarts, 'price', sortOrder);
+        const sorted = orderBy(sortedCarts, 'productDto.price', sortOrder);
         setSortedCarts(sorted);
         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    };
+
+    const handleSortByDescription = () => {
+        const sorted = orderBy(sortedCarts, 'productDto.description', sortOrder);
+        setSortedCarts(sorted);
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    };
+
+    const handleSearchByDescription = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+        const filteredCarts = carts.filter(cart =>
+            cart.productDto.description.toLowerCase().includes(event.target.value.toLowerCase())
+        );
+        setSortedCarts(filteredCarts);
     };
 
     return (
         <Container maxWidth="lg" sx={{ marginTop: '20px' }}>
             <h1 style={{ margin: '0 20px' }}>Zaakceptowane przedmioty</h1>
+            <Box sx={{ marginBottom: '20px', display: 'flex', alignItems: 'center' }}>
+            <TextField
+                label="Szukaj po opisie"
+                variant="outlined"
+                value={searchTerm}
+                onChange={handleSearchByDescription}
+                InputProps={{
+                    endAdornment: (
+                        <IconButton>
+                            <SearchIcon />
+                        </IconButton>
+                    ),
+                }}
+                sx={{ margin: '0 20px 20px' }}
+            />
+            </Box>
             <TableContainer component={Paper} sx={{ marginTop: '20px', marginBottom: '20px' }}>
                 <Table aria-label="Tabela koszyków" sx={{ marginTop: '20px' }}>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Opis koszyka</TableCell>
+                            <TableCell>Opis koszyka
+                                <IconButton onClick={handleSortByDescription}>
+                                    {sortOrder === 'asc' ? (
+                                        <ArrowUpwardIcon fontSize="small" />
+                                    ) : (
+                                        <ArrowDownwardIcon fontSize="small" />
+                                    )}
+                                </IconButton>
+                            </TableCell>
                             <TableCell>Marka</TableCell>
                             <TableCell>Model</TableCell>
                             <TableCell>Cena
