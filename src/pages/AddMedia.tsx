@@ -146,7 +146,7 @@ const AddMediaPage = () => {
     return (
         <Container component="main" maxWidth="s" sx={{ display: 'flex', justifyContent: 'center', backgroundImage: 'url(/img015.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', height: '150vh', overflow: 'hidden' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', width: '50%', alignItems: 'center', mt: 4 }}>
-                <h1 style={{ margin: '0 20px' }}>Dodaj nową kamerę</h1>
+                <h1 style={{ margin: '0 20px' }}>Dodaj nowy aparat</h1>
                 <Box component="form" noValidate sx={{ mt: 3, p: 3, bgcolor: 'white', borderRadius: '1%', boxShadow: 1, width: '100%' }}>
                     <div style={{ marginBottom: '10px' }}>
                         <TextField
