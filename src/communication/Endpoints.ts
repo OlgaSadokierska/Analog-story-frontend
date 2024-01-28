@@ -4,6 +4,7 @@ const PRODUCTS = "/products";
 const CARTS ="/carts";
 const PRODUCT_TYPES = "/product-types";
 const CAMERA = "/cameras";
+const FILM = "/films";
 
 export class Get {
     static USERS = [API_V1, USERS].join("");
@@ -35,6 +36,8 @@ export class Post {
     static ACCEPT_CART = [API_V1, CARTS, "/mark-as-purchased/:cartId"].join("");
 
     static ADD_CAMERA = [API_V1, CAMERA, "/add/:userId"].join("");
+
+    static ADD_FILM = [API_V1, FILM, "/add/:userId"].join("");
 }
 
 export class Put {
