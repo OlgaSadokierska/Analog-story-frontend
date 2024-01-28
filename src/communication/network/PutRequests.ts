@@ -4,7 +4,7 @@ import { api } from "../Config";
 import {Utils} from "./Utils";
 
 export class PutRequests {
-    static updateUser(id: number, first_name: string, last_name: string, login: string, email: string, password: string, phone: string, accountTypeId: number): Promise<void> {
+    static updateUser(id: number, first_name: string, last_name: string, login: string, email: string, password: string, phone: string, accountTypeId: number): Promise<User> {
         const requestBody = {
             firstName: first_name,
             lastName: last_name,
@@ -16,7 +16,7 @@ export class PutRequests {
         };
 
         return api.put(`${Put.USER_UPDATE}/${id}`, requestBody)
-            .then(Utils.mapResponse<void>)
+            .then(Utils.mapResponse<User>)
             .catch(Utils.handleError);
     }
 }

@@ -18,8 +18,8 @@ export class PostRequests {
 
     static registerUser(first_name: string, last_name: string, login: string, email: string, password: string, phone: string): Promise<User> {
         return apiAuth.post(Post.USERREG, {
-            firstname: first_name,
-            lastname: last_name,
+            firstName: first_name,
+            lastName: last_name,
             login: login,
             email: email,
             password: password,

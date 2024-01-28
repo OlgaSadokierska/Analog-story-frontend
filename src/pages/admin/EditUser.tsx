@@ -94,7 +94,7 @@ export default function EditUser() {
                             autoComplete="firstname"
                             autoFocus
                             value={user.firstName}
-                            onChange={(event) => handleChange('firstname', event.target.value)}
+                            onChange={(event) => handleChange('firstName', event.target.value)}
                         />
                         <TextField
                             margin="normal"
@@ -106,7 +106,7 @@ export default function EditUser() {
                             autoComplete="lastname"
                             autoFocus
                             value={user.lastName}
-                            onChange={(event) => handleChange('lastname', event.target.value)}
+                            onChange={(event) => handleChange('lastName', event.target.value)}
                         />
                         <TextField
                             margin="normal"
