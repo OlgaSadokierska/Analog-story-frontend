@@ -51,9 +51,13 @@ export class PostRequests {
         }).then(Utils.mapResponse<User>)
             .catch(Utils.handleError);
     }
-    static createProduct(product_type_id: number, description: string, price: number): Promise<any> {
+    static createProduct(product_type_id: number, brand: string, model: string, description: string, price: number): Promise<any> {
+        const userId = localStorage.getItem('UserId');
         const postData = {
+            userdId: Number(userId),
             productTypeId: product_type_id,
+            brand: brand,
+            model: model,
             description: description,
             price: price
         };

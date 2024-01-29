@@ -20,7 +20,6 @@ import { UserMedia, Film, Camera, Product, ProductType } from '../../communicati
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 
-
 const Row = ({
                  camera,
                  films,

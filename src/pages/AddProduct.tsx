@@ -10,26 +10,20 @@ import { GetRequests } from '../communication/network/GetRequests';
 import { ProductType, Product } from '../communication/Types';
 
 const AddProduct = () => {
-    const initialProductState: {
-        // id: number;
-        productTypeId: number;
-        description: string;
-        price: number;
-        // brand: string | undefined ;
-        // model: string | undefined
-    } = {
-        // id: 0,
-        productTypeId: 0,
-        description: '',
+    const [newProduct, setNewProduct] = useState<Product>({
+        brand: "",
+        description: "",
+        id: 0,
+        model: "",
         price: 0,
-        // model: undefined,
-        // brand: undefined
-    }, [newProduct, setNewProduct] = useState<Product>(initialProductState), [productTypes, setProductTypes] = useState<ProductType[]>([]), [error, setError] = useState<string>('');
+        productTypeId: 0,
+        userId: 0
+    });
+    const [productTypes, setProductTypes] = useState<ProductType[]>([]);
+    const [error, setError] = useState<string>('');
 
-    const isFormValid = () => {
-        // Add your validation logic here
-        return newProduct.description.trim() !== '' && newProduct.price > 0;
-    };
+    const isFormValid = () => newProduct.description.trim() !== '' && newProduct.price > 0;
+
     useEffect(() => {
         const fetchProductTypes = async () => {
             try {
@@ -40,44 +34,62 @@ const AddProduct = () => {
                     setNewProduct((prevState) => ({ ...prevState, productTypeId: productTypesData[0].id }));
                 }
             } catch (error) {
-                console.error('Wystąpił błąd podczas pobierania typów produktów:', error);
+                console.error('Error fetching product types:', error);
             }
         };
-
         fetchProductTypes();
     }, []);
 
+    const handleInputChange = (field: string, value: any) => {
+        setNewProduct((prevState) => ({ ...prevState, [field]: value }));
+    };
+
     const handleAddProduct = async () => {
         try {
-            console.log('Product data to be sent:', newProduct);
             await PostRequests.createProduct(
-                // newProduct.id,
                 newProduct.productTypeId,
+                newProduct.brand,
+                newProduct.model,
                 newProduct.description,
                 newProduct.price
-                // newProduct.brand,
-                // newProduct.model
-                );
-            alert("Produkt został dodany");
-            console.log('Dodano nowy produkt:', newProduct);
-            setNewProduct(initialProductState);
-            setError('');
+            );
+            alert('Produkt dodany do sklepu');
         } catch (error) {
-            alert("Produkt nie został dodany");
-            console.error('Wystąpił błąd podczas dodawania produktu:', error);
-            if (error.response) {
                 console.error('Error Response Data:', error.response.data);
-            }
-
         }
     };
 
+    const containerStyles = {
+        display: "flex",
+        justifyContent: "center",
+        backgroundImage: 'url(/img015.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        height: '100vh',
+        overflow: 'hidden'
+    };
+
+    const boxStyles = {
+        display: "flex",
+        flexDirection: "column",
+        width: "50%",
+        alignItems: "center",
+        mt: 4
+    };
+
+    const formStyles = {
+        mt: 3,
+        p: 3,
+        bgcolor: "white",
+        borderRadius: "1%",
+        boxShadow: 1
+    };
 
     return (
-        <Container component="main" maxWidth="s" sx={{ display: "flex", justifyContent: "center", backgroundImage: 'url(/img015.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', height: '100vh', overflow: 'hidden' }}>
-            <Box sx={{ display: "flex", flexDirection: "column", width: "50%", alignItems: "center", mt: 4 }}>
+        <Container component="main" maxWidth="s" sx={containerStyles}>
+            <Box sx={boxStyles}>
                 <h1 style={{ margin: '0 20px' }}>Dodaj nowy produkt</h1>
-                <Box component="form" noValidate sx={{ mt: 3, p: 3, bgcolor: "white", borderRadius: "1%", boxShadow: 1, }}>
+                <Box component="form" noValidate sx={formStyles}>
                     <div style={{ marginBottom: '20px' }}>
                         <span style={{ marginRight: '10px' }}>Typ produktu:</span>
                         <Select
@@ -85,35 +97,31 @@ const AddProduct = () => {
                             label="Product Type"
                             variant="outlined"
                             value={newProduct.productTypeId}
-                            onChange={(event) => setNewProduct((prevState) => ({ ...prevState, productTypeId: event.target.value }))}
+                            onChange={(event) => handleInputChange('productTypeId', event.target.value)}
                         >
-                            {productTypes.map(({id, typeName}) => (
+                            {productTypes.map(({ id, typeName }) => (
                                 <MenuItem key={id} value={id}>
                                     {typeName}
                                 </MenuItem>
                             ))}
                         </Select>
                     </div>
-                    {/*{newProduct.productTypeId === productTypes.find(type => type.typeName === 'Camera')?.id && (*/}
-                    {/*    <>*/}
-                    {/*        <TextField*/}
-                    {/*            label="Marka"*/}
-                    {/*            variant="outlined"*/}
-                    {/*            margin="normal"*/}
-                    {/*            fullWidth*/}
-                    {/*            value={newProduct.brand}*/}
-                    {/*            onChange={(event) => setNewProduct((prevState) => ({ ...prevState, brand: event.target.value }))}*/}
-                    {/*        />*/}
-                    {/*        <TextField*/}
-                    {/*            label="Model"*/}
-                    {/*            variant="outlined"*/}
-                    {/*            margin="normal"*/}
-                    {/*            fullWidth*/}
-                    {/*            value={newProduct.model}*/}
-                    {/*            onChange={(event) => setNewProduct((prevState) => ({ ...prevState, model: event.target.value }))}*/}
-                    {/*        />*/}
-                    {/*    </>*/}
-                    {/*)}*/}
+                    <TextField
+                        label="Marka"
+                        variant="outlined"
+                        margin="normal"
+                        fullWidth
+                        value={newProduct.brand}
+                        onChange={(event) => handleInputChange('brand', event.target.value)}
+                    />
+                    <TextField
+                        label="Model"
+                        variant="outlined"
+                        margin="normal"
+                        fullWidth
+                        value={newProduct.model}
+                        onChange={(event) => handleInputChange('model', event.target.value)}
+                    />
                     <TextField
                         label="Opis"
                         variant="outlined"
@@ -122,7 +130,7 @@ const AddProduct = () => {
                         rows={4}
                         fullWidth
                         value={newProduct.description}
-                        onChange={(event) => setNewProduct((prevState) => ({ ...prevState, description: event.target.value }))}
+                        onChange={(event) => handleInputChange('description', event.target.value)}
                     />
                     <TextField
                         label="Cena"
@@ -134,7 +142,7 @@ const AddProduct = () => {
                         onChange={(event) => {
                             const parsedValue = parseFloat(event.target.value);
                             if (!isNaN(parsedValue) && parsedValue >= 0) {
-                                setNewProduct((prevState) => ({ ...prevState, price: parsedValue }));
+                                handleInputChange('price', parsedValue);
                             }
                         }}
                         inputProps={{

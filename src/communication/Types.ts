@@ -10,12 +10,12 @@ export interface User {
 }
 export interface Product {
     id: number;
-    productTypeId: number;
     userId: number;
+    productTypeId: number;
     description: string;
+    model: string;
+    brand: string;
     price: number;
-    // model?: string | null;
-    // brand?: string | null;
 }
 
 export interface ProductType {
