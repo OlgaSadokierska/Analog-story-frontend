@@ -11,6 +11,7 @@ export interface User {
 export interface Product {
     id: number;
     productTypeId: number;
+    userId: number;
     description: string;
     price: number;
     // model?: string | null;

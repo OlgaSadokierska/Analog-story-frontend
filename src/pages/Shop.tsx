@@ -113,6 +113,7 @@ export default function ProductTable() {
                     <TableHead>
                         <TableRow>
                             <TableCell>Opis ogłoszenia</TableCell>
+                            <TableCell>Id usera</TableCell>
                             <TableCell>Marka</TableCell>
                             <TableCell>Model</TableCell>
                             <TableCell>
@@ -132,6 +133,7 @@ export default function ProductTable() {
                         {sortedProducts.map((product) => (
                             <TableRow key={product.id}>
                                 <TableCell>{product.description}</TableCell>
+                                <TableCell>{product.userId}</TableCell>
                                 <TableCell>{product.brand}</TableCell>
                                 <TableCell>{product.model}</TableCell>
                                 <TableCell>{product.price} zł</TableCell>
