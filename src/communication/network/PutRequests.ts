@@ -1,5 +1,4 @@
-import { Put } from "../Endpoints";
-import { User } from "../Types";
+import {Post, Put} from "../Endpoints";
 import { api } from "../Config";
 import {Utils} from "./Utils";
 
@@ -19,4 +18,15 @@ export class PutRequests {
             .then(Utils.mapResponse<User>)
             .catch(Utils.handleError);
     }
+    static setCameraForSale(id: number, description: string, price: number): Promise<any> {
+        const putData = Put.CAMERA_FOR_SALE.replace(":cameraId", id.toString());
+        const requestBody = {
+            description: description,
+            price: price,
+        };
+        return api.put(putData, requestBody)
+            .then(Utils.mapResponse<any>)
+            .catch(Utils.handleError);
+    }
+
 }

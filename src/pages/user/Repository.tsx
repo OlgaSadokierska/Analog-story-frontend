@@ -79,6 +79,7 @@ const Row = ({
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Liczba załadowanych klatek</TableCell>
+                                    <TableCell>Maksymalna liczba klatek</TableCell>
                                     <TableCell>Czy w pełni wykorzystany?</TableCell>
                                     <TableCell>Czy na sprzedaż?</TableCell>
                                 </TableRow>
@@ -87,6 +88,7 @@ const Row = ({
                                 {films.map((film) => (
                                     <TableRow key={film.id}>
                                         <TableCell>{film.loadedFrames}</TableCell>
+                                        <TableCell>{film.maxLoaded}</TableCell>
                                         <TableCell>{film.isFull ? 'Tak' : 'Nie'}</TableCell>
                                         <TableCell>{film.isForSale ? 'Tak' : 'Nie'}</TableCell>
                                     </TableRow>
@@ -141,7 +143,6 @@ const Repository = () => {
         navigate('/addmedia');
     };
     const handleEditCamera = (cameraId: number) => {
-        // Obsługa edycji aparatury
         console.log(`Edytuj aparat o ID: ${cameraId}`);
         navigate(`/editcamera/${cameraId}`);
     };
@@ -152,13 +153,11 @@ const Repository = () => {
     };
 
     const handleEditFilm = (filmId: number) => {
-        // Obsługa edycji filmu
         console.log(`Edytuj film o ID: ${filmId}`);
         navigate(`/editfilm/${filmId}`);
     };
 
     const handleDeleteFilm = (filmId: number) => {
-        // Obsługa usunięcia filmu
         console.log(`Usuń film o ID: ${filmId}`);
     };
 
@@ -276,6 +275,7 @@ const Repository = () => {
                         <TableHead>
                             <TableRow>
                                 <TableCell>Liczba załadowanych klatek</TableCell>
+                                <TableCell>Maksymalna liczba klatek</TableCell>
                                 <TableCell>Czy w pełni wykorzystany?</TableCell>
                                 <TableCell>Czy na sprzedaż?</TableCell>
                                 <TableCell>Edytuj</TableCell>
@@ -286,6 +286,7 @@ const Repository = () => {
                             {filmsWithoutCameras.map((film) => (
                                 <TableRow key={film.id}>
                                     <TableCell>{film.loadedFrames}</TableCell>
+                                    <TableCell>{film.maxLoaded}</TableCell>
                                     <TableCell>{film.isFull ? 'Tak' : 'Nie'}</TableCell>
                                     <TableCell>{film.isForSale ? 'Tak' : 'Nie'}</TableCell>
                                     <TableCell>

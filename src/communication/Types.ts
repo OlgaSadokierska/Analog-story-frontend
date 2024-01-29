@@ -42,6 +42,7 @@ export interface Film {
     id_produktu: number | null;
     isForSale: boolean;
     user_id: number;
+    maxLoaded: number;
 }
 
 export interface UserMedia {
