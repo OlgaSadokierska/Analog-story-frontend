@@ -53,4 +53,5 @@ export class Delete {
     static PRODUCT_DELETE = (id: number) => [API_V1, PRODUCTS, `/${id}`].join("");
     static CAMERA_DELETE = (id: number) => [API_V1, CAMERA, `/deleteCamera/${id}`].join("");
     static FILM_DELETE = (id: number) => [API_V1, FILM, `/deleteFilm/${id}`].join("");
+    static FILM_REMOVE = (id: number) => [API_V1, FILM, `/removeCamera/${id}`].join("");
 }
