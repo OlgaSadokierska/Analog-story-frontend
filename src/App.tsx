@@ -40,7 +40,7 @@ export default function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/addproduct" element={<AddProduct />} />
                 <Route path="/addmedia" element={<AddMedia />} />
-                <Route path="/editcamera/:cameraId" element={<EditCamera />} />
+                <Route path="/updateDetails/:cameraId" element={<EditCamera />} />
                 <Route path="/products/:productId" element={<UpdateProduct />} />
 
             </Routes>
