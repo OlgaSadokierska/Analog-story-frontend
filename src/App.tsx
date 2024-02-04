@@ -18,6 +18,7 @@ import EditCamera from "./pages/EditCamera";
 import UnacceptedCartsEmployee from "./pages/UnacceptedCartsEmployee";
 import CartsManagementEmployee from "./pages/CartsManagementEmployee";
 import CartsManagementUser from "./pages/user/CartsManagementUser";
+import UpdateProduct from "./pages/UpdateProduct";
 
 export default function App() {
   return (
@@ -40,6 +41,8 @@ export default function App() {
                 <Route path="/addproduct" element={<AddProduct />} />
                 <Route path="/addmedia" element={<AddMedia />} />
                 <Route path="/editcamera/:cameraId" element={<EditCamera />} />
+                <Route path="/products/:productId" element={<UpdateProduct />} />
+
             </Routes>
         </BrowserRouter>
     </div>

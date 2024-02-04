@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -21,8 +21,8 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import { orderBy } from 'lodash';
 import Button from "@mui/material/Button";
-import {PostRequests} from "../communication/network/PostRequests";
-
+import { PostRequests } from "../communication/network/PostRequests";
+import { DeleteRequest} from "../communication/network/DeleteRequest";
 
 export default function ProductTable() {
     const [products, setProducts] = useState<Product[]>([]);
@@ -31,6 +31,19 @@ export default function ProductTable() {
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
     const userAccountType = localStorage.getItem('UserAccountType');
     const navigate = useNavigate();
+    const [loggedInUserId, setLoggedInUserId] = useState(null);
+
+    useEffect(() => {
+        const storedUserId = localStorage.getItem('UserId');
+        if (storedUserId !== null) {
+            const parsedUserId = parseInt(storedUserId, 10);
+            setLoggedInUserId(parsedUserId.toString());
+            console.log("Logged In User Id:", parsedUserId.toString());
+        }
+    }, []);
+
+    const { productId } = useParams();
+
 
     useEffect(() => {
         async function fetchProducts() {
@@ -48,11 +61,21 @@ export default function ProductTable() {
 
     const handleEdit = (productId: number) => {
         console.log(`Edytuj produkt o ID: ${productId}`);
+        navigate(`/products/${productId}`);
     };
 
-    const handleDelete = (productId: number) => {
-        console.log(`Usuń produkt o ID: ${productId}`);
+    const handleDelete = async (productId: number) => {
+        try {
+            await DeleteRequest.deleteProduct(productId);
+            setProducts(prevProducts => prevProducts.filter(product => product.id !== productId));
+            alert(`Produkt o ID ${productId} został usunięty.`);
+            window.location.reload();
+        } catch (error) {
+            console.error(`Błąd podczas usuwania produktu o ID ${productId}:`, error);
+            alert(`Nie udało się usunąć produktu o ID ${productId} ze względu na powiązaną kliszę.`);
+        }
     };
+
 
     const handleBuy = async (productId: number) => {
         const storedUserId = localStorage.getItem('UserId');
@@ -128,6 +151,7 @@ export default function ProductTable() {
                             <TableCell>Akcje</TableCell>
                         </TableRow>
                     </TableHead>
+
                     <TableBody>
                         {sortedProducts.map((product) => (
                             <TableRow key={product.id}>
@@ -146,9 +170,14 @@ export default function ProductTable() {
                                             </IconButton>
                                         </>
                                     ) : null}
-                                    {userAccountType === "2" ? (
+                                    {userAccountType === "2" && product.userId !== loggedInUserId ? (
                                         <IconButton onClick={() => handleBuy(product.id)}>
                                             <ShoppingCartIcon />
+                                        </IconButton>
+                                    ) : null}
+                                    {userAccountType === "2" && product.userId === loggedInUserId ? (
+                                        <IconButton onClick={() => handleEdit(product.id)}>
+                                            <EditIcon />
                                         </IconButton>
                                     ) : null}
                                 </TableCell>

@@ -11,10 +11,11 @@ export interface User {
 export interface Product {
     id: number;
     productTypeId: number;
+    userId: string;
     description: string;
     price: number;
-    // model?: string | null;
-    // brand?: string | null;
+    model: string;
+    brand: string;
 }
 
 export interface ProductType {

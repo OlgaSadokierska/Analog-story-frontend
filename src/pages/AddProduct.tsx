@@ -10,34 +10,41 @@ import { GetRequests } from '../communication/network/GetRequests';
 import { ProductType, Product } from '../communication/Types';
 
 const AddProduct = () => {
-    const initialProductState: {
-        // id: number;
-        productTypeId: number;
-        description: string;
-        price: number;
-        // brand: string | undefined ;
-        // model: string | undefined
-    } = {
-        // id: 0,
+    const initialProductState: Product = {
         productTypeId: 0,
         description: '',
         price: 0,
-        // model: undefined,
-        // brand: undefined
-    }, [newProduct, setNewProduct] = useState<Product>(initialProductState), [productTypes, setProductTypes] = useState<ProductType[]>([]), [error, setError] = useState<string>('');
+        model: '',
+        brand: ''
+    };
 
+    const [newProduct, setNewProduct] = useState<Product>(initialProductState);
+    const [productTypes, setProductTypes] = useState<ProductType[]>([]);
+    const [error, setError] = useState<string>('');
     const isFormValid = () => {
-        // Add your validation logic here
         return newProduct.description.trim() !== '' && newProduct.price > 0;
     };
+    const [loggedInUserId, setLoggedInUserId] = useState(null);
+
+    useEffect(() => {
+        const storedUserId = localStorage.getItem('UserId');
+        if (storedUserId !== null) {
+            const parsedUserId = parseInt(storedUserId, 10);
+            setLoggedInUserId(parsedUserId.toString());
+            console.log("Logged In User Id:", parsedUserId.toString());
+        }
+    }, []);
+
+
+
     useEffect(() => {
         const fetchProductTypes = async () => {
             try {
-                const productTypesData = await GetRequests.getAllProductTypes();
+                const productTypesData = await GetRequests.getAllProductTypes(loggedInUserId);
                 setProductTypes(productTypesData);
 
                 if (productTypesData.length > 0) {
-                    setNewProduct((prevState) => ({ ...prevState, productTypeId: productTypesData[0].id }));
+                    setNewProduct(prevState => ({ ...prevState, productTypeId: productTypesData[0].id }));
                 }
             } catch (error) {
                 console.error('Wystąpił błąd podczas pobierania typów produktów:', error);
@@ -47,17 +54,19 @@ const AddProduct = () => {
         fetchProductTypes();
     }, []);
 
+
+
     const handleAddProduct = async () => {
         try {
             console.log('Product data to be sent:', newProduct);
             await PostRequests.createProduct(
-                // newProduct.id,
+                loggedInUserId,
                 newProduct.productTypeId,
                 newProduct.description,
-                newProduct.price
-                // newProduct.brand,
-                // newProduct.model
-                );
+                newProduct.price,
+                newProduct.model,
+                newProduct.brand
+            );
             alert("Produkt został dodany");
             console.log('Dodano nowy produkt:', newProduct);
             setNewProduct(initialProductState);
@@ -68,10 +77,8 @@ const AddProduct = () => {
             if (error.response) {
                 console.error('Error Response Data:', error.response.data);
             }
-
         }
     };
-
 
     return (
         <Container component="main" maxWidth="s" sx={{ display: "flex", justifyContent: "center", backgroundImage: 'url(/img015.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', height: '100vh', overflow: 'hidden' }}>
@@ -85,35 +92,32 @@ const AddProduct = () => {
                             label="Product Type"
                             variant="outlined"
                             value={newProduct.productTypeId}
-                            onChange={(event) => setNewProduct((prevState) => ({ ...prevState, productTypeId: event.target.value }))}
+                            onChange={(event) => setNewProduct(prevState => ({ ...prevState, productTypeId: event.target.value }))}
                         >
-                            {productTypes.map(({id, typeName}) => (
+                            {productTypes.map(({ id, typeName }) => (
                                 <MenuItem key={id} value={id}>
                                     {typeName}
                                 </MenuItem>
                             ))}
                         </Select>
                     </div>
-                    {/*{newProduct.productTypeId === productTypes.find(type => type.typeName === 'Camera')?.id && (*/}
-                    {/*    <>*/}
-                    {/*        <TextField*/}
-                    {/*            label="Marka"*/}
-                    {/*            variant="outlined"*/}
-                    {/*            margin="normal"*/}
-                    {/*            fullWidth*/}
-                    {/*            value={newProduct.brand}*/}
-                    {/*            onChange={(event) => setNewProduct((prevState) => ({ ...prevState, brand: event.target.value }))}*/}
-                    {/*        />*/}
-                    {/*        <TextField*/}
-                    {/*            label="Model"*/}
-                    {/*            variant="outlined"*/}
-                    {/*            margin="normal"*/}
-                    {/*            fullWidth*/}
-                    {/*            value={newProduct.model}*/}
-                    {/*            onChange={(event) => setNewProduct((prevState) => ({ ...prevState, model: event.target.value }))}*/}
-                    {/*        />*/}
-                    {/*    </>*/}
-                    {/*)}*/}
+                    <TextField
+                        label="Marka"
+                        variant="outlined"
+                        margin="normal"
+                        fullWidth
+                        value={newProduct.brand}
+                        onChange={(event) => setNewProduct(prevState => ({ ...prevState, brand: event.target.value }))}
+                    />
+                    <TextField
+                        label="Model"
+                        variant="outlined"
+                        margin="normal"
+                        fullWidth
+                        value={newProduct.model}
+                        onChange={(event) => setNewProduct(prevState => ({ ...prevState, model: event.target.value }))}
+                    />
+
                     <TextField
                         label="Opis"
                         variant="outlined"
@@ -122,7 +126,7 @@ const AddProduct = () => {
                         rows={4}
                         fullWidth
                         value={newProduct.description}
-                        onChange={(event) => setNewProduct((prevState) => ({ ...prevState, description: event.target.value }))}
+                        onChange={(event) => setNewProduct(prevState => ({ ...prevState, description: event.target.value }))}
                     />
                     <TextField
                         label="Cena"
@@ -134,7 +138,7 @@ const AddProduct = () => {
                         onChange={(event) => {
                             const parsedValue = parseFloat(event.target.value);
                             if (!isNaN(parsedValue) && parsedValue >= 0) {
-                                setNewProduct((prevState) => ({ ...prevState, price: parsedValue }));
+                                setNewProduct(prevState => ({ ...prevState, price: parsedValue }));
                             }
                         }}
                         inputProps={{
