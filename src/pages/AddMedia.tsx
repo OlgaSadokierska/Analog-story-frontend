@@ -249,7 +249,7 @@ const AddMediaPage = () => {
                 </Box>
 
 
-                <h1 style={{margin: '0 20px'}}>Dodaj nowy film</h1>
+                <h1 style={{margin: '0 20px'}}>Dodaj nową kliszę</h1>
                 <Box component="form" noValidate
                      sx={{mt: 3, p: 3, bgcolor: 'white', borderRadius: '1%', boxShadow: 1, width: '100%'}}>
                     <div style={{marginBottom: '10px'}}>
