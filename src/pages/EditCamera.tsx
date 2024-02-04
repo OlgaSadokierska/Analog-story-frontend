@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
 import { useParams } from 'react-router-dom';
 import { GetRequests } from '../communication/network/GetRequests';
 import { PutRequests } from '../communication/network/PutRequests';
@@ -81,6 +78,7 @@ const EditCamera = () => {
                 price: priceAsFloat
             });
             alert("Aparat został edytowany");
+            window.location.reload(true);
 
         } catch (error) {
             console.error('Wystąpił błąd podczas edycji aparatu.', error);
@@ -107,7 +105,7 @@ const EditCamera = () => {
                             sx={{mb: 2}}
                         />
                         <TextField
-                            label="Brand"
+                            label="Marka"
                             variant="outlined"
                             fullWidth
                             value={editedBrand}
@@ -121,7 +119,6 @@ const EditCamera = () => {
                                     type="checkbox"
                                     checked={editedIsForSale}
                                     onChange={(e) => setEditedIsForSale(e.target.checked)}
-                                    sx={{ml: 1}}
                                 />
                             </label>
                         </Box>

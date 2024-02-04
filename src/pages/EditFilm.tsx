@@ -102,6 +102,7 @@ const EditFilm = () => {
             }, {});
 
             alert("Film został edytowany.");
+            window.location.reload(true);
         } catch (error) {
             console.error('Wystąpił błąd podczas edycji filmu.', error);
             if (error.response) {
@@ -114,6 +115,7 @@ const EditFilm = () => {
         try {
             await PutRequests.assignCamera(filmId, idCamera);
             alert("Kamera została przypisana do filmu.");
+            window.location.reload(true);
         } catch (error) {
             console.error('Wystąpił błąd podczas przypisywania kamery do filmu.', error);
             if (error.response) {
