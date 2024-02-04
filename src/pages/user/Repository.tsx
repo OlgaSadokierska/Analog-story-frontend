@@ -40,14 +40,28 @@ const Row = ({
     handleAddMedia: () => void;
 }) => {
     const [open, setOpen] = useState(false);
-    const navigate = useNavigate();
     const findProductById = (productId: number): Product | undefined => {
         const foundProduct = products ? products.find((product) => product.id === productId) : undefined;
-        console.log("Found product:", foundProduct);
         return foundProduct;
     };
 
     const cameraProduct = findProductById(camera.product_id);
+
+    const deleteCameraFilmConnection = async () => {
+        try {
+            if (films.length > 0) {
+                const filmId = films[0].id; // Assuming camera has only one film
+                await DeleteRequest.removeFilm(filmId);
+                alert(`Powiązanie zostało usunięte`);
+                window.location.reload();
+            } else {
+                alert(`Kamera nie ma przypisanego filmu`);
+            }
+        } catch (error) {
+            console.error(`Błąd podczas usuwania powiazania`, error);
+            alert(`Usunięcie powiązania jest niemożliwe.`);
+        }
+    };
 
     return (
         <React.Fragment>
@@ -66,9 +80,9 @@ const Row = ({
                     <IconButton aria-label="edit-camera" onClick={() => handleEditCamera(camera.id)}>
                         <EditIcon/>
                     </IconButton>
-                    <IconButton aria-label="delete-camera" onClick={() => handleDeleteCamera(camera.id)}>
-                        <DeleteIcon/>
-                    </IconButton>
+                    <Button variant="contained" color="error" onClick={() => deleteCameraFilmConnection()}>
+                        {'Usuń połączenie'}
+                    </Button>
                 </TableCell>
             </TableRow>
             <TableRow>

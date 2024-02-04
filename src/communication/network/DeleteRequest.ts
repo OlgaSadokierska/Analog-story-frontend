@@ -30,4 +30,11 @@ export class DeleteRequest {
             .then(Utils.mapResponse<any>)
             .catch(Utils.handleError);
     }
+
+    static removeFilm(id: number): Promise<any> {
+        const deleteData = Delete.FILM_REMOVE(id).replace(":id", id.toString());
+        return api.delete(deleteData)
+            .then(Utils.mapResponse<any>)
+            .catch(Utils.handleError);
+    }
 }
