@@ -81,6 +81,7 @@ const EditCamera = () => {
                 price: priceAsFloat
             });
             alert("Aparat został edytowany");
+            window.location.reload(true);
 
         } catch (error) {
             console.error('Wystąpił błąd podczas edycji aparatu.', error);

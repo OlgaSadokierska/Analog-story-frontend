@@ -109,6 +109,7 @@ const AddMediaPage = () => {
 
             console.log('Dodano nowy film:', newFilm);
             alert("Film został dodany");
+            window.location.reload(true);
         } catch (error) {
             console.error('Wystąpił błąd podczas dodawania filmu:', error);
             alert("Film nie został dodany");
@@ -329,25 +330,7 @@ const AddMediaPage = () => {
                             marginTop: '10px',
                             justifyContent: 'center'
                         }}>
-                            {/*<span style={{marginRight: '10px'}}>Powiązana kamera:</span>*/}
-                            {/*<Select*/}
-                            {/*    id="related-camera"*/}
-                            {/*    label="Related Camera"*/}
-                            {/*    variant="outlined"*/}
-                            {/*    value={newFilm.idCamera}*/}
-                            {/*    required*/}
-                            {/*    onChange={(e) => setNewFilm((prev) => {*/}
-                            {/*        const value = e.target.value === "" ? null : Number(e.target.value);*/}
-                            {/*        return ({...prev, idCamera: value});*/}
-                            {/*    })}*/}
-                            {/*>*/}
-                            {/*    <MenuItem value="">Brak</MenuItem>*/}
-                            {/*    {userCameras.map(({brand, id, model}) => (*/}
-                            {/*        <MenuItem key={id} value={id}>*/}
-                            {/*            {`${brand} ${model}`}*/}
-                            {/*        </MenuItem>*/}
-                            {/*    ))}*/}
-                            {/*</Select>*/}
+
 
                         </div>
                         <Button onClick={handleAddFilm} variant="contained"
