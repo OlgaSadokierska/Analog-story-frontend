@@ -44,6 +44,7 @@ const Row = ({
         const foundProduct = products ? products.find((product) => product.id === productId) : undefined;
         return foundProduct;
     };
+    const navigate = useNavigate();
 
     const cameraProduct = findProductById(camera.product_id);
 
@@ -117,9 +118,6 @@ const Row = ({
                                         <TableCell>
                                             <IconButton aria-label="edit-film" onClick={() => handleEditFilm(film.id)}>
                                                 <EditIcon />
-                                            </IconButton>
-                                            <IconButton aria-label="delete-film" onClick={() => handleDeleteFilm(film.id)}>
-                                                <DeleteIcon />
                                             </IconButton>
                                         </TableCell>
                                     </TableRow>
