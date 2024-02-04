@@ -45,6 +45,7 @@ export class Post {
 export class Put {
     static USER_UPDATE = [API_V1, USERS,"/id"].join("");
     static CAMERA_FOR_SALE = [API_V1, CAMERA, "/setForSale/:cameraId"].join("");
+    static UPDATE_PRODUCT = [API_V1, PRODUCTS, "/:productId"].join("")
 }
 
 export class Delete {

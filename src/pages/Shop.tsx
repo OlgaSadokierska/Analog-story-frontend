@@ -58,6 +58,7 @@ export default function ProductTable() {
 
     const handleEdit = (productId: number) => {
         console.log(`Edytuj produkt o ID: ${productId}`);
+        navigate(`/products/${productId}`);
     };
 
     const handleDelete = (productId: number) => {
