@@ -170,12 +170,12 @@ export default function ProductTable() {
                                             </IconButton>
                                         </>
                                     ) : null}
-                                    {userAccountType === "2" && product.userId !== loggedInUserId ? (
+                                    {userAccountType === "2" && product.userId != loggedInUserId ? (
                                         <IconButton onClick={() => handleBuy(product.id)}>
                                             <ShoppingCartIcon />
                                         </IconButton>
                                     ) : null}
-                                    {userAccountType === "2" && product.userId === loggedInUserId ? (
+                                    {userAccountType === "2" && product.userId == loggedInUserId ? (
                                         <IconButton onClick={() => handleEdit(product.id)}>
                                             <EditIcon />
                                         </IconButton>

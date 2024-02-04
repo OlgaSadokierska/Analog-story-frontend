@@ -29,6 +29,8 @@ const AddMediaPage = () => {
         isForSale: false,
         idCamera: null,
         maxLoaded: 50,
+        model: '',
+        brand: ''
     });
 
     const [userCameras, setUserCameras] = useState([]);
@@ -98,7 +100,9 @@ const AddMediaPage = () => {
                     newFilm.isFull,
                     newFilm.idCamera,
                     newFilm.maxLoaded,
-                    newFilm.isForSale
+                    newFilm.isForSale,
+                    newFilm.model,
+                    newFilm.brand
                 );
             }
             console.log('Dodano nowy film:', newFilm);
@@ -293,6 +297,28 @@ const AddMediaPage = () => {
                                                }))}/>}
                             label="Czy na sprzedaż?"
                         />
+                        <div style={{marginBottom: '10px'}}>
+                            <TextField
+                                label="Model"
+                                variant="outlined"
+                                margin="normal"
+                                fullWidth
+                                value={newFilm.model}
+                                required
+                                onChange={(event) => setNewFilm((prevState) => ({ ...prevState, model: event.target.value }))}
+                            />
+                        </div>
+                        <div style={{marginBottom: '10px'}}>
+                            <TextField
+                                label="Marka"
+                                variant="outlined"
+                                margin="normal"
+                                fullWidth
+                                value={newFilm.brand}
+                                required
+                                onChange={(event) => setNewFilm((prevState) => ({ ...prevState, brand: event.target.value }))}
+                            />
+                        </div>
                         <div style={{
                             display: 'flex',
                             alignItems: 'center',
