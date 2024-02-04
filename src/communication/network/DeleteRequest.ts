@@ -15,4 +15,26 @@ export class DeleteRequest {
             .then(Utils.mapResponse<any>)
             .catch(Utils.handleError);
     }
+
+    static deleteCamera(id: number): Promise<any> {
+        const deleteData = Delete.CAMERA_DELETE(id).replace(":id", id.toString());
+        console.log(deleteData)
+        return api.delete(deleteData)
+            .then(Utils.mapResponse<any>)
+            .catch(Utils.handleError);
+    }
+
+    static deleteFilm(id: number): Promise<any> {
+        const deleteData = Delete.FILM_DELETE(id).replace(":id", id.toString());
+        return api.delete(deleteData)
+            .then(Utils.mapResponse<any>)
+            .catch(Utils.handleError);
+    }
+
+    static removeFilm(id: number): Promise<any> {
+        const deleteData = Delete.FILM_REMOVE(id).replace(":id", id.toString());
+        return api.delete(deleteData)
+            .then(Utils.mapResponse<any>)
+            .catch(Utils.handleError);
+    }
 }

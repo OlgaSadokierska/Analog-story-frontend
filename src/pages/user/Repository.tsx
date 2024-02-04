@@ -19,7 +19,7 @@ import { GetRequests } from "../../communication/network/GetRequests";
 import { UserMedia, Film, Camera, Product, ProductType } from '../../communication/Types';
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
-
+import {DeleteRequest} from "../../communication/network/DeleteRequest";
 
 const Row = ({
                  camera,
@@ -28,7 +28,6 @@ const Row = ({
                  types,
                  handleEditCamera,
                  handleDeleteCamera,
-                 handleDeleteFilm,
                  handleAddMedia,
              }: {
     camera: Camera;
@@ -41,15 +40,28 @@ const Row = ({
     handleAddMedia: () => void;
 }) => {
     const [open, setOpen] = useState(false);
-    const navigate = useNavigate();
-
     const findProductById = (productId: number): Product | undefined => {
         const foundProduct = products ? products.find((product) => product.id === productId) : undefined;
-        console.log("Found product:", foundProduct);
         return foundProduct;
     };
 
     const cameraProduct = findProductById(camera.product_id);
+
+    const deleteCameraFilmConnection = async () => {
+        try {
+            if (films.length > 0) {
+                const filmId = films[0].id; // Assuming camera has only one film
+                await DeleteRequest.removeFilm(filmId);
+                alert(`Powiązanie zostało usunięte`);
+                window.location.reload();
+            } else {
+                alert(`Kamera nie ma przypisanego filmu`);
+            }
+        } catch (error) {
+            console.error(`Błąd podczas usuwania powiazania`, error);
+            alert(`Usunięcie powiązania jest niemożliwe.`);
+        }
+    };
 
     const handleEditFilm = (filmId: number) => {
         console.log(`Edytuj film o ID: ${filmId}`);
@@ -73,9 +85,9 @@ const Row = ({
                     <IconButton aria-label="edit-camera" onClick={() => handleEditCamera(camera.id)}>
                         <EditIcon/>
                     </IconButton>
-                    <IconButton aria-label="delete-camera" onClick={() => handleDeleteCamera(camera.id)}>
-                        <DeleteIcon/>
-                    </IconButton>
+                    <Button variant="contained" color="error" onClick={() => deleteCameraFilmConnection()}>
+                        {'Usuń połączenie'}
+                    </Button>
                 </TableCell>
             </TableRow>
             <TableRow>
@@ -121,6 +133,11 @@ const Row = ({
     );
 };
 
+    const tableContainerStyle = {
+    marginTop: '20px',
+    marginBottom: '20px',
+};
+
 
 const Repository = () => {
     const [userId, setUserId] = useState<number | null>(null);
@@ -161,8 +178,15 @@ const Repository = () => {
         navigate(`/updateDetails/${cameraId}`);
     };
 
-    const handleDeleteCamera = (cameraId: number) => {
-        console.log(`Usuń apart o ID: ${cameraId}`);
+    const handleDeleteCamera = async (cameraId: number) => {
+        try {
+            await DeleteRequest.deleteCamera(cameraId);
+            alert(`Aparat o ID ${cameraId} został usunięty.`);
+            window.location.reload();
+        } catch (error) {
+            console.error(`Błąd podczas usuwania aparatu o ID ${cameraId}:`, error);
+            alert(`Usunięcie aparatu o ID ${cameraId} jest niemożliwe. Aparat ma zaladowane klisze lub jest zarezerwowany`);
+        }
     };
 
     const handleEditFilm = (filmId: number) => {
@@ -170,8 +194,15 @@ const Repository = () => {
         navigate(`/updateFilmDetails/${filmId}`);
     };
 
-    const handleDeleteFilm = (filmId: number) => {
-        console.log(`Usuń film o ID: ${filmId}`);
+    const handleDeleteFilm = async (filmId: number) => {
+        try {
+            await DeleteRequest.deleteFilm(filmId);
+            alert(`Film o ID ${filmId} został usunięty.`);
+            window.location.reload();
+        } catch (error) {
+            console.error(`Błąd podczas usuwania filmu o ID ${filmId}:`, error);
+            alert(`Nie udało się usunąć filmu o ID ${filmId}`);
+        }
     };
 
 
