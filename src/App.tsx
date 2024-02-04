@@ -19,6 +19,7 @@ import UnacceptedCartsEmployee from "./pages/UnacceptedCartsEmployee";
 import CartsManagementEmployee from "./pages/CartsManagementEmployee";
 import CartsManagementUser from "./pages/user/CartsManagementUser";
 import UpdateProduct from "./pages/UpdateProduct";
+import EditFilm from "./pages/EditFilm";
 
 export default function App() {
   return (
@@ -40,8 +41,9 @@ export default function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/addproduct" element={<AddProduct />} />
                 <Route path="/addmedia" element={<AddMedia />} />
-                <Route path="/editcamera/:cameraId" element={<EditCamera />} />
+                <Route path="/updateDetails/:cameraId" element={<EditCamera />} />
                 <Route path="/products/:productId" element={<UpdateProduct />} />
+                <Route path="/updateFilmDetails/:filmId" element ={<EditFilm />} />
 
             </Routes>
         </BrowserRouter>

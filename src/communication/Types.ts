@@ -24,7 +24,7 @@ export interface ProductType {
 }
 
 export interface Camera {
-    product: any;
+    product: Product;
     id: number;
     user_id: number;
     model: string;
@@ -32,6 +32,7 @@ export interface Camera {
     filmLoaded: boolean;
     isForSale: boolean;
     product_id: number;
+
 }
 
 export interface Film {
@@ -45,6 +46,7 @@ export interface Film {
     maxLoaded: number;
     model: string;
     brand: string;
+    product: Product;
 }
 
 export interface UserMedia {

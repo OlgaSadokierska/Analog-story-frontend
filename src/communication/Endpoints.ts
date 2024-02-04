@@ -46,6 +46,8 @@ export class Put {
     static USER_UPDATE = [API_V1, USERS,"/id"].join("");
     static CAMERA_FOR_SALE = [API_V1, CAMERA, "/setForSale/:cameraId"].join("");
     static UPDATE_PRODUCT = [API_V1, PRODUCTS, "/:productId"].join("")
+    static UPDATE_CAMERA_DETAILS = [API_V1, CAMERA, "/updateDetails/:cameraId"].join("")
+    static UPDATE_FILM = [API_V1, FILM, '/updateDetails/:filmId'].join("")
 }
 
 export class Delete {

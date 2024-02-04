@@ -4,26 +4,24 @@ import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import { useParams, useNavigate } from 'react-router-dom';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import { useParams } from 'react-router-dom';
 import { GetRequests } from '../communication/network/GetRequests';
 import { PutRequests } from '../communication/network/PutRequests';
-import { Camera, Film } from '../communication/Types';
-import { Input } from '@mui/material';
+import {Camera, Product} from '../communication/Types';
 
 const EditCamera = () => {
+    const { cameraId } = useParams();
+    const userId = localStorage.getItem('UserId');
+
     const [camera, setCamera] = useState<Camera | null>(null);
     const [editedModel, setEditedModel] = useState('');
     const [editedBrand, setEditedBrand] = useState('');
     const [editedIsForSale, setEditedIsForSale] = useState(false);
-    const [editedFilm, setEditedFilm] = useState<Film | null>(null);
-    const [editedLoadedFrames, setEditedLoadedFrames] = useState<number>(0);
-    const [editedFilmIsForSale, setEditedFilmIsForSale] = useState<boolean>(false);
-    const [editedFilmIsFull, setEditedFilmIsFull] = useState<boolean>(false);
-
-    const navigate = useNavigate();
-    const { cameraId } = useParams();
-
-    const userId = localStorage.getItem('UserId');
+    const [editedDescription, setEditedDescription] = useState('');
+    const [editedPrice, setEditedPrice] = useState('');
+    const [product, setProduct] = useState<Product | null>(null);
 
     useEffect(() => {
         const fetchCameraData = async () => {
@@ -39,20 +37,18 @@ const EditCamera = () => {
                         setEditedModel(foundCamera.model);
                         setEditedBrand(foundCamera.brand);
                         setEditedIsForSale(foundCamera.isForSale);
+                        setEditedDescription(foundCamera.product.description);
+                        setEditedPrice(foundCamera.product.price);
 
-
-                        const associatedFilm = userMediaData.films.find(
-                            (film) => film.idCamera === foundCamera.id
-                        );
-
-                        if (associatedFilm) {
-                            setEditedFilm(associatedFilm);
-                            setEditedLoadedFrames(associatedFilm.loadedFrames);
-                            setEditedFilmIsForSale(associatedFilm.isForSale);
-                            setEditedFilmIsFull(associatedFilm.isFull);
-                        }
                     } else {
+                        alert('Aparat nie został znaleziony w danych użytkownika.');
                         console.error('Camera not found in user media data.');
+                    }
+
+                    // Fetch product data for the camera
+                    const productData = await GetRequests.getAllProducts(foundCamera.product_id);
+                    if (productData) {
+                        setProduct(productData);
                     }
                 }
             } catch (error) {
@@ -67,34 +63,34 @@ const EditCamera = () => {
 
     const handleSaveChanges = async () => {
         try {
-            await PutRequests.updateCamera(cameraId, {
+            console.log('Camera data to be sent:', {
                 model: editedModel,
                 brand: editedBrand,
                 isForSale: editedIsForSale,
+                description: editedDescription,
+                price: editedPrice,
             });
 
-            if (editedFilm) {
-                await PutRequests.updateFilm(editedFilm.id, {
-                    loadedFrames: editedLoadedFrames,
-                    isForSale: editedFilmIsForSale,
-                });
-            }
+            const priceAsFloat = parseFloat(editedPrice);
 
-            navigate(`/repository`);
+            await PutRequests.updateCameraDetails(cameraId, {
+                model: editedModel,
+                brand: editedBrand
+            }, {
+                description: editedDescription,
+                price: priceAsFloat
+            });
+            alert("Aparat został edytowany");
+
         } catch (error) {
-            console.error('Error saving camera changes:', error);
+            console.error('Wystąpił błąd podczas edycji aparatu.', error);
+            if (error.response) {
+                console.error('Error Response Data:', error.response.data);
+            }
         }
     };
 
-    if (!camera) {
-        return (
-            <Container component="main" maxWidth="lg">
-                <Typography variant="h5">
-                    Loading data...
-                </Typography>
-            </Container>
-        );
-    }
+
 
     return (
         <Container component="main" maxWidth="s" sx={{ display: 'flex', justifyContent: 'center', backgroundImage: 'url(/img015.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', height: '100vh', overflow: 'hidden' }}>
@@ -128,54 +124,37 @@ const EditCamera = () => {
                                     sx={{ml: 1}}
                                 />
                             </label>
-
                         </Box>
-                    </div>
-                </Box>
-
-                {editedFilm && (
-                    <Box sx={{display: 'flex', flexDirection: 'column', width: '50%', alignItems: 'center', mt: 4}}>
-                        <h1 style={{margin: '0 20px'}}>Edytuj powiązaną kliszę</h1>
-                        <Box component="form" noValidate
-                             sx={{mt: 3, p: 3, bgcolor: "white", borderRadius: "1%", boxShadow: 1}}>
-                            <div style={{marginBottom: '20px'}}>
+                        {editedIsForSale && (
+                            <div>
                                 <TextField
-                                    label="Liczba załadowanych klatek"
+                                    label="Opis"
+                                    variant="outlined"
+                                    fullWidth
+                                    value={editedDescription}
+                                    onChange={(e) => setEditedDescription(e.target.value)}
+                                    sx={{mb: 2}}
+                                />
+                                <TextField
+                                    label="Cena"
                                     variant="outlined"
                                     margin="normal"
                                     type="number"
                                     fullWidth
-                                    value={editedLoadedFrames}
-                                    onChange={(e) => setEditedLoadedFrames(Math.min(Math.max(parseInt(e.target.value, 10), 0), 32))}
-                                    inputProps={{min: 0, max: 32}}
-                                    sx={{width: '250px'}}
+                                    value={editedPrice}
+                                    onChange={(e) => {
+                                        const inputPrice = e.target.value;
+                                        if (!isNaN(inputPrice) && parseFloat(inputPrice) >= 0) {
+                                            setEditedPrice(inputPrice);
+                                        }
+                                    }}
+                                    sx={{mb: 2}}
                                 />
                             </div>
-                            <div style={{marginBottom: '20px'}}>
-                                <label>
-                                    Czy w pełni wykorzystany:
-                                    <input
-                                        type="checkbox"
-                                        checked={editedFilmIsForSale}
-                                        onChange={(e) => setEditedFilmIsForSale(e.target.checked)}
-                                        sx={{ml: 1}}
-                                    />
-                                </label>
-                            </div>
-                            <div style={{marginBottom: '20px'}}>
-                                <label>
-                                    Czy na sprzedaż:
-                                    <input
-                                        type="checkbox"
-                                        checked={editedFilmIsFull}
-                                        onChange={(e) => setEditedFilmIsFull(e.target.checked)}
-                                        sx={{ml: 1}}
-                                    />
-                                </label>
-                            </div>
-                        </Box>
-                    </Box>
-                )}
+                        )}
+                    </div>
+                </Box>
+
                 <div style={{margin: '20px'}}>
                     <Button
                         variant="contained"
@@ -187,8 +166,10 @@ const EditCamera = () => {
                     </Button>
                 </div>
             </Box>
+
+
         </Container>
-);
+    );
 };
 
 export default EditCamera;

@@ -63,6 +63,11 @@ const Row = ({
         }
     };
 
+    const handleEditFilm = (filmId: number) => {
+        console.log(`Edytuj film o ID: ${filmId}`);
+        navigate(`/updateFilmDetails/${filmId}`);
+    };
+
     return (
         <React.Fragment>
             <TableRow key={camera.id}>
@@ -95,6 +100,9 @@ const Row = ({
                                     <TableCell>Maksymalna liczba klatek</TableCell>
                                     <TableCell>Czy w pełni wykorzystany?</TableCell>
                                     <TableCell>Czy na sprzedaż?</TableCell>
+                                    <TableCell>Marka</TableCell>
+                                    <TableCell>Model</TableCell>
+                                    <TableCell>Akcje</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -104,6 +112,16 @@ const Row = ({
                                         <TableCell>{film.maxLoaded}</TableCell>
                                         <TableCell>{film.isFull ? 'Tak' : 'Nie'}</TableCell>
                                         <TableCell>{film.isForSale ? 'Tak' : 'Nie'}</TableCell>
+                                        <TableCell>{film.brand}</TableCell>
+                                        <TableCell>{film.model}</TableCell>
+                                        <TableCell>
+                                            <IconButton aria-label="edit-film" onClick={() => handleEditFilm(film.id)}>
+                                                <EditIcon />
+                                            </IconButton>
+                                            <IconButton aria-label="delete-film" onClick={() => handleDeleteFilm(film.id)}>
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        </TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
@@ -157,7 +175,7 @@ const Repository = () => {
     };
     const handleEditCamera = (cameraId: number) => {
         console.log(`Edytuj aparat o ID: ${cameraId}`);
-        navigate(`/editcamera/${cameraId}`);
+        navigate(`/updateDetails/${cameraId}`);
     };
 
     const handleDeleteCamera = async (cameraId: number) => {
@@ -173,7 +191,7 @@ const Repository = () => {
 
     const handleEditFilm = (filmId: number) => {
         console.log(`Edytuj film o ID: ${filmId}`);
-        navigate(`/editfilm/${filmId}`);
+        navigate(`/updateFilmDetails/${filmId}`);
     };
 
     const handleDeleteFilm = async (filmId: number) => {
@@ -209,6 +227,11 @@ const Repository = () => {
     const filmsWithoutCameras = media.films.filter(
         (film) => !media.cameras.some((camera) => camera.id === film.idCamera)
     );
+
+    const tableContainerStyle = {
+        marginTop: '20px',
+        marginBottom: '20px',
+    };
 
     return (
         <Container component="main" maxWidth="lg">

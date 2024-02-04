@@ -1,7 +1,7 @@
 import {Post, Put} from "../Endpoints";
 import { api } from "../Config";
 import {Utils} from "./Utils";
-import {User} from "../Types";
+import {Camera, Film, Product, User} from "../Types";
 
 export class PutRequests {
     static updateUser(id: number, first_name: string, last_name: string, login: string, email: string, password: string, phone: string, accountTypeId: number): Promise<User> {
@@ -43,4 +43,40 @@ export class PutRequests {
             .then(Utils.mapResponse<any>)
             .catch(Utils.handleError);
     }
+
+
+    static updateCameraDetails(id: number, updatedCameraDTO: Camera, updatedProductDTO: Product): Promise<Camera> {
+        const putData = Put.UPDATE_CAMERA_DETAILS.replace(":cameraId", id.toString());
+        const requestBody = {
+            model: updatedCameraDTO.model,
+            brand: updatedCameraDTO.brand,
+            productDto: {
+                description: updatedProductDTO.description,
+                price: updatedProductDTO.price
+            }
+        };
+
+        console.log('Request body to be sent:', requestBody);
+
+        return api.put(putData, requestBody)
+            .then(Utils.mapResponse<Camera>)
+            .catch(Utils.handleError);
+    }
+
+    static updateFilmDetails(id: number, updatedFilmDTO: Film, updatedProductDTO: Product): Promise<Film> {
+        const putData = Put.UPDATE_FILM.replace(":filmId", id.toString());
+        const requestBody = {
+            model: updatedFilmDTO.model,
+            brand: updatedFilmDTO.brand,
+            loadedFrames: updatedFilmDTO.loadedFrames,
+            maxLoaded: updatedFilmDTO.maxLoaded,
+            productDto: {}
+        };
+        console.log('Request body to be sent:', requestBody);
+        return api.put(putData, requestBody)
+            .then(Utils.mapResponse<Film>)
+            .catch(Utils.handleError);
+    }
+
+
 }
