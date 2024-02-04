@@ -31,11 +31,11 @@ const EditProduct = () => {
                 if (foundProduct) {
                     setEditedProduct(foundProduct);
                 } else {
-                    setError('Product not found');
+                    setError('Produkt nie został znaleziony.');
                 }
             } catch (error) {
-                console.error('Error fetching product:', error);
-                setError('Error fetching product');
+                console.error('Błąd:', error);
+                setError('Błąd');
             }
         }
 
@@ -55,6 +55,7 @@ const EditProduct = () => {
             );
             alert("Produkt został zaktualizowany");
             console.log('Zaktualizowano produkt:', editedProduct);
+            window.location.reload();
         } catch (error) {
             alert("Produkt nie został zaktualizowany");
             console.error('Wystąpił błąd podczas aktualizacji produktu:', error);

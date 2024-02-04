@@ -50,4 +50,5 @@ export class Put {
 
 export class Delete {
     static USER_DELETE = [API_V1, USERS].join("");
+    static PRODUCT_DELETE = (id: number) => [API_V1, PRODUCTS, `/${id}`].join("");
 }

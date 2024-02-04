@@ -42,6 +42,7 @@ export default function App() {
                 <Route path="/addmedia" element={<AddMedia />} />
                 <Route path="/editcamera/:cameraId" element={<EditCamera />} />
                 <Route path="/products/:productId" element={<UpdateProduct />} />
+
             </Routes>
         </BrowserRouter>
     </div>

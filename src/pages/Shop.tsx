@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -22,6 +22,7 @@ import Box from '@mui/material/Box';
 import { orderBy } from 'lodash';
 import Button from "@mui/material/Button";
 import { PostRequests } from "../communication/network/PostRequests";
+import { DeleteRequest} from "../communication/network/DeleteRequest";
 
 export default function ProductTable() {
     const [products, setProducts] = useState<Product[]>([]);
@@ -40,6 +41,8 @@ export default function ProductTable() {
             console.log("Logged In User Id:", parsedUserId.toString());
         }
     }, []);
+
+    const { productId } = useParams();
 
 
     useEffect(() => {
@@ -61,9 +64,18 @@ export default function ProductTable() {
         navigate(`/products/${productId}`);
     };
 
-    const handleDelete = (productId: number) => {
-        console.log(`Usuń produkt o ID: ${productId}`);
+    const handleDelete = async (productId: number) => {
+        try {
+            await DeleteRequest.deleteProduct(productId);
+            setProducts(prevProducts => prevProducts.filter(product => product.id !== productId));
+            alert(`Produkt o ID ${productId} został usunięty.`);
+            window.location.reload();
+        } catch (error) {
+            console.error(`Błąd podczas usuwania produktu o ID ${productId}:`, error);
+            alert(`Nie udało się usunąć produktu o ID ${productId} ze względu na powiązaną kliszę.`);
+        }
     };
+
 
     const handleBuy = async (productId: number) => {
         const storedUserId = localStorage.getItem('UserId');
