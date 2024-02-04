@@ -5,7 +5,7 @@ export class Utils {
         return response.data as T;
     }
 
-    static handleError(error: AxiosError): never {
+    static handleError(error: AxiosError): any {
         throw error;
     }
 }

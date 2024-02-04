@@ -19,7 +19,7 @@ import { GetRequests } from "../../communication/network/GetRequests";
 import { UserMedia, Film, Camera, Product, ProductType } from '../../communication/Types';
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
-
+import {DeleteRequest} from "../../communication/network/DeleteRequest";
 
 const Row = ({
                  camera,
@@ -41,7 +41,6 @@ const Row = ({
 }) => {
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
-
     const findProductById = (productId: number): Product | undefined => {
         const foundProduct = products ? products.find((product) => product.id === productId) : undefined;
         console.log("Found product:", foundProduct);
@@ -147,9 +146,15 @@ const Repository = () => {
         navigate(`/editcamera/${cameraId}`);
     };
 
-    const handleDeleteCamera = (cameraId: number) => {
-        // Obsługa usunięcia aparatu
-        console.log(`Usuń apart o ID: ${cameraId}`);
+    const handleDeleteCamera = async (cameraId: number) => {
+        try {
+            await DeleteRequest.deleteCamera(cameraId);
+            alert(`Aparat o ID ${cameraId} został usunięty.`);
+            window.location.reload();
+        } catch (error) {
+            console.error(`Błąd podczas usuwania aparatu o ID ${cameraId}:`, error);
+            alert(`Usunięcie aparatu o ID ${cameraId} jest niemożliwe. Aparat ma zaladowane klisze lub jest zarezerwowany`);
+        }
     };
 
     const handleEditFilm = (filmId: number) => {
@@ -157,8 +162,15 @@ const Repository = () => {
         navigate(`/editfilm/${filmId}`);
     };
 
-    const handleDeleteFilm = (filmId: number) => {
-        console.log(`Usuń film o ID: ${filmId}`);
+    const handleDeleteFilm = async (filmId: number) => {
+        try {
+            await DeleteRequest.deleteFilm(filmId);
+            alert(`Film o ID ${filmId} został usunięty.`);
+            window.location.reload();
+        } catch (error) {
+            console.error(`Błąd podczas usuwania filmu o ID ${filmId}:`, error);
+            alert(`Nie udało się usunąć filmu o ID ${filmId}`);
+        }
     };
 
 
