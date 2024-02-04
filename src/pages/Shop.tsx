@@ -21,8 +21,7 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import { orderBy } from 'lodash';
 import Button from "@mui/material/Button";
-import {PostRequests} from "../communication/network/PostRequests";
-
+import { PostRequests } from "../communication/network/PostRequests";
 
 export default function ProductTable() {
     const [products, setProducts] = useState<Product[]>([]);
@@ -31,6 +30,17 @@ export default function ProductTable() {
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
     const userAccountType = localStorage.getItem('UserAccountType');
     const navigate = useNavigate();
+    const [loggedInUserId, setLoggedInUserId] = useState(null);
+
+    useEffect(() => {
+        const storedUserId = localStorage.getItem('UserId');
+        if (storedUserId !== null) {
+            const parsedUserId = parseInt(storedUserId, 10);
+            setLoggedInUserId(parsedUserId.toString());
+            console.log("Logged In User Id:", parsedUserId.toString());
+        }
+    }, []);
+
 
     useEffect(() => {
         async function fetchProducts() {
@@ -128,6 +138,7 @@ export default function ProductTable() {
                             <TableCell>Akcje</TableCell>
                         </TableRow>
                     </TableHead>
+
                     <TableBody>
                         {sortedProducts.map((product) => (
                             <TableRow key={product.id}>
@@ -146,9 +157,14 @@ export default function ProductTable() {
                                             </IconButton>
                                         </>
                                     ) : null}
-                                    {userAccountType === "2" ? (
+                                    {userAccountType === "2" && product.userId !== loggedInUserId ? (
                                         <IconButton onClick={() => handleBuy(product.id)}>
                                             <ShoppingCartIcon />
+                                        </IconButton>
+                                    ) : null}
+                                    {userAccountType === "2" && product.userId === loggedInUserId ? (
+                                        <IconButton onClick={() => handleEdit(product.id)}>
+                                            <EditIcon />
                                         </IconButton>
                                     ) : null}
                                 </TableCell>

@@ -51,17 +51,20 @@ export class PostRequests {
         }).then(Utils.mapResponse<User>)
             .catch(Utils.handleError);
     }
-    static createProduct(product_type_id: number, description: string, price: number): Promise<any> {
-        const postData = {
+    static createProduct(user_id: string, product_type_id: number, description: string, price: number, model: string, brand: string): Promise<any> {
+        const postData = Post.ADD_PRODUCT.replace(":userId", user_id.toString());
+        const requestBody = {
             productTypeId: product_type_id,
             description: description,
-            price: price
+            price: price,
+            model: model,
+            brand: brand,
         };
-
-        return api.post(Post.PRODUCT, postData)
+        return api.post(postData, requestBody)
             .then(Utils.mapResponse<any>)
             .catch(Utils.handleError);
     }
+
 
     static addProductToCart(user_id: string, product_id: number): Promise<any> {
         const postData = Post.ADD_TO_CART.replace(":userId", user_id.toString()).replace(":productId", product_id.toString());

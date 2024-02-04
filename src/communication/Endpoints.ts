@@ -6,6 +6,7 @@ const PRODUCT_TYPES = "/product-types";
 const CAMERA = "/cameras";
 const FILM = "/films";
 
+
 export class Get {
     static USERS = [API_V1, USERS].join("");
     static USER_BY_ID = [API_V1, USERS, "/id/"].join("");
@@ -30,7 +31,8 @@ export class Post {
     static USER_LOGOUT = "/logout";
 
     static USER_ADD_EMPLOYEE = [API_V1, USERS, "/addEmployee"].join("");
-    static PRODUCT = [API_V1, PRODUCTS].join("");
+
+    static ADD_PRODUCT = [API_V1, PRODUCTS, "/create/:userId"].join("")
 
     static ADD_TO_CART = [API_V1, CARTS, "/add-to-cart/:userId/:productId"].join("");
     static ACCEPT_CART = [API_V1, CARTS, "/mark-as-purchased/:cartId"].join("");
