@@ -190,16 +190,6 @@ const UserProfile = () => {
                         onChange={(event) => setUser((prevState) => ({ ...prevState, phone: event.target.value }))}
                         readOnly={!isEditing}
                     />
-
-                    {isEditing ? (
-                        <Button onClick={handleSaveProfile} fullWidth variant="contained">
-                            Zapisz
-                        </Button>
-                    ) : (
-                        <Button onClick={handleEditProfile} fullWidth variant="contained">
-                            Edytuj
-                        </Button>
-                    )}
                 </Box>
             </Box>
         </Container>

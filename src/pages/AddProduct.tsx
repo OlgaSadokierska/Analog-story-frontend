@@ -35,8 +35,6 @@ const AddProduct = () => {
         }
     }, []);
 
-
-
     useEffect(() => {
         const fetchProductTypes = async () => {
             try {
@@ -50,11 +48,8 @@ const AddProduct = () => {
                 console.error('Wystąpił błąd podczas pobierania typów produktów:', error);
             }
         };
-
         fetchProductTypes();
     }, []);
-
-
 
     const handleAddProduct = async () => {
         try {
@@ -117,7 +112,6 @@ const AddProduct = () => {
                         value={newProduct.model}
                         onChange={(event) => setNewProduct(prevState => ({ ...prevState, model: event.target.value }))}
                     />
-
                     <TextField
                         label="Opis"
                         variant="outlined"

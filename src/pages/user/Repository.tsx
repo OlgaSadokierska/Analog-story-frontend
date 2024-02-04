@@ -118,9 +118,6 @@ const Row = ({
                                             <IconButton aria-label="edit-film" onClick={() => handleEditFilm(film.id)}>
                                                 <EditIcon />
                                             </IconButton>
-                                            <IconButton aria-label="delete-film" onClick={() => handleDeleteFilm(film.id)}>
-                                                <DeleteIcon />
-                                            </IconButton>
                                         </TableCell>
                                     </TableRow>
                                 ))}
