@@ -10,8 +10,6 @@ import { GetRequests } from '../communication/network/GetRequests';
 import MenuItem from '@mui/material/MenuItem';
 import { Select } from '@mui/material';
 import { PutRequests } from '../communication/network/PutRequests';
-import { Utils } from '../utils/Utils';
-
 
 const AddMediaPage = () => {
     const [newCamera, setNewCamera] = useState({
@@ -85,6 +83,7 @@ const AddMediaPage = () => {
             }
             console.log('Dodano nową kamerę:', newCamera);
             alert("Aparat został dodany");
+            window.location.reload(true);
         } catch (error) {
             console.error('Wystąpił błąd podczas dodawania kamery:', error);
             alert(error.message);
