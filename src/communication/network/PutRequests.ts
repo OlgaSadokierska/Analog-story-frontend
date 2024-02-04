@@ -78,5 +78,12 @@ export class PutRequests {
             .catch(Utils.handleError);
     }
 
+    static assignCamera(id: string, cameraId: string): Promise<any>{
+        const putData = Put.ASSIGN.replace(":filmId", id.toString()).replace(":cameraId", cameraId.toString());
+        return api.put(putData)
+            .then(Utils.mapResponse<Camera>)
+            .catch(Utils.handleError);
+    }
+
 
 }

@@ -44,6 +44,7 @@ const Row = ({
         const foundProduct = products ? products.find((product) => product.id === productId) : undefined;
         return foundProduct;
     };
+    const navigate = useNavigate();
 
     const cameraProduct = findProductById(camera.product_id);
 

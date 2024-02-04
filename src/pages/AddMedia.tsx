@@ -28,7 +28,8 @@ const AddMediaPage = () => {
         idCamera: null,
         maxLoaded: 50,
         model: '',
-        brand: ''
+        brand: '',
+
     });
 
     const [userCameras, setUserCameras] = useState([]);
@@ -103,7 +104,9 @@ const AddMediaPage = () => {
                     newFilm.model,
                     newFilm.brand
                 );
+
             }
+
             console.log('Dodano nowy film:', newFilm);
             alert("Film został dodany");
         } catch (error) {
@@ -111,6 +114,7 @@ const AddMediaPage = () => {
             alert("Film nie został dodany");
         }
     };
+
 
     const handleSetCameraForSale = async () => {
         try {
@@ -144,6 +148,7 @@ const AddMediaPage = () => {
             }
         }
     };
+
 
 
     return (
@@ -324,25 +329,25 @@ const AddMediaPage = () => {
                             marginTop: '10px',
                             justifyContent: 'center'
                         }}>
-                            <span style={{marginRight: '10px'}}>Powiązana kamera:</span>
-                            <Select
-                                id="related-camera"
-                                label="Related Camera"
-                                variant="outlined"
-                                value={newFilm.idCamera}
-                                required
-                                onChange={(e) => setNewFilm((prev) => {
-                                    const value = e.target.value === "" ? null : Number(e.target.value);
-                                    return ({...prev, idCamera: value});
-                                })}
-                            >
-                                <MenuItem value="">Brak</MenuItem>
-                                {userCameras.map(({brand, id, model}) => (
-                                    <MenuItem key={id} value={id}>
-                                        {`${brand} ${model}`}
-                                    </MenuItem>
-                                ))}
-                            </Select>
+                            {/*<span style={{marginRight: '10px'}}>Powiązana kamera:</span>*/}
+                            {/*<Select*/}
+                            {/*    id="related-camera"*/}
+                            {/*    label="Related Camera"*/}
+                            {/*    variant="outlined"*/}
+                            {/*    value={newFilm.idCamera}*/}
+                            {/*    required*/}
+                            {/*    onChange={(e) => setNewFilm((prev) => {*/}
+                            {/*        const value = e.target.value === "" ? null : Number(e.target.value);*/}
+                            {/*        return ({...prev, idCamera: value});*/}
+                            {/*    })}*/}
+                            {/*>*/}
+                            {/*    <MenuItem value="">Brak</MenuItem>*/}
+                            {/*    {userCameras.map(({brand, id, model}) => (*/}
+                            {/*        <MenuItem key={id} value={id}>*/}
+                            {/*            {`${brand} ${model}`}*/}
+                            {/*        </MenuItem>*/}
+                            {/*    ))}*/}
+                            {/*</Select>*/}
 
                         </div>
                         <Button onClick={handleAddFilm} variant="contained"
