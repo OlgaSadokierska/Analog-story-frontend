@@ -9,7 +9,7 @@ import MuiAlert from '@mui/material/Alert';
 import { useParams } from 'react-router-dom';
 import { GetRequests } from '../communication/network/GetRequests';
 import { PutRequests } from '../communication/network/PutRequests';
-import { Camera } from '../communication/Types';
+import {Camera, Product} from '../communication/Types';
 
 const EditCamera = () => {
     const { cameraId } = useParams();
@@ -22,8 +22,6 @@ const EditCamera = () => {
     const [editedDescription, setEditedDescription] = useState('');
     const [editedPrice, setEditedPrice] = useState('');
     const [product, setProduct] = useState<Product | null>(null);
-    const [isDataChanged, setIsDataChanged] = useState(false);
-    const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
 
     useEffect(() => {
         const fetchCameraData = async () => {
@@ -92,9 +90,7 @@ const EditCamera = () => {
         }
     };
 
-    const handleSnackbarClose = () => {
-        setIsSnackbarOpen(false);
-    };
+
 
     return (
         <Container component="main" maxWidth="s" sx={{ display: 'flex', justifyContent: 'center', backgroundImage: 'url(/img015.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', height: '100vh', overflow: 'hidden' }}>
@@ -171,16 +167,7 @@ const EditCamera = () => {
                 </div>
             </Box>
 
-            <Snackbar open={isSnackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
-                <MuiAlert
-                    elevation={6}
-                    variant="filled"
-                    onClose={handleSnackbarClose}
-                    severity={isDataChanged ? 'success' : 'info'}
-                >
-                    {isDataChanged ? 'Dane zostały zmienione!' : 'Brak zmian w danych.'}
-                </MuiAlert>
-            </Snackbar>
+
         </Container>
     );
 };

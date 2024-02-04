@@ -51,10 +51,9 @@ const Row = ({
 
     const cameraProduct = findProductById(camera.product_id);
 
-    // Dodaj funkcję obsługującą edycję filmu
     const handleEditFilm = (filmId: number) => {
         console.log(`Edytuj film o ID: ${filmId}`);
-        navigate(`/editfilm/${filmId}`);
+        navigate(`/updateFilmDetails/${filmId}`);
     };
 
     return (
@@ -168,7 +167,7 @@ const Repository = () => {
 
     const handleEditFilm = (filmId: number) => {
         console.log(`Edytuj film o ID: ${filmId}`);
-        navigate(`/editfilm/${filmId}`);
+        navigate(`/updateFilmDetails/${filmId}`);
     };
 
     const handleDeleteFilm = (filmId: number) => {

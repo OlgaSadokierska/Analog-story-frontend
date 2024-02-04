@@ -63,21 +63,18 @@ export class PutRequests {
             .catch(Utils.handleError);
     }
 
-    static updateFilmDetails(id: number, updatedFilmDTO: Film, updatedProductDTO: Product): Promise<Camera> {
-        const putData = Put.UPDATE_CAMERA_DETAILS.replace(":filmId", id.toString());
+    static updateFilmDetails(id: number, updatedFilmDTO: Film, updatedProductDTO: Product): Promise<Film> {
+        const putData = Put.UPDATE_FILM.replace(":filmId", id.toString());
         const requestBody = {
             model: updatedFilmDTO.model,
             brand: updatedFilmDTO.brand,
-            productDto: {
-                description: updatedProductDTO.description,
-                price: updatedProductDTO.price
-            }
+            loadedFrames: updatedFilmDTO.loadedFrames,
+            maxLoaded: updatedFilmDTO.maxLoaded,
+            productDto: {}
         };
-
         console.log('Request body to be sent:', requestBody);
-
         return api.put(putData, requestBody)
-            .then(Utils.mapResponse<Camera>)
+            .then(Utils.mapResponse<Film>)
             .catch(Utils.handleError);
     }
 

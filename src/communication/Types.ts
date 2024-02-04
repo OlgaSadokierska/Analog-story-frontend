@@ -46,6 +46,7 @@ export interface Film {
     maxLoaded: number;
     model: string;
     brand: string;
+    product: Product;
 }
 
 export interface UserMedia {
