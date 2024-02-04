@@ -44,7 +44,6 @@ export default function ProductTable() {
 
     const { productId } = useParams();
 
-
     useEffect(() => {
         async function fetchProducts() {
             try {
@@ -75,7 +74,6 @@ export default function ProductTable() {
             alert(`Nie udało się usunąć produktu o ID ${productId} ze względu na powiązaną kliszę.`);
         }
     };
-
 
     const handleBuy = async (productId: number) => {
         const storedUserId = localStorage.getItem('UserId');
@@ -127,9 +125,13 @@ export default function ProductTable() {
                         ),
                     }}
                 />
-                <Button sx={{ backgroundColor: '#EFC049', marginLeft: 'auto' }} onClick={handleAddProduct}>
-                    {'Dodaj ogłoszenie'}
-                </Button>
+                {userAccountType === "2" ? (
+                    <>
+                        <Button sx={{ backgroundColor: '#EFC049', marginLeft: 'auto' }} onClick={handleAddProduct}>
+                            {'Dodaj ogłoszenie'}
+                        </Button>
+                    </>
+                ) : null}
             </Box>
             <TableContainer component={Paper} sx={{ marginTop: '20px', marginBottom: '20px' }}>
                 <Table aria-label="Tabela produktów" sx={{ marginTop: '20px' }}>
