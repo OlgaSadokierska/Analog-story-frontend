@@ -91,7 +91,7 @@ const UserProfile = () => {
                 <Typography component="h1" variant="h5" sx={{ color: "black", mt: 3 }}>
                     Dane użytkownika
                 </Typography>
-                <Box component="form" noValidate sx={{ mt: 3, pl: 2, pr: 2, width: "50%", height: "60%", pLeft: 2, bgcolor: "white", borderRadius: "1%", justifyContent: "center", }}>
+                <Box component="form" noValidate sx={{ mt: 3, pl: 2, pr: 2, width: "60%", height: "53%", pLeft: 2, bgcolor: "white", borderRadius: "1%", justifyContent: "center", }}>
                     <TextField
                         margin="normal"
                         required
