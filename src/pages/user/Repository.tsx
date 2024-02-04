@@ -290,6 +290,8 @@ const Repository = () => {
                                 <TableCell>Maksymalna liczba klatek</TableCell>
                                 <TableCell>Czy w pełni wykorzystany?</TableCell>
                                 <TableCell>Czy na sprzedaż?</TableCell>
+                                <TableCell>Marka</TableCell>
+                                <TableCell>Model</TableCell>
                                 <TableCell>Edytuj</TableCell>
                                 <TableCell>Usuń</TableCell>
                             </TableRow>
@@ -301,6 +303,8 @@ const Repository = () => {
                                     <TableCell>{film.maxLoaded}</TableCell>
                                     <TableCell>{film.isFull ? 'Tak' : 'Nie'}</TableCell>
                                     <TableCell>{film.isForSale ? 'Tak' : 'Nie'}</TableCell>
+                                    <TableCell>{film.brand}</TableCell>
+                                    <TableCell>{film.model}</TableCell>
                                     <TableCell>
                                         <IconButton aria-label="edit-film" onClick={() => handleEditFilm(film.id)}>
                                             <EditIcon />
@@ -314,6 +318,7 @@ const Repository = () => {
                                 </TableRow>
                             ))}
                         </TableBody>
+
                     </Table>
                 </TableContainer>
             )}

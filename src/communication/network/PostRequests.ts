@@ -93,14 +93,16 @@ export class PostRequests {
             .catch(Utils.handleError);
     }
 
-    static addFilm(user_id: string, loaded_frames: number, is_full: boolean, id_camera: number| null, max_loaded: number, is_for_sale:boolean): Promise<any> {
+    static addFilm(user_id: string, loaded_frames: number, is_full: boolean, id_camera: number| null, max_loaded: number, is_for_sale:boolean, model: string, brand: string): Promise<any> {
         const postData = Post.ADD_FILM.replace(":userId", user_id.toString());
         const requestBody = {
             loadedFrames: loaded_frames,
             isFull: is_full,
             idCamera: id_camera,
             maxLoaded: max_loaded,
-            isForSale: is_for_sale
+            isForSale: is_for_sale,
+            model: model,
+            brand: brand
 
         };
         return api.post(postData, requestBody)
